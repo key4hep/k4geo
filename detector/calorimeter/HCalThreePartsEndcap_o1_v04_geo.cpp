@@ -52,9 +52,9 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
   xml_comp_t xSpace = xmlElement.child(_Unicode(plate_space)); // to avoid overlaps
   xml_comp_t xSteelSupport = xmlElement.child(_Unicode(steel_support));
 
-  double dZEndPlate = xEndPlate.thickness(); // end plate full thickness along z
-  double dRhoFacePlate = xFacePlate.thickness(); // end plate full thickness along rho
-  double space = xSpace.thickness(); // full thickness of empty gaps between layers and plates
+  double dZEndPlate = xEndPlate.thickness();        // end plate full thickness along z
+  double dRhoFacePlate = xFacePlate.thickness();    // end plate full thickness along rho
+  double space = xSpace.thickness();                // full thickness of empty gaps between layers and plates
   double dSteelSupport = xSteelSupport.thickness(); // steel support full thickness along rho
 
   dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v04", "steel support thickness (cm): %.2f", dSteelSupport);
@@ -160,7 +160,8 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
   double dzDetectorSens1 = (numSequencesZ1 * dzSequence) / 2; // net (i.e. only layers) detector half-width along z
   double dzDetectorSens2 = (numSequencesZ2 * dzSequence) / 2;
   double dzDetectorSens3 = (numSequencesZ3 * dzSequence) / 2;
-  double dzDetector1 = dzDetectorSens1 + dZEndPlate + space; // gross (i.e. layers + side mechanics) detector half-width along z
+  double dzDetector1 =
+      dzDetectorSens1 + dZEndPlate + space; // gross (i.e. layers + side mechanics) detector half-width along z
   double dzDetector2 = dzDetectorSens2 + dZEndPlate + space;
   double dzDetector3 = dzDetectorSens3 + dZEndPlate + space;
 
@@ -179,7 +180,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
   double sensitiveBarrel1Rmax = sensitiveBarrel1Rmin + moduleDepth1;
   double sensitiveBarrel2Rmax = sensitiveBarrel2Rmin + moduleDepth2;
   double sensitiveBarrel3Rmax = sensitiveBarrel3Rmin + moduleDepth3;
-  
+
   // Radial endpoints of the outer steel support
   double rminSupport1 = sensitiveBarrel1Rmax;
   double rminSupport2 = sensitiveBarrel2Rmax;
@@ -228,57 +229,57 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     facePlate3.setPlacement(placedFacePlate3);
 
     // Add structural support made of steel at external ends of extHCal (part 1 @ low z, part 3 @ high z)
-    dd4hep::Tube endPlateShape1(dimensions.rmin1(), rmaxSupport1, dZEndPlate/2);
+    dd4hep::Tube endPlateShape1(dimensions.rmin1(), rmaxSupport1, dZEndPlate / 2);
     Volume endPlateVol1("endPlateVol1", endPlateShape1, lcdd.material(xEndPlate.materialStr()));
     endPlateVol1.setVisAttributes(lcdd, xEndPlate.visStr());
     DetElement endPlateNeg(caloDetElem, "endPlate_" + std::to_string(2 * sign), 0);
-    dd4hep::Position negOffset(0, 0, sign * (extBarrelOffset1 - (dzDetector1 - dZEndPlate/2)));
+    dd4hep::Position negOffset(0, 0, sign * (extBarrelOffset1 - (dzDetector1 - dZEndPlate / 2)));
     PlacedVolume placedEndPlateNeg = envelopeVolume.placeVolume(endPlateVol1, negOffset);
     endPlateNeg.setPlacement(placedEndPlateNeg);
 
-    dd4hep::Tube endPlateShape3(dimensions.rmin(), rmaxSupport3, dZEndPlate/2);
+    dd4hep::Tube endPlateShape3(dimensions.rmin(), rmaxSupport3, dZEndPlate / 2);
     Volume endPlateVol3("endPlateVol3", endPlateShape3, lcdd.material(xEndPlate.materialStr()));
     endPlateVol3.setVisAttributes(lcdd, xEndPlate.visStr());
     DetElement endPlatePos(caloDetElem, "endPlate_" + std::to_string(1 * sign), 0);
-    dd4hep::Position posOffset(0, 0, sign * (extBarrelOffset3 + (dzDetector3 - dZEndPlate/2)));
+    dd4hep::Position posOffset(0, 0, sign * (extBarrelOffset3 + (dzDetector3 - dZEndPlate / 2)));
     PlacedVolume placedEndPlatePos = envelopeVolume.placeVolume(endPlateVol3, posOffset);
     endPlatePos.setPlacement(placedEndPlatePos);
 
     // Add end plates (same as the ones at the outer ends) in between the different parts...
 
     // --> Between part 1 and 2, side of part 1
-    dd4hep::Tube endPlateShapeIn12(dimensions.rmin1(), rmaxSupport1, dZEndPlate/2);
+    dd4hep::Tube endPlateShapeIn12(dimensions.rmin1(), rmaxSupport1, dZEndPlate / 2);
     Volume endPlateVolIn12("endPlateVolIn12", endPlateShapeIn12, lcdd.material(xEndPlate.materialStr()));
     endPlateVolIn12.setVisAttributes(lcdd, xEndPlate.visStr());
     DetElement inPlate12(caloDetElem, "inPlate12_" + std::to_string(1 * sign), 0);
-    dd4hep::Position offsetInPlate12(0, 0, sign * (extBarrelOffset1 + (dzDetector1 - dZEndPlate/2)));
+    dd4hep::Position offsetInPlate12(0, 0, sign * (extBarrelOffset1 + (dzDetector1 - dZEndPlate / 2)));
     PlacedVolume placedInPlate12 = envelopeVolume.placeVolume(endPlateVolIn12, offsetInPlate12);
     inPlate12.setPlacement(placedInPlate12);
 
     // --> Between part 1 and 2, side of part 2
-    dd4hep::Tube endPlateShapeIn21(dimensions.rmin2(), rmaxSupport2, dZEndPlate/2);
+    dd4hep::Tube endPlateShapeIn21(dimensions.rmin2(), rmaxSupport2, dZEndPlate / 2);
     Volume endPlateVolIn21("endPlateVolIn21", endPlateShapeIn21, lcdd.material(xEndPlate.materialStr()));
     endPlateVolIn21.setVisAttributes(lcdd, xEndPlate.visStr());
     DetElement inPlate21(caloDetElem, "inPlate21_" + std::to_string(1 * sign), 0);
-    dd4hep::Position offsetInPlate21(0, 0, sign * (extBarrelOffset2 - (dzDetector2 - dZEndPlate/2)));
+    dd4hep::Position offsetInPlate21(0, 0, sign * (extBarrelOffset2 - (dzDetector2 - dZEndPlate / 2)));
     PlacedVolume placedInPlate21 = envelopeVolume.placeVolume(endPlateVolIn21, offsetInPlate21);
     inPlate21.setPlacement(placedInPlate21);
 
     // --> Between part 2 and 3, side of part 2
-    dd4hep::Tube endPlateShapeIn23(dimensions.rmin2(), rmaxSupport2, dZEndPlate/2);
+    dd4hep::Tube endPlateShapeIn23(dimensions.rmin2(), rmaxSupport2, dZEndPlate / 2);
     Volume endPlateVolIn23("endPlateVolIn23", endPlateShapeIn23, lcdd.material(xEndPlate.materialStr()));
     endPlateVolIn23.setVisAttributes(lcdd, xEndPlate.visStr());
     DetElement inPlate23(caloDetElem, "inPlate23_" + std::to_string(1 * sign), 0);
-    dd4hep::Position offsetInPlate23(0, 0, sign * (extBarrelOffset2 + (dzDetector2 - dZEndPlate/2)));
+    dd4hep::Position offsetInPlate23(0, 0, sign * (extBarrelOffset2 + (dzDetector2 - dZEndPlate / 2)));
     PlacedVolume placedInPlate23 = envelopeVolume.placeVolume(endPlateVolIn23, offsetInPlate23);
     inPlate23.setPlacement(placedInPlate23);
 
     // --> Between part 2 and 3, side of part 3
-    dd4hep::Tube endPlateShapeIn32(dimensions.rmin(), rmaxSupport3, dZEndPlate/2);
+    dd4hep::Tube endPlateShapeIn32(dimensions.rmin(), rmaxSupport3, dZEndPlate / 2);
     Volume endPlateVolIn32("endPlateVolIn32", endPlateShapeIn32, lcdd.material(xEndPlate.materialStr()));
     endPlateVolIn32.setVisAttributes(lcdd, xEndPlate.visStr());
     DetElement inPlate32(caloDetElem, "inPlate32_" + std::to_string(1 * sign), 0);
-    dd4hep::Position offsetInPlate32(0, 0, sign * (extBarrelOffset3 - (dzDetector3 - dZEndPlate/2)));
+    dd4hep::Position offsetInPlate32(0, 0, sign * (extBarrelOffset3 - (dzDetector3 - dZEndPlate / 2)));
     PlacedVolume placedInPlate32 = envelopeVolume.placeVolume(endPlateVolIn32, offsetInPlate32);
     inPlate32.setPlacement(placedInPlate32);
 
@@ -363,9 +364,11 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
         tileVol.setVisAttributes(lcdd, xComp.visStr());
 
         dd4hep::Position tileOffset(0, 0, sign * (tileZOffset + 0.5 * xComp.thickness()));
-        dd4hep::PlacedVolume placedTileVol = tileSequenceVolume.placeVolume(tileVol, tileOffset);
+        tileSequenceVolume.placeVolume(tileVol, tileOffset);
 
-        if (xComp.isSensitive()) {tileVol.setSensitiveDetector(sensDet);}
+        if (xComp.isSensitive()) {
+          tileVol.setSensitiveDetector(sensDet);
+        }
         tileZOffset += xComp.thickness();
       }
 
@@ -426,9 +429,11 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
         tileVol.setVisAttributes(lcdd, xComp.visStr());
 
         dd4hep::Position tileOffset(0, 0, sign * (tileZOffset + 0.5 * xComp.thickness()));
-        dd4hep::PlacedVolume placedTileVol = tileSequenceVolume.placeVolume(tileVol, tileOffset);
+        tileSequenceVolume.placeVolume(tileVol, tileOffset);
 
-        if (xComp.isSensitive()) {tileVol.setSensitiveDetector(sensDet);}
+        if (xComp.isSensitive()) {
+          tileVol.setSensitiveDetector(sensDet);
+        }
         tileZOffset += xComp.thickness();
       } // close first Z loop
 
@@ -499,9 +504,11 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
         tileVol.setVisAttributes(lcdd, xComp.visStr());
 
         dd4hep::Position tileOffset(0, 0, sign * (tileZOffset + 0.5 * xComp.thickness()));
-        dd4hep::PlacedVolume placedTileVol = tileSequenceVolume.placeVolume(tileVol, tileOffset);
+        tileSequenceVolume.placeVolume(tileVol, tileOffset);
 
-        if (xComp.isSensitive()) {tileVol.setSensitiveDetector(sensDet);}
+        if (xComp.isSensitive()) {
+          tileVol.setSensitiveDetector(sensDet);
+        }
         tileZOffset += xComp.thickness();
       }
 
@@ -561,10 +568,10 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
   caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::EndcapLayout;
   caloDetElem.addExtension<dd4hep::rec::LayeredCalorimeterData>(caloData);
 
-  caloData->extent[0] = sensitiveBarrel3Rmin;                // innerRCoordinate
-  caloData->extent[1] = sensitiveBarrel3Rmax;                // outerRCoordinate
-  caloData->extent[2] = extBarrelOffset1 - dzDetectorSens1;   // innerZCoordinate (start of the first part of the Endcap)
-  caloData->extent[3] = extBarrelOffset3 + dzDetectorSens3;   // outerZCoordinate (end of the third part of the Endcap)
+  caloData->extent[0] = sensitiveBarrel3Rmin;               // innerRCoordinate
+  caloData->extent[1] = sensitiveBarrel3Rmax;               // outerRCoordinate
+  caloData->extent[2] = extBarrelOffset1 - dzDetectorSens1; // innerZCoordinate (start of the first part of the Endcap)
+  caloData->extent[3] = extBarrelOffset3 + dzDetectorSens3; // outerZCoordinate (end of the third part of the Endcap)
 
   dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
 

@@ -34,9 +34,9 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   xml_comp_t xSpace = xmlDet.child(_Unicode(plate_space)); // to avoid overlaps
   xml_comp_t xSteelSupport = xmlDet.child(_Unicode(steel_support));
 
-  double dZEndPlate = xEndPlate.thickness(); // end plate full thickness along z
-  double dRhoFacePlate = xFacePlate.thickness(); // end plate full thickness along rho
-  double space = xSpace.thickness(); // full thickness of empty gaps between layers and plates
+  double dZEndPlate = xEndPlate.thickness();        // end plate full thickness along z
+  double dRhoFacePlate = xFacePlate.thickness();    // end plate full thickness along rho
+  double space = xSpace.thickness();                // full thickness of empty gaps between layers and plates
   double dSteelSupport = xSteelSupport.thickness(); // steel support full thickness along rho
 
   dd4hep::printout(dd4hep::DEBUG, "HCalTileBarrel_o1_v04", "steel support thickness (cm): %.2f", dSteelSupport);
@@ -84,17 +84,18 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     }
   }
   // Calculate correction along z based on the module size (can only have natural number of modules)
-  double masterPlateThk = 0.; 
-  for (xml_coll_t xCompColl(sequences[0], _Unicode(module_component)); xCompColl;
-        ++xCompColl) {
+  double masterPlateThk = 0.;
+  for (xml_coll_t xCompColl(sequences[0], _Unicode(module_component)); xCompColl; ++xCompColl) {
     xml_comp_t xComp = xCompColl;
     if ((masterPlateThk <= 0) && (xComp.nameStr() == "master")) {
-      masterPlateThk = xComp.thickness();  
+      masterPlateThk = xComp.thickness();
       break;
     }
   }
-  double dzDetectorSens = (numSequencesZ * dzSequence - masterPlateThk) / 2; // net (i.e. only layers) detector half-width along z
-  double dzDetector = dzDetectorSens + dZEndPlate + space; // gross (i.e. layers + side mechanics) detector half-width along z
+  double dzDetectorSens =
+      (numSequencesZ * dzSequence - masterPlateThk) / 2; // net (i.e. only layers) detector half-width along z
+  double dzDetector =
+      dzDetectorSens + dZEndPlate + space; // gross (i.e. layers + side mechanics) detector half-width along z
 
   dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v04", "dzDetector (cm): %.2f", dzDetector);
   dd4hep::printout(dd4hep::DEBUG, "HCalTileBarrel_o1_v04", "correction of dz in cm (negative = size reduced): %.2f",
@@ -109,7 +110,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
                    numLayersR * numSequencesZ);
 
   double sensitiveBarrelRmax = sensitiveBarrelRmin + moduleDepth; // max radius of the sensitive part (stack of layers)
-  
+
   // radial endpoints of the outer steel support
   double rminSupport = sensitiveBarrelRmax;
   double rmaxSupport = sensitiveBarrelRmax + dSteelSupport;
@@ -140,15 +141,15 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   facePlate_det.setPlacement(placedFacePlate);
 
   // Add structural support made of steel at both ends of HCal
-  dd4hep::Tube endPlateShape(xDimensions.rmin(), rmaxSupport, dZEndPlate/2);
+  dd4hep::Tube endPlateShape(xDimensions.rmin(), rmaxSupport, dZEndPlate / 2);
   Volume endPlateVol("HCalEndPlateVol", endPlateShape, lcdd.material(xEndPlate.materialStr()));
   endPlateVol.setVisAttributes(lcdd, xEndPlate.visStr());
   DetElement endPlatePos(caloDetElem, "HCalEndPlatePos", 0);
-  dd4hep::Position posOffset(0, 0, dzDetector - dZEndPlate/2);
+  dd4hep::Position posOffset(0, 0, dzDetector - dZEndPlate / 2);
   PlacedVolume placedEndPlatePos = envelopeVolume.placeVolume(endPlateVol, posOffset);
   endPlatePos.setPlacement(placedEndPlatePos);
   DetElement endPlateNeg(caloDetElem, "HCalEndPlateNeg", 1);
-  dd4hep::Position negOffset(0, 0, -dzDetector + dZEndPlate/2);
+  dd4hep::Position negOffset(0, 0, -dzDetector + dZEndPlate / 2);
   PlacedVolume placedEndPlateNeg = envelopeVolume.placeVolume(endPlateVol, negOffset);
   endPlateNeg.setPlacement(placedEndPlateNeg);
 
@@ -202,9 +203,11 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
       tileVol.setVisAttributes(lcdd, xComp.visStr());
 
       dd4hep::Position tileOffset(0, 0, tileZOffset + 0.5 * xComp.thickness());
-      dd4hep::PlacedVolume placedTileVol = tileSequenceVolume.placeVolume(tileVol, tileOffset);
+      tileSequenceVolume.placeVolume(tileVol, tileOffset);
 
-      if (xComp.isSensitive()) {tileVol.setSensitiveDetector(sensDet);}
+      if (xComp.isSensitive()) {
+        tileVol.setSensitiveDetector(sensDet);
+      }
       tileZOffset += xComp.thickness();
     }
 
@@ -224,10 +227,11 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     //   Volume tileVol("HCalTileVol_" + xComp.nameStr(), tileShape, lcdd.material(xComp.materialStr()));
     //   tileVol.setVisAttributes(lcdd, xComp.visStr());
 
-    //   if ((xComp.nameStr() == "master") && (tileZOffset + xComp.thickness() > 0.5*dzSequence_R)) break; // i.e. cut sequence filling at the final master plate
+    //   if ((xComp.nameStr() == "master") && (tileZOffset + xComp.thickness() > 0.5*dzSequence_R)) break; // i.e. cut
+    //   sequence filling at the final master plate
 
     //   dd4hep::Position tileOffset(0, 0, tileZOffset + 0.5 * xComp.thickness());
-    //   dd4hep::PlacedVolume placedTileVol = tileSequenceVolume_R.placeVolume(tileVol, tileOffset);
+    //   tileSequenceVolume_R.placeVolume(tileVol, tileOffset);
 
     //   if (xComp.isSensitive()) {tileVol.setSensitiveDetector(sensDet);}
     //   tileZOffset += xComp.thickness();
@@ -236,7 +240,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     // special case for leftmost sequence, which must not feature the final master plate
     double dzSequence_L = dzSequence - masterPlateThk;
 
-    dd4hep::Tube tileSequenceShape_L(rminLayer, rmaxLayer, 0.5*dzSequence_L);
+    dd4hep::Tube tileSequenceShape_L(rminLayer, rmaxLayer, 0.5 * dzSequence_L);
     Volume tileSequenceVolume_L("HCalTileSequenceVol_L", tileSequenceShape_L, lcdd.air());
 
     tileZOffset = -0.5 * dzSequence_L;
@@ -249,12 +253,15 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
       Volume tileVol("HCalTileVol_" + xComp.nameStr(), tileShape, lcdd.material(xComp.materialStr()));
       tileVol.setVisAttributes(lcdd, xComp.visStr());
 
-      if ((xComp.nameStr() == "master") && (tileZOffset <= -0.5*dzSequence_L)) continue; // i.e. cut sequence filling at the final master plate
+      if ((xComp.nameStr() == "master") && (tileZOffset <= -0.5 * dzSequence_L))
+        continue; // i.e. cut sequence filling at the final master plate
 
       dd4hep::Position tileOffset(0, 0, tileZOffset + 0.5 * xComp.thickness());
-      dd4hep::PlacedVolume placedTileVol = tileSequenceVolume_L.placeVolume(tileVol, tileOffset);
+      tileSequenceVolume_L.placeVolume(tileVol, tileOffset);
 
-      if (xComp.isSensitive()) {tileVol.setSensitiveDetector(sensDet);}
+      if (xComp.isSensitive()) {
+        tileVol.setSensitiveDetector(sensDet);
+      }
       tileZOffset += xComp.thickness();
     }
 
@@ -262,9 +269,10 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     std::vector<dd4hep::PlacedVolume> sq_vector;
 
     for (uint numSeq = 0; numSeq < numSequencesZ; numSeq++) {
-      //double dzSequence_eff = (numSeq < numSequencesZ-1) ? dzSequence : dzSequence_R;
-      //double zOffset = -dzDetectorSens + numSeq * dzSequence + dzSequence_eff/2;
-      double zOffset = (numSeq > 0) ? -dzDetectorSens + dzSequence_L + (numSeq-0.5) * dzSequence : -dzDetectorSens + dzSequence_L/2;
+      // double dzSequence_eff = (numSeq < numSequencesZ-1) ? dzSequence : dzSequence_R;
+      // double zOffset = -dzDetectorSens + numSeq * dzSequence + dzSequence_eff/2;
+      double zOffset = (numSeq > 0) ? -dzDetectorSens + dzSequence_L + (numSeq - 0.5) * dzSequence
+                                    : -dzDetectorSens + dzSequence_L / 2;
       dd4hep::Position tileSequencePosition(0, 0, zOffset);
       dd4hep::PlacedVolume placedTileSequenceVolume;
       // if (numSeq < numSequencesZ-1) {
@@ -274,7 +282,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
       // }
       if (numSeq > 0) {
         placedTileSequenceVolume = layerVolume.placeVolume(tileSequenceVolume, tileSequencePosition);
-      }else{
+      } else {
         placedTileSequenceVolume = layerVolume.placeVolume(tileSequenceVolume_L, tileSequencePosition);
       }
       placedTileSequenceVolume.addPhysVolID("row", numSeq);

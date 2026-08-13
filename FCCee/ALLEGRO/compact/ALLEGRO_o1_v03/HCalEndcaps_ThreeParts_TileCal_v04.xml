@@ -115,10 +115,13 @@
          grid_size_row="1 1 1 1 1 1   1 1 1 1 1 1 1 1 1   1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"
          grouped_rows=""
          dz_row="2*EndcapHCal_master_plate_thickness + EndcapHCal_spacer_plate_thickness + EndcapHCal_scintillator_thickness + 2*EndcapHCal_air_space_thickness" 
+         dz_reduced_row="0"
          phi_bins="EndcapHCal_n_phi_modules" 
          offset_phi="-pi+(pi/EndcapHCal_n_phi_modules)"
          even_vol_offset="EndcapHCal_master_plate_thickness + EndcapHCal_air_space_thickness + EndcapHCal_scintillator_thickness/2"
          odd_vol_offset="2*EndcapHCal_master_plate_thickness + EndcapHCal_spacer_plate_thickness + EndcapHCal_air_space_thickness + EndcapHCal_scintillator_thickness/2"
+         even_vol_offset_reduced="0"
+         odd_vol_offset_reduced="0"
          />
       <id>system:4,type:3,layer:6,pseudoLayer:8,row:-8,phi:10</id>
     </readout>
