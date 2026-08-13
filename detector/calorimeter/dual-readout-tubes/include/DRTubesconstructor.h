@@ -165,6 +165,7 @@ private:
 
   dd4hep::Material m_air;
   std::string m_air_visString;
+  int m_air_volume_id{0};
 };
 
 } // namespace DRBarrelTubes

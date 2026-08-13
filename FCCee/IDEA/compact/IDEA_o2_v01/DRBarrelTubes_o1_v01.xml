@@ -266,7 +266,9 @@
 
             <trap>
                 <support material="DRBTBrass" width="DRBTSupportSideThickness" depth="DRBTSupportFrontThickness" z2="DRBTSupportBackThickness" vis="DRBTtrap_vis"/>
-                <air  material="Air"   vis="DRBTair_vis" />
+                <!-- 63 is retained for compatibility with existing DRBT CellIDs;
+                     it is no longer used to distinguish the barrel from the endcap. -->
+                <air id="63" material="Air" vis="DRBTair_vis" />
             </trap>
 
             <tube>
