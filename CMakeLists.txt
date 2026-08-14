@@ -52,19 +52,13 @@ find_package(DD4hep 1.31 REQUIRED COMPONENTS DDRec DDG4 DDParsers)
 find_package ( ROOT REQUIRED COMPONENTS Geom GenVector)
 message ( STATUS "ROOT_VERSION: ${ROOT_VERSION}" )
 
-find_package( Geant4 REQUIRED ) 
-OPTION(K4GEO_USE_LCIO "Enable or disable the use of LCIO, which is needed for some detector constructors and plugins" ON)
+find_package( Geant4 REQUIRED )
+
+# Deprecated: k4geo no longer uses LCIO. The option is kept temporarily so that
+# existing configurations passing it do not fail outright.
+OPTION(K4GEO_USE_LCIO "Deprecated and without effect: k4geo does not depend on LCIO anymore" OFF)
 if(K4GEO_USE_LCIO)
-  find_package(LCIO REQUIRED)
-  # Shim for older LCIO versions
-  if(NOT TARGET LCIO::lcio)
-    add_library(LCIO::lcio INTERFACE IMPORTED GLOBAL)
-    set_target_properties(LCIO::lcio
-      PROPERTIES
-      INTERFACE_INCLUDE_DIRECTORIES "${LCIO_INCLUDE_DIRS}"
-      INTERFACE_LINK_LIBRARIES "${LCIO_LIBRARIES}"
-    )
-  endif()
+  message(DEPRECATION "K4GEO_USE_LCIO is deprecated and has no effect, since k4geo does not depend on LCIO anymore. The option will be removed in a future release, please stop setting it.")
 endif()
 
 file(GLOB sources
@@ -126,11 +120,6 @@ target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detect
 
 target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ROOT::Core detectorSegmentations detectorCommon)
 target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core detectorSegmentations detectorCommon podio::podioRootIO EDM4HEP::edm4hep ${Geant4_LIBRARIES})
-
-if(K4GEO_USE_LCIO)
-  target_link_libraries(${PackageName}   LCIO::lcio)
-  target_link_libraries(${PackageName}G4 LCIO::lcio)
-endif()
 
 #Create this_package.sh file, and install
 dd4hep_instantiate_package(${PackageName})

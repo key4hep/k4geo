@@ -14,7 +14,6 @@ k4geo is distributed under the [GPLv3 License](http://www.gnu.org/licenses/gpl-3
 To build `k4geo` the following packages are required:
 - DD4hep
 - Geant4
-- LCIO
 - ROOT
 
 They are available for instance via the [Key4hep software stack](https://key4hep.github.io/key4hep-doc/), available on machines which have CVMFS mounted (e.g. lxplus).
