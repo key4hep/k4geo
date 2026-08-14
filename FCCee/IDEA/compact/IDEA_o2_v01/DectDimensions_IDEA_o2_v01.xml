@@ -49,18 +49,13 @@
     <constant name="DetID_LumiCalNoseShield"      value=" 22"/>
 
 
-    <!-- Dual-Readout Endcap Tubes (DRET) calorimeter DetID-->
-    <!-- This number is used in DRTubesSDAction to recreate
-	 the volume ids for this subdetector.
-	 Do not change it, contact the experts (Lorenzo Pezzoti)
-	 before any modification.
-    -->
+    <!-- Encoded as the system field in DRET CellIDs. Changing it requires migrating existing data and consumers. -->
     <constant name="DetID_DREndcapTubes"          value=" 25"/>
 
     <constant name="DetID_muonSystem"       value=" 26"/>
     <constant name="DetID_Preshower"       value=" 27"/>
 
-    <!-- Dual-Readout Barrel Tubes (DRBT) calorimeter DetID-->
+    <!-- Encoded as the system field in DRBT CellIDs. Changing it requires migrating existing data and consumers. -->
     <constant name="DetID_DRBarrelTubes"       value=" 28"/>
 
     <!-- BPW: Beam Pipe Width -->

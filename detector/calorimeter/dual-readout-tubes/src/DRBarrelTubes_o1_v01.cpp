@@ -34,6 +34,7 @@ static Ref_t create_detector(Detector& description, xml_h entities, SensitiveDet
   barrel_volume.setVisAttributes(description, "DRBTassembly_vis");
 
   DetElement s_detElement(det_name, det_id);
+  dd4hep::xml::setDetectorTypeFlag(entities, s_detElement);
   Volume mother_volume = description.pickMotherVolume(s_detElement);
 
   // Helper class to construct the calorimeter
