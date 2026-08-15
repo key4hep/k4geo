@@ -16,11 +16,6 @@
 #include "XML/DocumentHandler.h"
 #include "XML/Utilities.h"
 
-#include "UTIL/LCTrackerConf.h"
-#include <UTIL/BitField64.h>
-#include <UTIL/BitSet32.h>
-#include <UTIL/ILDConf.h>
-
 using dd4hep::_toString;
 using dd4hep::Assembly;
 using dd4hep::Box;
@@ -88,13 +83,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   std::map<std::string, Volume> volumes;
   std::map<std::string, Placements> sensitives;
   PlacedVolume pv;
-
-  // for encoding
-  std::string cellIDEncoding = sens.readout().idSpec().fieldDescription();
-  UTIL::BitField64 encoder(cellIDEncoding);
-  encoder.reset();
-  encoder[lcio::LCTrackerCellID::subdet()] = det_id;
-  encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::barrel;
 
   // --- create an envelope volume and position it into the world ---------------------
 

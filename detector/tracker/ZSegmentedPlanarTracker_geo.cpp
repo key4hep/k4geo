@@ -15,10 +15,6 @@
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
 
-#include <UTIL/BitField64.h>
-#include <UTIL/BitSet32.h>
-#include <UTIL/ILDConf.h>
-
 using dd4hep::_toString;
 using dd4hep::Assembly;
 using dd4hep::Box;

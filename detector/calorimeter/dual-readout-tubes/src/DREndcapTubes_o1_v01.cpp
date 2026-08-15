@@ -11,6 +11,7 @@
 #include "DDRec/Vector3D.h"
 #include "XML/Utilities.h"
 #include <DD4hep/DetFactoryHelper.h>
+#include <XML/Utilities.h>
 
 // Includers from stl
 #include <array>
@@ -302,7 +303,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 #endif
       Transform3D tower_trnsform(rotX * rotY * rotZ, Position(c_new.x(), c_new.y(), c_new.z()));
       PlacedVolume towerPlaced = phiERLog.placeVolume(towerLog, i, tower_trnsform);
-      // ID this volume with tower ID, for the moment I leave air ID to 0 (dummy)
+      // The endcap has no separate air volume, so its "air" field stays at zero.
       towerPlaced.addPhysVolID("tower", i).addPhysVolID("air", 0);
     }
     // Or, to debug, place towers one next to each other in assembly volume
@@ -494,6 +495,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // main detector element of this subdetector.This will be the unique entry point to access any
   // information of the subdetector."
   DetElement sdet(det_name, x_det.id());
+  dd4hep::xml::setDetectorTypeFlag(e, sdet);
   // Then "Place the subdetector envelope into its mother (typically the top level (world) volume)."
   Volume motherVolume = description.pickMotherVolume(sdet);
   // Place the assembly container inside the mother volume

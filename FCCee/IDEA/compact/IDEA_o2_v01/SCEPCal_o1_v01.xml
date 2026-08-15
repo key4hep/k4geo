@@ -945,30 +945,6 @@
     </readout>
   </readouts>
 
-  <display>
-    <vis name="crystalFVis"  alpha="1"   r="0.0"  g="0.0"  b="1.0"  showDaughters="true"  visible="false"/>
-    <vis name="crystalRVis"  alpha="1"   r="0.0"  g="0.5"  b="1.0"  showDaughters="true"  visible="false"/>
-    <vis name="crystalTVis"  alpha="1"   r="0.0"  g="1.0"  b="0.1"  showDaughters="true"  visible="false"/>
-
-    <vis name="barrelAssemblyGlobalVis"  alpha="0.1" r="1."  g="0."  b="0."  showDaughters="true"  visible="false"/>
-    <vis name="barrelAssemblyPhiVis"     alpha="0.1" r="0."  g="1."  b="0."  showDaughters="true"  visible="true"/>
-    <vis name="barrelAssemblyThetaVis"   alpha="0.1" r="0."  g="0."  b="1."  showDaughters="true"  visible="false"/>
-    
-    <vis name="endcapAssemblyGlobalVis"  alpha="0.1" r="1."  g="0."  b="0."  showDaughters="true"  visible="false"/>
-    <vis name="endcapAssemblyPhiVis"     alpha="0.1" r="0."  g="1."  b="0."  showDaughters="true"  visible="true"/>
-    <vis name="endcapAssemblyThetaVis"   alpha="0.1" r="0."  g="0."  b="1."  showDaughters="true"  visible="false"/>
-
-    <vis name="tlbarrelAssemblyGlobalVis"  alpha="0.1" r="1."  g="0."  b="0."  showDaughters="true"  visible="false"/>
-    <vis name="tlbarrelAssemblyPhiVis"     alpha="0.1" r="0."  g="1."  b="0."  showDaughters="true"  visible="false"/>
-    <vis name="tlbarrelAssemblyThetaVis"   alpha="0.1" r="0."  g="0."  b="1."  showDaughters="true"  visible="false"/>
-
-    <vis name="tlendcapAssemblyGlobalVis"  alpha="0.1" r="1."  g="0."  b="0."  showDaughters="true"  visible="false"/>
-    <vis name="tlendcapAssemblyPhiVis"     alpha="0.1" r="0."  g="1."  b="0."  showDaughters="true"  visible="false"/>
-    <vis name="tlendcapAssemblyThetaVis"   alpha="0.1" r="0."  g="0."  b="1."  showDaughters="true"  visible="false"/>
-
-    <vis name="scepcalAssemblyGlobalVis" alpha="0.5" r="0.1"  g="0.2"  b="0.1"  showDaughters="true"  visible="false"/>
-  </display>
-
   <detectors>
 
     <detector id="DetID_ECAL_Barrel"
