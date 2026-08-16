@@ -16,6 +16,8 @@
 
 #include "XML/Utilities.h"
 
+#include "XML/Utilities.h"
+
 using dd4hep::Position;
 using dd4hep::RotationZYX;
 using dd4hep::Transform3D;
@@ -815,7 +817,7 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
 
           CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
               "EndcapCrystalR_1", XTAL_LEN_R / 2, vsub1, crystalRXML, trans_dispRsub_1, endcapThetaAssemblyVolume_1,
-              ENDCAP_SYSTEM_NO, 2 * N_THETA_ENDCAP + N_THETA_BARREL - iTheta, nGamma, nEpsilon, 1, posGlobal_1, ENDCAP_PHI_START, ENDCAP_PHI_END, phi_endcap_rotations);
+              ENDCAP_SYSTEM_NO, 2 * N_THETA_ENDCAP + N_THETA_BARREL - 1 - iTheta, nGamma, nEpsilon, 1, posGlobal_1, ENDCAP_PHI_START, ENDCAP_PHI_END, phi_endcap_rotations);
           numCrystalsEndcap += 1;
         }
       }
