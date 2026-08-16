@@ -7,7 +7,9 @@
 //**************************************************************************
 
 // Includers from DD4hep
+#include "DDRec/DetectorData.h"
 #include "DDRec/Vector3D.h"
+#include "XML/Utilities.h"
 #include <DD4hep/DetFactoryHelper.h>
 #include <XML/Utilities.h>
 
@@ -500,6 +502,26 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   PlacedVolume AssemblyEndcapPV = motherVolume.placeVolume(AssemblyEndcap);
   AssemblyEndcapPV.addPhysVolID("system", x_det.id());
   sdet.setPlacement(AssemblyEndcapPV);
+
+  // apply <type_flags> and expose r-z extent for downstream reco
+  dd4hep::xml::setDetectorTypeFlag(e, sdet);
+
+  const double dtheta = thetaB / NbOfEndcap;                    // per-tower theta
+  const double theta_min = thetaB - NbOfEndcapReduced * dtheta; // innermost built tower edge
+  const double zmin = innerR * tan(thetaB);                     // front-face plane
+
+  // DD4hep DetElement takes ownership and deletes the extension on destruction
+  dd4hep::rec::LayeredCalorimeterData* caloData = new dd4hep::rec::LayeredCalorimeterData;
+  caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::EndcapLayout;
+  caloData->inner_symmetry = NbOfZRot;
+  caloData->outer_symmetry = NbOfZRot;
+  // The towers are projective, so each one only gains a projection of its height: the outermost
+  // tower (theta = thetaB) sets rmax, the innermost one (theta = theta_min) sets zmax.
+  caloData->extent[0] = zmin * tan(theta_min);                // rmin (innermost instrumented tower)
+  caloData->extent[1] = innerR + tower_height * sin(thetaB);  // rmax (outermost tower, inclined)
+  caloData->extent[2] = zmin;                                 // zmin (front-face plane)
+  caloData->extent[3] = zmin + tower_height * cos(theta_min); // zmax (innermost tower, inclined)
+  sdet.addExtension<dd4hep::rec::LayeredCalorimeterData>(caloData);
 
   std::cout << "--> DREndcapTubes::create_detector() end" << std::endl;
 

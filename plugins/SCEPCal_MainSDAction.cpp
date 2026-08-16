@@ -94,22 +94,6 @@ namespace sim {
       return hit;
     };
 
-    // Do not fill edep and S hits if there is no ionizing energy deposit
-    //
-    if (edep > 0.) {
-      // edep hits
-      auto* hitedep = newOrExistingHitIn(m_collectionID, false);
-      hitedep->energyDeposit += edep;
-
-      // scintillation hits
-      auto* hitS = newOrExistingHitIn(m_userData.m_collectionID_scint, false);
-      auto Scount = m_userData.SmearSsignal(edep);
-      // The EDM4HEP converter divides this entry by CLHEP::GeV to save energies in GeV unit.
-      // Here, we are saving S counts so we multiply by CLHEP::GeV to have the correct number in the output file.
-      if (Scount > 0)
-        hitS->energyDeposit += Scount * CLHEP::GeV;
-    }
-
     // Cerenkov hits
     if (track->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) {
       auto procSubType = track->GetCreatorProcess()->GetProcessSubType();
@@ -118,17 +102,48 @@ namespace sim {
         track->SetTrackStatus(fStopAndKill);
         return true;
       } else if (track->GetCurrentStepNumber() == 1) {
-        auto* hitC = newOrExistingHitIn(m_userData.m_collectionID_ceren, true);
-        // The EDM4HEP converter divides this entry by CLHEP::GeV to save energies in GeV unit.
-        // Here, we are saving C counts so we multiply by CLHEP::GeV to have the correct number in the output file.
-        if (m_userData.SmearCsignal())
+        // create a hit only if the photon is detected
+        if (m_userData.SmearCsignal()) {
+          auto* hitC = newOrExistingHitIn(m_userData.m_collectionID_ceren, true);
+          // The EDM4HEP converter divides this entry by CLHEP::GeV to save energies in GeV unit.
+          // Here, we are saving C counts so we multiply by CLHEP::GeV to have the correct number in the output file.
           hitC->energyDeposit += 1 * CLHEP::GeV;
+        } // if SmearCsignal
+
+        // counted -> kill || not detected -> kill
         track->SetTrackStatus(fStopAndKill);
-      } else
+      } else // keep it until it passes the reflection
         return true;
-    }
+    } // if optical photon
+
+    if (edep <= 0.)
+      return true; // do not save hits with no energy deposit
+
+    // Scintillation signal for this step.  NOTE: this early return also gates the edep collection
+    // below, so SCEPCal_MainEdep is deliberately NOT a complete record of the ionizing energy
+    // deposited in the crystals.  It stores only the deposits that produced a scintillation signal,
+    // so that every edep hit -- and the MC-truth contribution attached to it -- has a matching S hit
+    // in the same cell.
+    auto Scount = m_userData.SmearSsignal(edep);
+    if (Scount <= 0)
+      return true;
+
+    // edep hits (truth): only for steps with a scintillation signal -- see the note above
+    auto* hitedep = newOrExistingHitIn(m_collectionID, false);
+    HitContribution contrib = Geant4Calorimeter::Hit::extractContribution(step);
+    hitedep->energyDeposit += contrib.deposit;
+    hitedep->truth.emplace_back(contrib);
+    Geant4StepHandler h(step);
+    mark(h.track);
+
+    // scintillation hits
+    auto* hitS = newOrExistingHitIn(m_userData.m_collectionID_scint, false);
+    // The EDM4HEP converter divides this entry by CLHEP::GeV to save energies in GeV unit.
+    // Here, we are saving S counts so we multiply by CLHEP::GeV to have the correct number in the output file.
+    hitS->energyDeposit += Scount * CLHEP::GeV;
+
     return true;
-  }
+  } // process
 } // namespace sim
 } // namespace dd4hep
 

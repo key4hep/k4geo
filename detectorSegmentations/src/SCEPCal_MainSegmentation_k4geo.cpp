@@ -68,8 +68,10 @@ namespace DDSegmentation {
     // get gamma
     int igamma = Gamma(cID);
     int iphi = Phi(cID);
+    // gamma count for THIS cell's theta ring (barrel: constant; endcap: projective/per-ring)
+    const int nGammaHere = nGammaAtTheta(Theta(cID));
 
-    if (igamma > 0 && igamma < m_nGamma_ - 1) {
+    if (igamma > 0 && igamma < nGammaHere - 1) {
       // middle crystals, just add +/-1 in gamma
       CellID cID_low =
           setCellID(System(cID), Phi(cID), Theta(cID), igamma - 1, Epsilon(cID), Depth(cID), isCherenkov(cID));
@@ -83,10 +85,10 @@ namespace DDSegmentation {
           setCellID(System(cID), Phi(cID), Theta(cID), igamma + 1, Epsilon(cID), Depth(cID), isCherenkov(cID));
       int iphi_low = modulo(iphi - 1, m_nPhi_);
       CellID cID_low =
-          setCellID(System(cID), iphi_low, Theta(cID), m_nGamma_ - 1, Epsilon(cID), Depth(cID), isCherenkov(cID));
+          setCellID(System(cID), iphi_low, Theta(cID), nGammaHere - 1, Epsilon(cID), Depth(cID), isCherenkov(cID));
       neighbours.insert(cID_low);
       neighbours.insert(cID_high);
-    } else if (igamma == m_nGamma_ - 1) {
+    } else if (igamma == nGammaHere - 1) {
       // highest gamma, add -1 in gamma and +1 in phi (with wrap-around)
       CellID cID_low =
           setCellID(System(cID), Phi(cID), Theta(cID), igamma - 1, Epsilon(cID), Depth(cID), isCherenkov(cID));
@@ -103,32 +105,29 @@ namespace DDSegmentation {
     bool isMiddleOfBarrel = (itheta > m_iTheta_barrel_start_ && itheta < m_iTheta_barrel_end_);
     bool isMiddleOfEndcap = (itheta < m_iTheta_barrel_start_ - 1 || itheta > m_iTheta_barrel_end_ + 1);
 
+    // Insert every cell of the target theta ring that overlaps this cell in azimuth.  The gamma
+    // count changes between rings in the projective endcap, so the index cannot simply be copied.
+    auto insertThetaNeighbours = [&](int detId, int thetaTarget) {
+      for (const int g : gammaRange(Gamma(cID), itheta, thetaTarget))
+        neighbours.insert(setCellID(detId, Phi(cID), thetaTarget, g, Epsilon(cID), Depth(cID), isCherenkov(cID)));
+    };
+
     if (isMiddleOfBarrel || isMiddleOfEndcap) {
       // middle crystals, just add +/-1 in theta
-      CellID cID_low =
-          setCellID(System(cID), Phi(cID), itheta - 1, Gamma(cID), Epsilon(cID), Depth(cID), isCherenkov(cID));
-      CellID cID_high =
-          setCellID(System(cID), Phi(cID), itheta + 1, Gamma(cID), Epsilon(cID), Depth(cID), isCherenkov(cID));
-      neighbours.insert(cID_low);
-      neighbours.insert(cID_high);
+      insertThetaNeighbours(System(cID), itheta - 1);
+      insertThetaNeighbours(System(cID), itheta + 1);
+
     } else if (itheta == m_iTheta_barrel_start_ || itheta == m_iTheta_barrel_end_ + 1) {
       // beginning of barrel/endcap, add +1 in theta
       // and -1 in theta to endcap/barrel
-      CellID cID_high =
-          setCellID(System(cID), Phi(cID), itheta + 1, Gamma(cID), Epsilon(cID), Depth(cID), isCherenkov(cID));
-      CellID cID_low =
-          setCellID(differentDetId, Phi(cID), itheta - 1, Gamma(cID), Epsilon(cID), Depth(cID), isCherenkov(cID));
-      neighbours.insert(cID_low);
-      neighbours.insert(cID_high);
+      insertThetaNeighbours(differentDetId, itheta - 1);
+      insertThetaNeighbours(System(cID), itheta + 1);
+
     } else if (itheta == m_iTheta_barrel_end_ || itheta == m_iTheta_barrel_start_ - 1) {
       // end of barrel/endcap, add -1 in theta
       // and +1 in theta to endcap/barrel
-      CellID cID_low =
-          setCellID(System(cID), Phi(cID), itheta - 1, Gamma(cID), Epsilon(cID), Depth(cID), isCherenkov(cID));
-      CellID cID_high =
-          setCellID(differentDetId, Phi(cID), itheta + 1, Gamma(cID), Epsilon(cID), Depth(cID), isCherenkov(cID));
-      neighbours.insert(cID_low);
-      neighbours.insert(cID_high);
+      insertThetaNeighbours(System(cID), itheta - 1);
+      insertThetaNeighbours(differentDetId, itheta + 1);
     }
 
     return;

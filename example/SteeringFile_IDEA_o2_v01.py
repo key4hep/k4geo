@@ -1,3 +1,5 @@
+import sys
+
 from DDSim.DD4hepSimulation import DD4hepSimulation
 from g4units import cm, mm, GeV, MeV
 
@@ -113,13 +115,18 @@ SIM.action.mapActions["SCEPCal_TimingLayer"] = "SCEPCal_TimingSDAction"
 SIM.filter.mapDetFilter["SCEPCal_MainLayer"] = ""
 SIM.filter.mapDetFilter["SCEPCal_TimingLayer"] = ""
 
-## Replace SDAction for DREndcapTubes subdetector
-SIM.action.mapActions["DREndcapTubes"] = "DRTubesSDAction"
-## Configure the regexSD for DREndcapTubes subdetector
-SIM.geometry.regexSensitiveDetector["DREndcapTubes"] = {
-    "Match": ["DRETS"],
-    "OutputLevel": 4,
-}
+## DREndcapTubes only exists in the full geometry; the CI wedge drops it, so skip its SDAction/regexSD
+## here -- otherwise they reference a missing detector and ddsim exits.  Detected from the compact
+## file on the command line; ddsim owns the argument parser, so a custom flag is not available.
+_idea_o2_ci = any("_CI.xml" in a for a in sys.argv)
+if not _idea_o2_ci:
+    ## Replace SDAction for DREndcapTubes subdetector
+    SIM.action.mapActions["DREndcapTubes"] = "DRTubesSDAction"
+    ## Configure the regexSD for DREndcapTubes subdetector
+    SIM.geometry.regexSensitiveDetector["DREndcapTubes"] = {
+        "Match": ["DRETS"],
+        "OutputLevel": 4,
+    }
 
 ## Replace SDAction for DRBarrelTubes subdetector
 SIM.action.mapActions["DRBarrelTubes"] = "DRTubesSDAction"
