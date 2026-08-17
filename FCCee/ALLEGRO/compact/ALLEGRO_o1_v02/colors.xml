@@ -32,6 +32,17 @@
     <vis name="GoldCoatingVis" alpha="0.0" r="0.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
     <vis name="TubeVis" alpha="1.0" r="1.0" g="0.7" b="0.5" showDaughters="true" visible="true"/>
     <vis name="VacVis" alpha="1.0" r="1.0" g="1.0" b="1.0" showDaughters="true" visible="false"/>
+    <vis name="BlueVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/> <!-- Missing definiton -->
+
+    <!-- Missing definition. Beam Instrumentation (defined in BeamInstrumentation.xml) -->
+    <vis name="CoilVis" alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
+
+    <!-- Missing definitions. LumiCal / HOMAbsorber (defined in LumiCal.xml and HOMAbsorber.xml) -->
+    <vis name="SeeThrough" alpha="0.0" r="0" g="0" b="0" showDaughters="true" visible="false"/>
+    <vis name="BCLayerVis1" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="BCLayerVis2" alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="BCLayerVis3" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="LCALShieldVis" alpha="1.0" r="0.6" g="0.3" b="0.0" showDaughters="true" visible="true"/>
 
     <!-- ECAL Barrel (retrieved from ECalBarrel_thetamodulemerged.xml) -->
     <vis name="ecal_envelope" r="0.1" g="0.2" b="0.6" alpha="1" showDaughters="false" visible="true" />
@@ -44,6 +55,7 @@
     <vis name="emec_lar_vis" r="0.5" g="0.3" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="emec_pb_vis" r="0.5" g="0.5" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="emec_readout_vis" r="0.5" g="0.1" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_envelope_vis" r="0.6" g="0.3" b="0" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" /> <!-- Missing definiton -->
 
     <!-- HCAL Barrel (retrieved from HCalBarrel_TileCal.xml) -->
     <vis name="hcal_steel_vis" r="0.5" g="0.5" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
@@ -57,6 +69,8 @@
     <vis name="hcal_barrel_seq2_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
     <vis name="hcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
     <vis name="hcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" />
+    <vis name="hcal_steel_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" /> <!-- Missing definiton -->
+    <vis name="hcal_steel_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" /> <!-- Missing definiton -->
 
     <!-- HCAL Endcaps (retrieved from HCalEndcaps_ThreeParts_TileCal.xml) -->
     <vis name="endcapHcal_steel_vis" r="0.5" g="0.5" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
@@ -70,6 +84,11 @@
     <vis name="endcapHcal_barrel_seq2_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
     <vis name="endcapHcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
     <vis name="endcapHhcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_steel_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" /> <!-- Missing definiton -->
+    <vis name="endcapHcal_steel_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" /> <!-- Missing definiton -->
+    <vis name="endcapHcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" /> <!-- Missing definiton -->
+    <vis name="endcaphcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" /> <!-- Missing definiton -->
+    <vis name="endcaphcal_barrel_seq1_vis" r="0.1" g="0.8" b="0.6" alpha="1" showDaughters="true" visible="true" /> <!-- Missing definiton -->
 
     <!-- Muon Tagger (retrieved from MuonTagger.xml) -->
     <vis name="muon_vis" r="1.0" g="0.1" b="0.1" showDaughters="true" visible="true" />
@@ -91,6 +110,7 @@
     <vis name="vCDCH:ReadOutBox" alpha="1.0" r="0.8" g="0.5" b="0.0" showDaughters="true" visible="true"/>
     <vis name="vCDCH:ROSteel" alpha="1.0" r="0.8" g="0.5" b="0.0" showDaughters="true" visible="true"/>
     <vis name="vCDCH:Air" showDaughters="true" visible="false"/>
+    <vis name="CDCH" alpha="0.1" r="0.0" g="0.1" b="0.6" showDaughters="true" visible="false"/> <!-- Missing definiton -->
 
     <!-- Vertex (retrieved from Vertex.xml) -->
     <vis name="SiVertexModuleVis" alpha="1.0" r="1" g="1" b="0.6" showDaughters="true" visible="false"/>
@@ -98,6 +118,7 @@
     <vis name="SiVertexPassiveVis" alpha="1.0" r="0.274" g="0.274" b="0.274" showDaughters="true" visible="true"/>
     <vis name="SiVertexCableVis" alpha="1.0" r="0.85" g="0.53" b="0.4" showDaughters="true" visible="true"/>
     <vis name="SiVertexAir" alpha="1.0" r="0" g="0" b="0" showDaughters="false" visible="false"/>
+    <vis name="SiVertexLayerVis" alpha="1.0" r="1" g="0.75" b="0" showDaughters="false" visible="true"/> <!-- Missing definiton -->
 
     <!-- Solenoid (retrieved from Solenoid_o1_v01_02.xml; not currently included by ALLEGRO_o1_v02.xml) -->
     <vis name="SolenoidBarrelLayerVis" alpha="1" r="0" g="0.3" b="0.3" showDaughters="false" visible="true"/>
