@@ -74,9 +74,6 @@
     <constant name="readout_thickness" value="1.2*mm"/>
   </define>
 
-  <display>
-    <vis name="ecal_envelope" r="0.1" g="0.2" b="0.6" alpha="1" showDaughters="false" visible="true"/>
-  </display>
 
   <readouts>
     <!-- readout for the simulation, with the baseline merging: 2x along the module direction in each layer; 4x along theta in each layer except layer 1 -->
