@@ -9,9 +9,6 @@
   Simple muon tagger - barrel and endcaps
   -->
 
-  <display>
-    <vis name="muon_vis" r="1.0" g="0.1" b="0.1" showDaughters="true" visible="true" />
-  </display> 
   
   <readouts>
     <readout name="MuonTaggerPhiEta">
