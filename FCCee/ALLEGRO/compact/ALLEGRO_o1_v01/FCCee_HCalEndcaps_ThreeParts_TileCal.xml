@@ -51,7 +51,7 @@
 		  width="(HCalEndcap_max_z1 - HCalEndcap_min_z1)*0.5"  dz="(HCalEndcap_max_z2 - HCalEndcap_min_z2)*0.5" z_length="(HCalEndcap_max_z3 - HCalEndcap_min_z3)*0.5"
 		  offset="HCalEndcap_min_z1 + (HCalEndcap_max_z1 - HCalEndcap_min_z1)*0.5"  z_offset="HCalEndcap_min_z2 + (HCalEndcap_max_z2 - HCalEndcap_min_z2)*0.5" v_offset="HCalEndcap_min_z3 + (HCalEndcap_max_z3 - HCalEndcap_min_z3)*0.5"/>
       <layers>
-	<layer id="0" name="type_1" material="Air" vis="endcaphcal_barrel_layer_vis">
+	<layer id="0" name="type_1" material="Air" vis="endcapHcal_barrel_layer_vis">
           <dimensions
               dr="100*mm"
 	      nmodules="4"
@@ -59,7 +59,7 @@
 	      nPads="4"
              />
 	</layer>
-	<layer id="1" name="type_2" material="Air" vis="endcaphcal_barrel_layer_vis">
+	<layer id="1" name="type_2" material="Air" vis="endcapHcal_barrel_layer_vis">
 	  <dimensions
               dr="150*mm"
 	      nmodules="2"
@@ -67,7 +67,7 @@
               nPads="10"
              />
 	</layer>
-	<layer id="2" name="type_3" material="Air" vis="endcaphcal_barrel_layer_vis">
+	<layer id="2" name="type_3" material="Air" vis="endcapHcal_barrel_layer_vis">
 	  <dimensions
               dr="250*mm"
 	      nmodules="0"
@@ -77,7 +77,7 @@
 	</layer>
       </layers>
       
-      <sequence_a id="3" name="sequence_1" material="Air" vis="endcaphcal_barrel_seq1_vis">
+      <sequence_a id="3" name="sequence_1" material="Air" vis="endcapHcal_barrel_seq1_vis">
 	<dimensions
 	   dz="2*EndcapHCal_master_plate_thickness + EndcapHCal_spacer_plate_thickness + EndcapHCal_scintillator_thickness + 2*EndcapHCal_air_space_thickness"
 	   phiBins="EndcapHCal_n_phi_modules"
