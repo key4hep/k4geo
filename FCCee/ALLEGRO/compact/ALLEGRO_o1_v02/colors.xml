@@ -84,8 +84,6 @@
     <vis name="endcapHcal_barrel_seq2_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
     <vis name="endcapHcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
     <vis name="endcapHcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" />
-    <vis name="endcaphcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" /> <!-- Missing definiton -->
-    <vis name="endcaphcal_barrel_seq1_vis" r="0.1" g="0.8" b="0.6" alpha="1" showDaughters="true" visible="true" /> <!-- Missing definiton -->
 
     <!-- Muon Tagger (retrieved from MuonTagger.xml) -->
     <vis name="muon_vis" r="1.0" g="0.1" b="0.1" showDaughters="true" visible="true" />
