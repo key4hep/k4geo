@@ -86,11 +86,11 @@
 	   x="EndcapHCAL_module_spacing_phi"
 	   />
 	<!-- Master plate -->
-	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_steel_master_vis" />
+	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_master_vis" />
 	<!-- Spacer plate -->
 	<module_component thickness="EndcapHCal_spacer_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_steel_vis" />
 	<!-- Master plate -->
-	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_steel_master_vis" />
+	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_master_vis" />
 	<!-- Air -->
 	<module_component thickness="EndcapHCal_air_space_thickness"    y_offset="0" material="Air" sensitive="false" vis="endcapHcal_air_vis" />
 	<!-- Scintillator plate -->
@@ -105,7 +105,7 @@
 	   x="EndcapHCAL_module_spacing_phi"
 	   />
 	<!-- Master plate -->
-	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_steel_master_vis" />
+	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_master_vis" />
 	<!-- Air -->
 	<module_component thickness="EndcapHCal_air_space_thickness"    y_offset="0" material="Air" sensitive="false" vis="endcapHcal_air_vis" />
 	<!-- Scintillator plate -->
@@ -113,14 +113,14 @@
 	<!-- Air -->
 	<module_component thickness="EndcapHCal_air_space_thickness"    y_offset="0" material="Air" sensitive="false" vis="endcapHcal_air_vis" />
 	<!-- Master plate -->
-	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_steel_master_vis" />
+	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_master_vis" />
 	<!-- Spacer plate -->
 	<module_component thickness="EndcapHCal_spacer_plate_thickness" y_offset="0"  material="Fe" sensitive="false" vis="endcapHcal_steel_vis" />
       </sequence_b>
       <end_plate name="end_plate" thickness="EndcapHCal_end_plate_thickness" material="Fe" sensitive="false" vis="endcapHcal_end_plate_vis" />
       <face_plate name="face_plate" thickness="EndcapHCal_face_plate_thickness" material="Fe" sensitive="false" vis="endcapHcal_face_plate_vis" />
       <plate_space name="plate_space" thickness="EndcapHCal_plate_space" material="Air" sensitive="false" vis="endcapHcal_air_vis" />
-      <steel_support name="steel_support" thickness="EndcapHCal_steel_support_thickness" material="Steel235" sensitive="false" vis="endcapHcal_steel_support_vis" />
+      <steel_support name="steel_support" thickness="EndcapHCal_steel_support_thickness" material="Steel235" sensitive="false" vis="endcapHcal_support_vis" />
     </detector>
   </detectors>
   
