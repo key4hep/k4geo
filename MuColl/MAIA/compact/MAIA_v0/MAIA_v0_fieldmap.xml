@@ -248,7 +248,8 @@
 
     </plugins>
 
-    <include ref="Field_Solenoid_Analytic_5T.xml"/>
+    <!-- The idealised solenoid is swapped for the computed field map. -->
+    <include ref="Field_Solenoid_Map_5T.xml"/>
 
 </lccdd>
 
