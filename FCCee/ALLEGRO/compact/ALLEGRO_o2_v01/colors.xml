@@ -29,11 +29,18 @@
     <!-- Straw Tube Tracker (retrieved from StrawTubeTracker_o1_v01.xml) -->
     <vis name="STTVis" alpha="0.1" r="0.1" g=".5" b=".5" showDaughters="true" visible="false"/>
 
-    <!-- 
+    <!--
     
-    This version reuses some files from IDEA_o1_v04 as-is:
+    This version reuses some files from IDEA_o1_v04, ALLEGRO_o1_v03 and MDI_o1_v00 as-is:
     - VertexComplete_o1_v04
     - SiliconWrapper_o1_v02
+    - ECalBarrel_thetamodulemerged
+    - ECalEndcaps_Turbine_o1_v03
+    - HCalBarrel_TileCal_v03
+    - HCalEndcaps_ThreeParts_TileCal_v03
+    - MuonTaggerPhiTheta
+    - LumiCal
+
       
     The vis entries below are duplicated from that version colors.xml file to keep this one self-contained
     
@@ -63,6 +70,74 @@
     <vis name="SiWrWaterVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
     <vis name="SiWrSupportVis" alpha="0.8" r="0.25" g="0.25" b="0.2" showDaughters="true" visible="true"/>
     <vis name="SiWrStaveVis" alpha="0.8" r="1.0" g="0.5" b="0.0" showDaughters="false" visible="true"/>
+
+    <!-- ECAL Barrel (reused as-is from ALLEGRO_o1_v03/ECalBarrel_thetamodulemerged.xml) -->
+    <vis name="ecal_envelope" r="0.1" g="0.2" b="0.6" alpha="1" showDaughters="false" visible="true"/>
+    <vis name="service_bath" r="0." g="1" b="0." alpha="1" showDaughters="true" visible="true"/>
+    <vis name="sensitive_bath" r="0.0" g="0." b="1" alpha="1" showDaughters="true" visible="true"/>
+    <vis name="absorbers" r="1" g="0." b="0." alpha="1" showDaughters="true" visible="true"/>
+    <vis name="pcb" r="0." g="1." b="0." alpha="1" showDaughters="true" visible="true"/>
+
+    <!-- ECAL Endcaps (reused as-is from ALLEGRO_o1_v03/ECalEndcaps_Turbine_o1_v03.xml) -->
+    <vis name="emec_cryo_vis" r="0.6" g="0.6" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_bath_vis" r="0.6" g="0.4" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_envelope_vis_vis" r="0.6" g="0.3" b="0" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_layer_vis" r="0.6" g="0.3" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_lar_vis" r="0.5" g="0.3" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_pb_vis" r="0.5" g="0.5" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_readout_vis" r="0.5" g="0.1" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="electrode_vis" r="0.5" g="0.0" b="0.0" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_envelope_vis" r="0.6" g="0.3" b="0" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+
+    <!-- HCAL Barrel (reused as-is from ALLEGRO_o1_v03/HCalBarrel_TileCal_v03.xml) -->
+    <vis name="hcal_steel_vis" r="0.5" g="0.5" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="hcal_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="hcal_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="hcal_face_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="hcal_end_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="hcal_polystyrene_vis" r="0.0" g="0.6" b="0.3" alpha="0.8" showDaughters="true" visible="true" />
+    <vis name="hcal_envelope" r="0.6" g="0.8" b="0.6" alpha="1" showDaughters="true" visible="true" />
+    <vis name="hcal_barrel_seq1_vis" r="0.1" g="0.8" b="0.6" alpha="1" showDaughters="true" visible="true" />
+    <vis name="hcal_barrel_seq2_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
+    <vis name="hcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
+    <vis name="hcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" />
+    <vis name="hcal_steel_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="hcal_steel_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+
+    <!-- HCAL Endcaps (reused as-is from ALLEGRO_o1_v03/HCalEndcaps_ThreeParts_TileCal_v03.xml) -->
+    <vis name="endcapHcal_steel_vis" r="0.5" g="0.5" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_face_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_end_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_polystyrene_vis" r="0.0" g="0.6" b="0.3" alpha="0.8" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_envelope" r="0.6" g="0.8" b="0.6" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_barrel_seq1_vis" r="0.1" g="0.8" b="0.6" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_barrel_seq2_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcapHhcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_steel_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_steel_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcaphcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcaphcal_barrel_seq1_vis" r="0.1" g="0.8" b="0.6" alpha="1" showDaughters="true" visible="true" /> 
+
+    <!-- Muon Tagger (reused as-is from ALLEGRO_o1_v03/MuonTaggerPhiTheta.xml) -->
+    <vis name="muon_vis" r="1.0" g="0.1" b="0.1" showDaughters="true" visible="true" />
+
+    <!-- LumiCal (reused as-is from ALLEGRO_o1_v03/LumiCal.xml) -->
+    <vis name="SeeThrough" alpha="0.0" r="0" g="0" b="0" showDaughters="true" visible="false"/>
+    <vis name="BCLayerVis1" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="BCLayerVis2" alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="BCLayerVis3" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="LCALShieldVis" alpha="1.0" r="0.6" g="0.3" b="0.0" showDaughters="true" visible="true"/>
+
+    <!-- Beampipe (reused as-is from MDI_o1_v00/Beampipe_o4_v05.xml) -->
+    <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
+    <vis name="BlueVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+
+    <!-- Beam Instrumentation (reused as-is from MDI_o1_v00/BeamInstrumentation_o1_v01.xml) -->
+    <vis name="CoilVis" alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
 
   </display>
 
