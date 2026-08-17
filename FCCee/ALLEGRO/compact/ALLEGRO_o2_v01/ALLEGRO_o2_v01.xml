@@ -29,6 +29,7 @@
   </define>
 
   <include ref="./DectDimensions.xml" />
+  <include ref="./colors.xml" />
 
   <!-- shape based model of the beam pipe -->
   <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
