@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lccdd>
 
+  <!-- FCCee ALLEGRO_o1_v03: consolidated visualization (color) definitions -->
+
   <display>
 
     <!-- Global palette (retrieved from DectDimensions.xml) -->
@@ -56,8 +58,6 @@
     <vis name="hcal_barrel_seq2_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
     <vis name="hcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
     <vis name="hcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" />
-    <vis name="hcal_steel_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" /> <!-- Missing definiton -->
-    <vis name="hcal_steel_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" /> <!-- Missing definiton -->
 
     <!-- HCAL Endcaps (retrieved from HCalEndcaps_ThreeParts_TileCal_*.xml) -->
     <vis name="endcapHcal_steel_vis" r="0.5" g="0.5" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
@@ -71,8 +71,6 @@
     <vis name="endcapHcal_barrel_seq2_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
     <vis name="endcapHcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
     <vis name="endcapHhcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" />
-    <vis name="endcapHcal_steel_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" /> <!-- Missing definiton -->
-    <vis name="endcapHcal_steel_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" /> <!-- Missing definiton -->
     <vis name="endcapHcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" /> <!-- Missing definiton -->
     <vis name="endcaphcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" /> <!-- Missing definiton -->
     <vis name="endcaphcal_barrel_seq1_vis" r="0.1" g="0.8" b="0.6" alpha="1" showDaughters="true" visible="true" /> <!-- Missing definiton -->
@@ -90,11 +88,6 @@
     <!-- 
         
     This version reuses some files from IDEA_o1_v03, IDEA_o1_v04 and MDI_o1_v01 as-is:
-    - DriftChamber_o1_v02
-    - VertexComplete_o1_v04
-    - SiliconWrapper_o1_v02
-    - Beampipe_o4_v05
-    - BeamInstrumentation_o1_v01
 
     The vis entries below are duplicated from that version colors.xml file to keep this one self-contained
 
