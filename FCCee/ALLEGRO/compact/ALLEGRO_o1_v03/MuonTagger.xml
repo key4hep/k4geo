@@ -9,7 +9,6 @@
   Simple muon tagger - barrel and endcaps
   -->
 
-  
   <readouts>
     <readout name="MuonTaggerPhiEta">
       <segmentation type="FCCSWGridPhiEta_k4geo" phi_bins="704" offset_phi="-pi+(pi/704.)" grid_size_eta="0.01" offset_eta="-2.91"/>
