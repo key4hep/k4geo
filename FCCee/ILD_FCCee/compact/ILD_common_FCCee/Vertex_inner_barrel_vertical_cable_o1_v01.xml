@@ -1,0 +1,9 @@
+<!-- Proxy for barrel vertex cabling (like in CLD vertex detector) -->
+<detector name="VertexVerticalCable" type="TrackerEndcapSupport_o1_v02" reflect="true"  region="VertexEndcapRegion">
+    <envelope>
+        <shape type="Assembly"/>
+    </envelope>
+    <layer id="1" inner_r="VTXIB_SEED_r2" inner_z="VTXIB_SEED_nModules5*VTXIB_SEED_sensor_z/2.+5.0*mm+7*mm" outer_r="VTX_r_max-5*env_safety" vis="SiVertexCableVis">
+        <slice material="Copper" thickness="0.02*mm" />
+    </layer>
+</detector>
