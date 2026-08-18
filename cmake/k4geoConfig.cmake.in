@@ -1,10 +1,5 @@
 set(k4geo_VERSION @k4geo_VERSION@)
 
-# Whether this k4geo was built against LCIO (K4GEO_USE_LCIO at build time).
-# Consumers can query it to know if the LCIO-dependent detector constructors
-# and plugins are present in this installation.
-set(k4geo_USE_LCIO @K4GEO_USE_LCIO@)
-
 @PACKAGE_INIT@
 
 set_and_check(k4geo_CMAKE_DIR "@PACKAGE_CMAKE_INSTALL_CMAKEDIR@")
@@ -14,9 +9,6 @@ include(CMakeFindDependencyMacro)
 find_dependency(DD4hep REQUIRED)
 find_dependency(Geant4 REQUIRED)
 find_dependency(ROOT REQUIRED COMPONENTS Geom GenVector)
-if(k4geo_USE_LCIO)
-  find_dependency(LCIO REQUIRED)
-endif()
 
 include(${k4geo_CMAKE_DIR}/k4geoConfig-targets.cmake)
 

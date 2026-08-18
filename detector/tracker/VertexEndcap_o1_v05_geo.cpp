@@ -19,10 +19,6 @@
 #include "XML/Utilities.h"
 #include <map>
 
-#include "UTIL/LCTrackerConf.h"
-#include <UTIL/BitField64.h>
-#include <UTIL/ILDConf.h>
-
 using namespace std;
 
 using dd4hep::_toString;
@@ -39,7 +35,6 @@ using dd4hep::SensitiveDetector;
 using dd4hep::Transform3D;
 using dd4hep::Trapezoid;
 using dd4hep::Volume;
-using dd4hep::rec::NeighbourSurfacesData;
 using dd4hep::rec::ZDiskPetalsData;
 
 static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens) {
@@ -54,12 +49,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   map<string, Volume> modules;
   map<string, Placements> sensitives;
   PlacedVolume pv;
-
-  // for encoding
-  std::string cellIDEncoding = sens.readout().idSpec().fieldDescription();
-  UTIL::BitField64 encoder(cellIDEncoding);
-  encoder.reset();
-  encoder[lcio::LCTrackerCellID::subdet()] = det_id;
 
   // --- create an envelope volume and position it into the world ---------------------
 
@@ -76,7 +65,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
   // -------- reconstruction parameters  ----------------
   ZDiskPetalsData* zDiskPetalsData = new ZDiskPetalsData;
-  NeighbourSurfacesData* neighbourSurfacesData = new NeighbourSurfacesData();
   std::map<std::string, double> moduleSensThickness;
 
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi) {
@@ -211,66 +199,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
           }
         }
 
-        ///////////////////
-
-        // get cellID and fill map< cellID of surface, vector of cellID of neighbouring surfaces >
-
-        // encoding
-
-        dd4hep::CellID cellID_reflect;
-        if (reflect) {
-          encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::bwd;
-          encoder[lcio::LCTrackerCellID::layer()] = l_id;
-          encoder[lcio::LCTrackerCellID::module()] = 0; // only 1 ring so always 0
-          encoder[lcio::LCTrackerCellID::sensor()] = k;
-
-          cellID_reflect = encoder.lowWord(); // 32 bits
-        }
-
-        encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::fwd;
-        encoder[lcio::LCTrackerCellID::layer()] = l_id;
-        encoder[lcio::LCTrackerCellID::module()] = 0; // only 1 ring so always 0
-        encoder[lcio::LCTrackerCellID::sensor()] = k;
-
-        const dd4hep::CellID cellID = encoder.lowWord(); // 32 bits
-
-        // compute neighbours
-
-        int n_neighbours_sensor = 1; // 1 gives the adjacent modules (i do not think we would like to change this)
-
-        int newsensor = 0;
-
-        for (int isensor = -n_neighbours_sensor; isensor <= n_neighbours_sensor; isensor++) { // neighbouring sensors
-
-          if (isensor == 0)
-            continue; // cellID we started with
-          newsensor = k + isensor;
-
-          // compute special case at the boundary
-          // general computation to allow (if necessary) more then adiacent neighbours (ie: +-2)
-          if (newsensor < 0)
-            newsensor = nmodules + newsensor;
-          if (newsensor >= nmodules)
-            newsensor = newsensor - nmodules;
-
-          // encoding
-          encoder[lcio::LCTrackerCellID::module()] = 0;
-          encoder[lcio::LCTrackerCellID::sensor()] = newsensor;
-
-          neighbourSurfacesData->sameLayer[cellID].push_back(encoder.lowWord());
-
-          if (reflect) {
-            encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::bwd;
-            encoder[lcio::LCTrackerCellID::layer()] = l_id;
-            encoder[lcio::LCTrackerCellID::module()] = 0;
-            encoder[lcio::LCTrackerCellID::sensor()] = newsensor;
-
-            neighbourSurfacesData->sameLayer[cellID_reflect].push_back(encoder.lowWord());
-          }
-        }
-
-        ///////////////////
-
         // dz   = -dz; //NOTE: For "spiraling" endcaps this is not needed. Could add xml option to turn on
         phi += iphi;
       }
@@ -283,7 +211,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
   // attach data to detector
   sdet.addExtension<ZDiskPetalsData>(zDiskPetalsData);
-  sdet.addExtension<NeighbourSurfacesData>(neighbourSurfacesData);
 
   std::cout << "XXX Vertex endcap layers: " << zDiskPetalsData->layers.size() << std::endl;
 
