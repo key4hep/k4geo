@@ -35,7 +35,7 @@
     
     This version reuses some files from IDEA_o1_v04, ALLEGRO_o1_v03 and MDI_o1_v00 as-is.
       
-    The vis entries below are duplicated from that version colors.xml file to keep this one self-contained
+    The vis entries below are duplicated from that version display.xml file to keep this one self-contained
     
     -->
     <!-- Vertex (reused as-is from IDEA_o1_v04/VertexComplete_o1_v04.xml) -->
