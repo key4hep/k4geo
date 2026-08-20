@@ -2,18 +2,19 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-    <info name="CLD_o2_v08"
-        title="FCCee detector model option 2 version 08"
-        author="Andre Sailer, Leonhard Reichenbach"
+    <info name="CLD_o5_v01"
+        title="FCCee detector model option 5 version 01"
+        author="Andre Sailer, Leonhard Reichenbach, Armin Ilg"
         url="http://ilcsoft.desy.de"
         status="development"
-        version="7">
+        version="1">
         <comment>The compact format for the FCCee Detector design</comment>
     </info>
 
     <includes>
         <gdmlFile  ref="elements.xml"/>
         <gdmlFile  ref="materials.xml"/>
+        <gdmlFile  ref="../../../ILD_FCCee/compact/ILD_common_FCCee/materials.xml"/> <!-- For some FCC-SEED vertex materials -->
     </includes>
 
     <define>
@@ -61,15 +62,15 @@
         <constant name="BPWCool"       value="1.0*mm" />
         <constant name="BeamPipeWidth" value="2.0*BPWWall + BPWCool"/>
 
-	<constant name="BeamPipeWidthFirstCone" value="2.0*mm" />
+        <constant name="BeamPipeWidthFirstCone" value="2.0*mm" />
         <!-- this is the inner length of the longer elipse axis -->
-	<constant name="ConeBeamPipe_Rmax" value="28.9*mm" />
+        <constant name="ConeBeamPipe_Rmax" value="28.9*mm" />
         <constant name="CentralBeamPipe_zmax" value="90*mm"/>
-	<constant name="SeparatedBeamPipe_z" value="1190.0*mm"/>
+        <constant name="SeparatedBeamPipe_z" value="1190.0*mm"/>
         <constant name="CentralBeamPipe_rmax" value="10.0*mm"/>
-	<constant name="BeamPipeGoldWidth" value="0.005*mm" />
-	<constant name="BeamPipeGoldTolerance" value="0.001*mm" />  <!-- dummy tolerance, some small non zero value -->
-	<constant name="BeamPipeConeHalfAngle" value="(ConeBeamPipe_Rmax + BeamPipeWidthFirstCone - CentralBeamPipe_rmax ) / (SeparatedBeamPipe_z - CentralBeamPipe_zmax)" />
+        <constant name="BeamPipeGoldWidth" value="0.005*mm" />
+        <constant name="BeamPipeGoldTolerance" value="0.001*mm" />  <!-- dummy tolerance, some small non zero value -->
+        <constant name="BeamPipeConeHalfAngle" value="(ConeBeamPipe_Rmax + BeamPipeWidthFirstCone - CentralBeamPipe_rmax ) / (SeparatedBeamPipe_z - CentralBeamPipe_zmax)" />
 
         <constant name="InnerTracker_half_length" value="2300*mm" />
 
@@ -121,13 +122,34 @@
 
         <constant name="env_safety" value="0.1*mm"/>
 
-
-
-        <constant name="Vertex_inner_radius" value="12.5*mm"/>
+        <!-- Vertex variables. Adjustable -->  
+        <constant name="Vertex_inner_radius" value="CentralBeamPipe_rmax+BeamPipeWidth"/> <!-- Envelope starts right outside beam pipe, needed if vertex goes on top of beam pipe (if possible) -->
+        <constant name="VTXIB_r_min_layer" value="11.8*mm"/> <!-- Position of the first layer of the vertex barrel -->
         <constant name="Vertex_outer_radius" value="111*mm"/>
-        <constant name="Vertex_half_length" value="302*mm"/>
+        <constant name="Vertex_half_length" value="302*mm"/> <!-- Defines envelope for vertex endcap and of the placement of the disks -->
+        <constant name="VertexEndcap_zmin" value="160*mm"/>
+        <constant name="VertexEndcap_zmax" value="Vertex_half_length-2.0*mm"/>
+
+        <!-- Changes necessary for FCC-SEED -->
+        <constant name="VertexClearanceTheta"   value="0.1035*rad"/>  <!-- Clearance of vertex detector in mrad from IP. !!! Too high currently, lumical acceptance is 107 mrad so consider 110 mrad as limit -> Need to adapt vertex disks!!! -->
+        <constant name="VertexDisksAcceptanceLimit" value="0.135*rad"/>
+        <constant name="VTXIB_SEED_Kapton_beampipe_thickness" value="0.1*mm"/> <!-- Thickness of the Kapton layer on the beampipe. Kapton layer is used if Vertex_inner_radius+VTXIB_SEED_Kapton_beampipe_thickness = VTXIB_r_min_layer -->
+        <constant name="VTXIB_tube_thickness"   value="0.2*mm"/>      <!-- Thickness of the inner vertex tube needed for air-cooling -->
+        <constant name="VTXOB_r_max_layer" value="Vertex_outer_radius"/> 
+        <constant name="VTXOB_rmax_clearance" value="0.0*mm"/>
+        <constant name="VTX_r_max" value="Vertex_outer_radius"/>
+
+        <constant name="VTXIB_vertical_cable_r_max" value="VTX_r_max-5*env_safety"/>
+
+        <constant name="VTXIB_pitch_z"      value="0.020*mm"/>  <!-- Assume 20x20 µm pitch, DRD3 OCTOPUS-like sensors -->
+        <constant name="VTXIB_pitch_phi"    value="0.020*mm"/>
+        <constant name="VTXD_pitch_r"       value="0.020*mm"/>  <!-- Assume 20x20 µm pitch, DRD3 OCTOPUS-like sensors -->
+        <constant name="VTXD_pitch_phi"     value="0.020*mm"/>
+        <!-- end of changes for FCC-SEED -->
+
         <!-- cone to describe the upper acceptance of the LumiCal -->
         <constant name="Vertex_LumiCal_Clearence" value="110*mrad"/>
+
 
         <constant name="InnerTracker_inner_radius" value="61*mm"/>
         <constant name="InnerTracker_outer_radius" value="696*mm"/>
@@ -210,13 +232,13 @@
         <constant name="LumiCal_inner_radius" value="55.0*mm"/>
         <constant name="LumiCal_outer_radius" value="115.0*mm- env_safety"/>
 
-	<constant name="LumiCal_Instr_thickness" value="20*mm"/>
-	<constant name="LumiCal_Instr_inner_radius" value="LumiCal_outer_radius"/>
-	<constant name="LumiCal_Instr_outer_radius" value="LumiCal_outer_radius+LumiCal_Instr_thickness - env_safety"/>
+        <constant name="LumiCal_Instr_thickness" value="20*mm"/>
+        <constant name="LumiCal_Instr_inner_radius" value="LumiCal_outer_radius"/>
+        <constant name="LumiCal_Instr_outer_radius" value="LumiCal_outer_radius+LumiCal_Instr_thickness - env_safety"/>
 
-	<constant name="LumiCal_Cool_thickness" value="9.75*mm"/>
-	<constant name="LumiCal_Cool_inner_radius" value="LumiCal_Instr_outer_radius"/>
-	<constant name="LumiCal_Cool_outer_radius" value="LumiCal_Instr_outer_radius+LumiCal_Cool_thickness"/>
+        <constant name="LumiCal_Cool_thickness" value="9.75*mm"/>
+        <constant name="LumiCal_Cool_inner_radius" value="LumiCal_Instr_outer_radius"/>
+        <constant name="LumiCal_Cool_outer_radius" value="LumiCal_Instr_outer_radius+LumiCal_Cool_thickness"/>
 
         <constant name="Lcal_services_rmax" value="LumiCal_outer_radius+30*mm"/>
         <constant name="Lcal_offset_phi" value=" 0."/>
@@ -246,7 +268,7 @@
 
         <constant name="QD0_min_z" value="2000*mm"/>
         <constant name="QD0_max_z" value="5400*mm"/>
-	<constant name="QD0Coil_outer_radius" value="30*mm"/>
+	    <constant name="QD0Coil_outer_radius" value="30*mm"/>
         <constant name="CollimatorInFrontOfQD0_dz" value="20*cm"/>
         <constant name="CollimatorInFrontOfQD0_radius" value="10*mm"/>
         <constant name="CollimatorInFrontOfQD0_dr" value="16*mm"/>
@@ -308,13 +330,21 @@
 
     <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
 
-    <include ref="Beampipe_o4_v05.xml"/>
+    <!-- Import accelerator components -->
+    <!-- shape based model of the beam pipe -->
+    <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
+    <include ref="../../../MDI/compact/MDI_o1_v00/BeamInstrumentation_o1_v01.xml" />
 
-    <include ref="BeamInstrumentation_o3_v02_fitShield.xml"/>
+    <!-- engineered CAD model of the beam pipe -->
+    <!-- In order to use the CAD beampipe, build k4geo with the following CMake option:
+    cmake -D INSTALL_BEAMPIPE_STL_FILES=ON which will download the files needed -->
+    <!-- <include ref="../../../MDI/compact/MDI_o1_CADBased_v01/MDI_o1_CADBased_v01_collection.xml" />
+    <world material="Vacuum"/> -->
 
     <include ref="LumiCal_o3_v02_05.xml"/>
 
-    <include ref="Vertex_o4_v07_smallBP.xml"/>
+    <comment> FCC-SEED barrel and adapted CLD endcaps </comment>
+    <include ref="../../../ILD_FCCee/compact/ILD_common_FCCee/Vertex_FCC-SEED_o1_v01.xml"/>
 
     <include ref="InnerTracker_o2_v08.xml"/>
     <include ref="OuterTracker_o2_v08.xml"/>
@@ -377,13 +407,13 @@
         <argument value="(OuterTracker_Endcap_radius_2-OuterTracker_Barrel_radius_1)/(OuterTracker_half_length-OuterTracker_Barrel_half_length)" />
 
         <argument value="/VertexEndcap/" />
-        <argument value="VertexEndcap_z1" />
-        <argument value="VertexBarrel_r3+1*cm" />
-        <argument value="(VertexEndcap_rmax-VertexBarrel_r3+1*cm)/(VertexEndcap_z3-VertexEndcap_z1)" />
+        <argument value="VertexEndcap_zmin" />
+        <argument value="VertexBarrel_rmax+1*cm" />
+        <argument value="(VertexEndcap_rmax-VertexBarrel_rmax+1*cm)/(VertexEndcap_zmax-VertexEndcap_zmin)" />
 
         <argument value="/VertexVerticalCable" />
         <argument value="0" />
-        <argument value="VertexBarrel_r3+0.5*cm" />
+        <argument value="VertexBarrel_rmax+0.5*cm" />
         <argument value="0" />
       </plugin>
 
