@@ -50,6 +50,9 @@
   <constant name="VTXIB_r_min_layer" value="11.8*mm"/> <!-- Position of the first layer of the vertex barrel -->
   <constant name="Vertex_outer_radius" value="111*mm"/>
   <constant name="Vertex_half_length" value="302*mm"/> <!-- Defines envelope for vertex endcap and of the placement of the disks -->
+  <constant name="VertexEndcap_zmin" value="160*mm"/>
+  <constant name="VertexEndcap_zmax" value="Vertex_half_length-2.0*mm"/>
+
   <!-- cone to describe the upper acceptance of the LumiCal -->
   <constant name="Vertex_LumiCal_Clearence" value="110*mrad"/>
   <constant name="VertexClearanceTheta" value="0.1035*rad"/> <!-- Clearance of vertex detector in mrad from IP -->
@@ -64,6 +67,11 @@
   <constant name="VTXOB_rmax_clearance" value="0.0*mm"/>
   <constant name="VTX_r_max" value="Vertex_outer_radius"/>
   <constant name="env_safety" value="0.1*mm"/>
+
+  <constant name="VTXIB_pitch_z"      value="0.020*mm"/>  <!-- Assume 20x20 µm pitch, DRD3 OCTOPUS-like sensors -->
+  <constant name="VTXIB_pitch_phi"    value="0.020*mm"/>
+  <constant name="VTXD_pitch_r"       value="0.020*mm"/>  <!-- Assume 20x20 µm pitch, DRD3 OCTOPUS-like sensors -->
+  <constant name="VTXD_pitch_phi"     value="0.020*mm"/>
 
   <!-- end of changes for FCC-SEED -->
 

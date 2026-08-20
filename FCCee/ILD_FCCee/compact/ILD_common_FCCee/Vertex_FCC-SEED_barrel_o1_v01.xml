@@ -162,15 +162,17 @@
         <constant name="Support_ring_offset_phi3" value= "(VTXIB_SEED_sensor_phi+Flex_width-Support_ring_width3/2.)/VTXIB_SEED_curvature3*rad"/>
         <constant name="Support_ring_offset_phi4" value= "(VTXIB_SEED_sensor_phi+Flex_width-Support_ring_width4/2.)/VTXIB_SEED_curvature4*rad"/>
 
-        <comment> Variables used for imported xmls </comment>
+        <comment> Variables used for other imported xmls </comment>
         <constant name="VTXIB_tube_r"                       value="VTXIB_SEED_curvature5+2.*VTXIB_SEED_total_sensor_thickness+Support_longeron_betweenSensors_thickness+Support_longeron_betweenSensors_tolerance+Flex_total_thickness+7.*VTXIB_curved_tolerance_r"/> 
         <constant name="VTXIB_Kapton_beampipe_halfLength"   value="VTXIB_SEED_half_length1"/>
         <constant name="VTXIB_tube_half_length"             value="VTXIB_SEED_half_length5"/>
+        <constant name="VertexBarrel_rmax"                  value="VTXIB_tube_r"/>
+        <constant name="nInnerVertexLayers"                 value="5"/>
     </define>
 
     <!-- Inner vertex detector made of overlapping, curved sensors -->
     <detectors>
-        <detector name="VertexBarrel" type="VertexBarrel_detailed_o1_v03" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VertexBarrelRegion">
+        <detector name="VertexInnerBarrel" type="VertexBarrel_detailed_o1_v03" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VertexBarrelRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -333,6 +335,16 @@
             <layer nLadders="VTXIB_SEED_staves3" phi0="VTXIB_SEED_phi_offset3" r="VTXIB_SEED_curvature3" id="2" nmodules="VTXIB_SEED_nModules3" name="VTXIB_SEED_Stave3" step="0.0*mm" motherVolRmin="VTXIB_SEED_r3" motherVolThickness="VTXIB_SEED_r4-VTXIB_SEED_r3" motherVolLength="VTXIB_SEED_half_length3*2.+VTXIB_hybrid_length*2." z_offset="VTXIB_SEED_zoffset3" offset="VTXIB_SEED_sensor_offset3"/>
             <layer nLadders="VTXIB_SEED_staves4" phi0="VTXIB_SEED_phi_offset4" r="VTXIB_SEED_curvature4" id="3" nmodules="VTXIB_SEED_nModules4" name="VTXIB_SEED_Stave4" step="0.0*mm" motherVolRmin="VTXIB_SEED_r4" motherVolThickness="VTXIB_SEED_r5-VTXIB_SEED_r4" motherVolLength="VTXIB_SEED_half_length4*2.+VTXIB_hybrid_length*2." z_offset="VTXIB_SEED_zoffset4" offset="VTXIB_SEED_sensor_offset4"/>
             <layer nLadders="VTXIB_SEED_staves5" phi0="VTXIB_SEED_phi_offset5" r="VTXIB_SEED_curvature5" id="4" nmodules="VTXIB_SEED_nModules5" name="VTXIB_SEED_Stave5" step="0.0*mm" motherVolRmin="VTXIB_SEED_r5" motherVolThickness="VTXIB_tube_r-VTXIB_SEED_r5"  motherVolLength="VTXIB_SEED_half_length5*2.+VTXIB_hybrid_length*2." z_offset="VTXIB_SEED_zoffset5"  offset="VTXIB_SEED_sensor_offset5"/>
+        </detector>
+
+        <comment> Proxy for barrel vertex cabling (like in CLD vertex detector) </comment>
+        <detector name="VertexVerticalCable" type="TrackerEndcapSupport_o1_v02" reflect="true"  region="VertexEndcapRegion">
+            <envelope>
+                <shape type="Assembly"/>
+            </envelope>
+            <layer id="1" inner_r="VTXIB_SEED_r2" inner_z="VTXIB_SEED_nModules5*VTXIB_SEED_sensor_z/2.+5.0*mm+7*mm" outer_r="VTX_r_max-5*env_safety" vis="SiVertexCableVis">
+                <slice material="Copper" thickness="0.02*mm" />
+            </layer>
         </detector>
     </detectors>
 </lccdd>
