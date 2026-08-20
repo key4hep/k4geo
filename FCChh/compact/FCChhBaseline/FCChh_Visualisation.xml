@@ -71,9 +71,13 @@
     <!-- HCal Air (retrieved from Common/HcalAir.xml) -->
     <vis name="HCalEnvelopeVis" r="0.2" g="0.6" b="0.2" alpha="1" showDaughters="false" visible="true"/>
 
-    <!-- ECal Air placeholder (retrieved from FCChh_ECalAir.xml) -->
+    <!-- ECal Air (retrieved from FCChh_ECalAir.xml) -->
     <vis name="ECalEnvelopeVis" r="0.25" g="0.29" b="0.91" a="0.2" showDaughters="false" visible="true"/>
     <vis name="ECalEnvelopeExtBarVis" r="0.49" g="0.51" b="0.91" a="0.2" showDaughters="false" visible="true"/>
     <vis name="ECalEnvelopeFwdVis" r="0.65" g="0.67" b="0.87" a="0.2" showDaughters="false" visible="true"/>
+
+    <!-- Muon Air (retrieved from FCChh_MuonAir.xml; renamed from "MuonEnvelopeVis" to avoid collision) -->
+    <vis name="MuonAirEnvelopeVis" r="0.90" g="0.72" b="0.48" a="0.2" showDaughters="false" visible="true"/>
+
   </display>
 </lccdd>
