@@ -1,8 +1,8 @@
 <lccdd>
-    <comment> Carbon fibre support tube holding the complete inner vertex </comment>
+    <comment> Carbon fibre support tube holding the complete inner vertex. Implemented by Armin Ilg (UZH). </comment>
 
     <detectors>
-        <detector name="VertexInnerBarrel_tube" type="VertexBarrel_detailed_o1_v03" vis="VTXIBTubeVis" id="-3" readout="VertexDummyCollection" region="VertexBarrelRegion">
+        <detector name="VertexInnerBarrel_tube" type="VertexBarrel_detailed_o1_v03" vis="VTXIBTubeVis" id="-3" readout="VertexInnerSupportTubeDummyCollection" region="VertexBarrelRegion">
             <envelope vis="VTXIBTubeVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -16,4 +16,10 @@
             <layer nLadders="1" r="VTXIB_tube_r" id="0" name="VertexInnerBarrel_tube_stave" nmodules="1" motherVolThickness="VTXIB_tube_thickness"/>
         </detector>
     </detectors>
+
+    <readouts>
+        <readout name="VertexInnerSupportTubeDummyCollection">
+            <id>${GlobalTrackerReadoutID}</id>
+        </readout>  
+    </readouts>
 </lccdd>
