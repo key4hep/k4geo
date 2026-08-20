@@ -1,5 +1,5 @@
 <lccdd>
-    <comment> FCC-SEED inner vertex detector with curved, overlapping sensors </comment>
+    <comment> FCC-SEED inner vertex detector with curved, overlapping sensors. Implemented by Armin Ilg (UZH). </comment>
 
     <define>
         <comment>FCC-SEED inner vertex sensor properties</comment>
