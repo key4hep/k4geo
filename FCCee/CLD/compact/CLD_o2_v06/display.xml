@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lccdd>
 
+  <!-- Consolidated visualization (color) definitions -->
+
   <display>
 
     <!-- Global palette (retrieved from CLD_o2_v06.xml) -->
