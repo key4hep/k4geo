@@ -44,6 +44,7 @@ ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 option(BUILD_TESTING "Enable and build tests" ON)
 option(INSTALL_COMPACT_FILES "Copy compact files to install area" OFF)
 option(INSTALL_BEAMPIPE_STL_FILES "Download CAD files for building the detailed beampipe" OFF)
+option(INSTALL_VERTEX_STL_FILES "Download CAD files for IDEA vertex detector" OFF)
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -221,5 +222,45 @@ if(INSTALL_BEAMPIPE_STL_FILES)
 
     file(MAKE_DIRECTORY share/k4geo/FCCee)
     INSTALL(DIRECTORY ${OUTPUT_DIR} DESTINATION share/k4geo/FCCee/MDI/compact/stl_files )
+
+endif()
+
+if(INSTALL_VERTEX_STL_FILES)
+
+    set(STL_FILES
+          "VertexCoolingCones_o1_v03.stl"
+          "VertexSupport_CarbonFiber_o1_v03.stl"
+          "VertexSupport_PEEK_o1_v03.stl"
+        )
+    # Set main FCC url
+    set(FCC_URL "https://fccsw.web.cern.ch/fccsw/filesForSimDigiReco")
+    set(STL_PATH "IDEA/IDEA_o1_v03/STL_FILES/")
+
+    # Set the output directory where the file will be placed
+    set(OUTPUT_DIR "${PROJECT_SOURCE_DIR}/FCCee/IDEA/compact/IDEA_o1_v03/")
+
+    foreach(STL_FILE ${STL_FILES})
+        set(FULL_URL "${FCC_URL}/${STL_PATH}/${STL_FILE}")
+        message(DEBUG "Downloading file ${FULL_URL}")
+        set(OUTPUT_FILE "${OUTPUT_DIR}/${STL_FILE}")
+
+        if(EXISTS "${OUTPUT_FILE}")
+          message(STATUS "File ${STL_FILE} already exists. Skipping download.")
+        else()
+          # Download the file
+          file(DOWNLOAD ${FULL_URL} ${OUTPUT_FILE}
+            SHOW_PROGRESS
+            STATUS download_status)
+
+          list(GET download_status 0 status_code)
+          if(NOT status_code EQUAL 0)
+              list(GET download_status 1 error_message)
+              message(FATAL_ERROR "Failed to download file: ${error_message}")
+          endif()
+        endif()
+    endforeach()
+
+    file(MAKE_DIRECTORY share/k4geo/FCCee)
+    INSTALL(DIRECTORY ${OUTPUT_DIR} DESTINATION share/k4geo/FCCee/IDEA/compact/IDEA_o1_v03/stl_files )
 
 endif()
