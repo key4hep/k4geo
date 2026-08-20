@@ -73,8 +73,8 @@
   <!-- lumiCal from CLD_02_v07 -->
   <include ref="../../../CLD/compact/CLD_o2_v07/LumiCal_o3_v02_05.xml"/>
 
-  <!-- Vertex from CLD_o2_v07 -->
-  <include ref="../../../CLD/compact/CLD_o2_v07/Vertex_o4_v07_smallBP.xml"/>
+  <!-- Vertex from CLD_o2_v09 -->
+  <include ref="../../../CLD/compact/CLD_o2_v09/Vertex_o4_v08_smallBP.xml"/>
   
   <!-- or using FCC-SEED barrel + CLD endcaps -->
   <!-- <include ref="../ILD_common_FCCee/Vertex_FCC-SEED_o1_v01.xml"/> -->
