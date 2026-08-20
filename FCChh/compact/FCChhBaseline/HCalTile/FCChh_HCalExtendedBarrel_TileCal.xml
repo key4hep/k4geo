@@ -53,21 +53,21 @@
       <sensitive type="calorimeter"/>
       <dimensions rmin1="ExtBarHCal1_rmin" rmin2="ExtBarHCal2_rmin" rmax1="ExtBarHCal1_rmax" rmax2="ExtBarHCal2_rmax" width="ExtBarHCal1_dz" dz="ExtBarHCal2_dz" offset="ExtBarHCal1_zOffset" z_offset="ExtBarHCal2_zOffset"/>
       <layers>
-	<layer id="0" name="type_1" material="Air" vis="exthcal_barrel_layer_vis">
+	<layer id="0" name="type_1" material="Air" vis="extHcal_barrel_layer_vis">
           <dimensions
              dr="100*mm"
 	     nmodules="1"
 	     nModules="2"
              />
 	</layer>
-	<layer id="1" name="type_2" material="Air" vis="exthcal_barrel_layer_vis">
+	<layer id="1" name="type_2" material="Air" vis="extHcal_barrel_layer_vis">
 	  <dimensions
              dr="150*mm"
              nmodules="0"
              nModules="2"
              />
 	</layer>
-	<layer id="2" name="type_3" material="Air" vis="exthcal_barrel_layer_vis">
+	<layer id="2" name="type_3" material="Air" vis="extHcal_barrel_layer_vis">
 	  <dimensions
              dr="250*mm"
              nmodules="3"
@@ -76,7 +76,7 @@
 	</layer>
       </layers>
       
-      <sequence_a id="3" name="sequence_1" material="Air" vis="exthcal_barrel_seq1_vis">
+      <sequence_a id="3" name="sequence_1" material="Air" vis="extHcal_barrel_seq1_vis">
 	<dimensions
 	   dz="2*ExtBarHCal_master_plate_thickness + ExtBarHCal_spacer_plate_thickness + ExtBarHCal_scintillator_thickness + 2*ExtBarHCal_air_space_thickness"
 	   phiBins="ExtBarHCal_n_phi_modules"
