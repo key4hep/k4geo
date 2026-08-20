@@ -119,7 +119,7 @@ endif()
 # wedge (IDEA_o2_v01_CI.xml) and fire a pi- into it to exercise the SCEPCal + DRBT sensitive
 # detectors.  The steering skips the DREndcapTubes SD when the compact file is a "*_CI.xml".
 if(DCH_INFO_H_EXIST)
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/compact/IDEA_o2_v01_CI/IDEA_o2_v01_CI.xml
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o2_v01/reduced/IDEA_o2_v01_CI.xml
   N_EVENTS 1
   EXTRA_ARGS --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o2_v01.py
              --gun.particle pi- --gun.energy 10*GeV --gun.direction 0.966,0.259,0.01
