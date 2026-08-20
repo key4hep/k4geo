@@ -12,17 +12,6 @@
         </readout>
     </readouts>
 
-    <!--  Definitions of visualization attributes  -->
-    <display>
-        <vis name="ECalStaveVis"      alpha="1.0" r="0.0"  g="0.8"  b="1.0"  showDaughters="true"  visible="true"/>
-        <vis name="ECalLayerVis"      alpha="1.0" r="0.8"  g="0.8"  b="0.0"  showDaughters="true"  visible="true"/>
-        <vis name="ECalSensitiveVis"  alpha="1.0" r="0.7"  g="0.3"  b="0.0"  showDaughters="false" visible="true"/>
-        <vis name="ECalAbsorberVis"   alpha="1.0" r="0.4"  g="0.4"  b="0.0"  showDaughters="false" visible="true"/>
-        <vis name="ECalEndcapVis"     alpha="1.0" r="0.77" g="0.74" b="0.86" showDaughters="true"  visible="true"/>
-	<vis name="HiddenEnvelope"    alpha="0.0" r="1.0"  g="1.0"  b="1.0"  showDaughters="true"  visible="false"/>
-	<vis name="CompositeVis"      alpha="1.0" r="1.0"  g="0.0"  b="0.0"  showDaughters="true"  visible="true"/>
-    </display>
-
     <detectors>
         <detector name="ECalBarrel" type="GenericCalBarrel_o1_v01" id="DetID_ECal_Barrel" readout="ECalBarrelCollection" vis="ECALVis" gap="0.*cm">
 
