@@ -99,18 +99,18 @@
         <constant name="VTXIB_curved_z4_offset1" value="-(VTXIB_curved_z4_passive1+VTXIB_curved_z4_passive2+VTXIB_curved_gap_z4)/2. + VTXIB_curved_z4_passive1/2."/> 
         <constant name="VTXIB_curved_z4_offset2" value="+(VTXIB_curved_z4_passive1+VTXIB_curved_z4_passive2+VTXIB_curved_gap_z4)/2. - VTXIB_curved_z4_passive2/2."/> 
 
+        <constant name="VTXIB_curved_zoffset1" value="0.0*mm"/>
+        <constant name="VTXIB_curved_zoffset2" value="0.5*mm"/> <comment> Offset of layer 2 in z, to make sure no gap at theta=90 degree exists </comment>
+
         <comment> Representation of curved sensitive elements by number of trapezoids with flat surface. The more, the more round the sensors are. Multiplies the number of surfaces by this number, careful!
             Use '4' to be able to use conformal tracking. Use '1' to have perfect cylindrical surfaces.
         </comment>
         <constant name="VTXIB_curved_nsegments" value="4"/>
-
-        <constant name="VTXIB_curved_pitch_phi"  value="RSU_phi_pixelArray/VTXIB_curved_nsegments / ceil(RSU_phi_pixelArray/VTXIB_curved_nsegments/(VTXIB_pitch_phi))"/>  <comment> Make sure that the sensor size is a multiple of the pitch. Effective sensor size is RSU_phi_pixelArray*(VTXIB_r_min_layer+VTXIB_curved_insensitive_thickness_below)/VTXIB_r_min_layer (so a bit larger since the actually sensitive volume is at a larger radius). Choose a pitch as close as possible to target pitch </comment> 
-        <constant name="VTXIB_curved_pitch_z"    value="RSU_z_pixelArray / ceil(RSU_z_pixelArray/(VTXIB_pitch_z))"/> <comment> Make sure that the sensor size is a multiple of the pitch. Choose a pitch as close as possible to target pitch  </comment> 
-
         <constant name="VTXIB_curved_tolerance_r" value="0.100*mm"/> <comment> Needed for curved inner vertex as otherwise overlaps would be detected. Can be reduced if `VTXIB_curved_nsegments` is increased </comment>
     </define>
 
-    <define> <comment> Variables used for imported other subdetectors </comment>
+    <define>
+        <comment> Variables used for other imported xmls </comment>
         <constant name="VTXIB_Kapton_beampipe_halfLength"   value="VTXIB_curved_z1_passive/2."/>
         <constant name="VTXIB_tube_r"                       value="VTXIB_curved_r_outer-VTXIB_tube_thickness"/>
         <constant name="VTXIB_tube_half_length"             value="(2.*VTXIB_curved_z4_1+2.*VTXIB_curved_z4_2+VTXIB_curved_support_ring_length+VTXIB_curved_gap_z4)/2."/>
@@ -252,8 +252,8 @@
             </stave>
 
             <comment> Ultra-light inner vertex </comment>
-            <layer id="0" nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r1)*360.*deg+90.*deg+VTXIB_curved_phi0_1" r="VTXIB_curved_r1" nmodules="VTXIB_curved_nModules1" name="VTXIBStave1Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r2-VTXIB_curved_r1"        motherVolLength="VTXIB_curved_z1_passive" z_offset="VTXIB_zoffset1"/>
-            <layer id="1" nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r2)*360.*deg+90.*deg+VTXIB_curved_phi0_2" r="VTXIB_curved_r2" nmodules="VTXIB_curved_nModules2" name="VTXIBStave2Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r3-VTXIB_curved_r2"        motherVolLength="VTXIB_curved_z2_passive" z_offset="VTXIB_zoffset2"/>
+            <layer id="0" nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r1)*360.*deg+90.*deg+VTXIB_curved_phi0_1" r="VTXIB_curved_r1" nmodules="VTXIB_curved_nModules1" name="VTXIBStave1Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r2-VTXIB_curved_r1"        motherVolLength="VTXIB_curved_z1_passive" z_offset="VTXIB_curved_zoffset1"/>
+            <layer id="1" nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r2)*360.*deg+90.*deg+VTXIB_curved_phi0_2" r="VTXIB_curved_r2" nmodules="VTXIB_curved_nModules2" name="VTXIBStave2Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r3-VTXIB_curved_r2"        motherVolLength="VTXIB_curved_z2_passive" z_offset="VTXIB_curved_zoffset2"/>
 
             <comment> Layer 3 and 4 are constructed out of two pieces on the +z and -z side, with different lengths in z to optimise coverage </comment>
             <layer id="2" nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r3)*360.*deg+90.*deg+VTXIB_curved_phi0_3" r="VTXIB_curved_r3" nmodules="VTXIB_curved_nModules3_1" name="VTXIBStave3Curved_1" step="0.0*mm" motherVolThickness="VTXIB_curved_r4-VTXIB_curved_r3"        motherVolLength="VTXIB_curved_z3_passive1" motherVolOffset="+(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap3_length_center-VTXIB_curved_endcap3_length_side)/2.)" z_offset="VTXIB_curved_z3_offset1"/>
