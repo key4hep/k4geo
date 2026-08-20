@@ -11,10 +11,6 @@
         Latest presentation: https://indico.cern.ch/event/1599906/contributions/7019099/ 
     -->
 
-    <define>
-        <constant name="VertexDisksAcceptanceLimit" value="0.135*rad"/>
-    </define>
-
     <comment>Tracking detectors</comment>
     <detectors>
        <!-- The envelope consists of a tube generally surrounding the vertex barrel and endcap disks, subtracted by a
@@ -85,10 +81,11 @@
     <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_kapton_on_beampipe_o1_v01.xml"/>
 
     <comment> Inner vertex outer tube, for keeping the air in for air cooling </comment>
-    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_inner_barrel_support_tube_o1_v01.xml"/>
+    <include ref="../../../IDEA/compact/IDEA_o1_v04/VertexInnerBarrel_support_tube_o1_v01.xml"/>
 
+    <comment> Vertex inner barrel off-detector services representation, based on CLD </comment>
     <include ref="Vertex_inner_barrel_vertical_cable_o1_v01.xml"/>
 
-    <comment> Vertex endcap </comment>
+    <comment> Vertex endcap, based on CLD disks </comment>
     <include ref="Vertex_FCC-SEED_endcap_o1_v01.xml"/>
 </lccdd>

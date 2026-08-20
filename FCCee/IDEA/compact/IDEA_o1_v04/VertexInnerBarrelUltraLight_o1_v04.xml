@@ -1,0 +1,267 @@
+<lccdd>
+    <comment> Ultra-light inner vertex detector using ALICE ITS3-like stitched, curved MAPS </comment>
+
+    <define> <comment> Ultra-light, curved inner vertex (VTXIB_curved) properties </comment>
+        <constant name="VTXIB_curved_gap_phi" value="1.25*mm"/> <comment> Gap between two halves of a layer </comment>
+
+        <comment> Sensor properties (rescaled from ALICE ITS3 MOSAIX sensor). Each sensor consists of a number of repeated sensor units (RSUs) in z and phi, which are stitched together </comment>
+        <constant name="RSU_z_dataBackbone" value="0.06*mm"/>   <comment> insensitive, 4 per RSU </comment>
+        <constant name="RSU_z_pixelArray"   value="3.571*mm"/>  <comment> sensitive, 12 per RSU </comment>
+        <constant name="RSU_z_powerSwitch"  value="0.02*mm"/>   <comment> insensitive, 12 per RSU </comment>
+        <constant name="RSU_z"              value="2.*RSU_z_dataBackbone+6.*RSU_z_pixelArray+6.*RSU_z_powerSwitch"/> <comment> Length of a single RSU in z, 21.666*mm </comment>
+
+        <constant name="RSU_phi_ITS3"               value="2.*9.782*mm-2*0.25*mm"/>  <comment> RSU size in phi used in ALICE ITS3, but removing the auxiliary pads (0.25 mm) to achieve a higher acceptance (~2.5% more). We scale this down to enable a smaller radius. This is to simplified and in actuality depends on the reticle size of the actual process. Instead one could also envision using additional masks to reach the desired radius (pixel matrix not filling the complete reticle) </comment>
+        <constant name="RSU_phi"                    value="(2.*VTXIB_r_min_layer*pi-2.*VTXIB_curved_gap_phi)/2./2."/> <comment> Length of a single RSU in phi we want to use, derived from circumference of first layer minus the two gaps, divided by 2 (for two wafers), divided by 2 (for two RSUs for the first layer), = 20.895 mm </comment>
+        <constant name="RSU_phi_biasing"            value="0.06*mm*RSU_phi/RSU_phi_ITS3"/>   <comment> insensitive, 2 per RSU, scale up to reach desired rmin </comment>
+        <constant name="RSU_phi_pixelArray"         value="9.197*mm*RSU_phi/RSU_phi_ITS3"/>  <comment> sensitive, 12 per RSU, scale up to reach desired rmin </comment>
+        <constant name="RSU_phi_readoutPeripheryDicingLane"   value="0.275*mm*RSU_phi/RSU_phi_ITS3"/>    <comment> readout periphery (0.2 mm) and dicing lane (0.075 mm),insensitive, 2 per RSU, scale up to reach desired rmin </comment>
+
+        <constant name="VTXIB_curved_insensitive_thickness_below"   value="38e-03*mm"/> <comment> Assume 38 µm of insensitive sensor thickness </comment>
+        <constant name="VTXIB_curved_sensitive_thickness"           value="12e-03*mm"/> <comment> Assume 12 µm of sensitive sensor thickness, reflecting epi-layer thickness in TPSCo 65 nm process </comment>
+        <constant name="VTXIB_curved_insensitive_thickness_above"   value="16e-03*mm"/> <comment> Assume 16 µm of Si-equivalent for metal layer connecting RSUs for powering (see ALICE ITS3 TDR) </comment>
+        <constant name="VTXIB_curved_total_sensor_thickness"        value="VTXIB_curved_insensitive_thickness_below+VTXIB_curved_sensitive_thickness+VTXIB_curved_insensitive_thickness_above"/>
+    
+        <comment> VTXIB_curved layout parameters </comment>
+        <constant name="VTXIB_curved_r1" value="(RSU_phi*4.+2*VTXIB_curved_gap_phi)/(2.0*pi)"/>     <comment> Radius of layer, 13.7 mm  for first layer at 13.7 mm </comment>
+        <constant name="VTXIB_curved_r2" value="(RSU_phi*6.+2*VTXIB_curved_gap_phi)/(2.0*pi)"/>     <comment> Radius of layer, 20.35 mm for first layer at 13.7 mm </comment>
+        <constant name="VTXIB_curved_r3" value="(RSU_phi*8.+2*VTXIB_curved_gap_phi)/(2.0*pi)"/>     <comment> Radius of layer, 27.00 mm for first layer at 13.7 mm </comment>
+        <constant name="VTXIB_curved_r4" value="(RSU_phi*10.+2*VTXIB_curved_gap_phi)/(2.0*pi)"/>    <comment> Radius of layer, 33.65 mm for first layer at 13.7 mm </comment>
+        <constant name="VTXIB_curved_r_outer" value="42.0*mm"/>  <comment> End of vertex inner barrel </comment>
+
+        <constant name="VTXIB_curved_gap_z3" value="3.0*mm"/> <comment> Gap between the two sensors in z</comment>
+        <constant name="VTXIB_curved_gap_z4" value="3.0*mm"/> <comment> Gap between the two sensors in z</comment>
+
+        <constant name="VTXIB_curved_nModules1" value="floor(2.*VTXIB_curved_r1/(tan(VertexAcceptanceLimit)*RSU_z))"/> <comment> 10 for r_min of 13.7 mm, 8 for r_min of 11.7 mm </comment>
+        <constant name="VTXIB_curved_nModules2" value="min(13,floor(2.*VTXIB_curved_r2/(tan(VertexAcceptanceLimit)*RSU_z)))"/> <comment> 13 for r_min of 13.7 mm, 12 for r_min of 11.7 mm (13 is the limit of how many RSUs can fit on a single wafer) </comment>
+        <constant name="VTXIB_curved_nModules3_1" value="8"/>
+        <constant name="VTXIB_curved_nModules3_2" value="10"/>
+        <constant name="VTXIB_curved_nModules4_1" value="10"/>
+        <constant name="VTXIB_curved_nModules4_2" value="8"/>
+
+        <constant name="VTXIB_curved_z1" value="(VTXIB_curved_nModules1*RSU_z)/2."/> <comment> 10*21.666 = 216.66*mm </comment>
+        <constant name="VTXIB_curved_z2" value="(VTXIB_curved_nModules2*RSU_z)/2."/> <comment> 12*21.666 = 259.992*mm </comment>
+        <constant name="VTXIB_curved_z3_1" value="(VTXIB_curved_nModules3_1*RSU_z)/2."/> <comment> 8*21.666 = 173.328*mm </comment>
+        <constant name="VTXIB_curved_z3_2" value="(VTXIB_curved_nModules3_2*RSU_z)/2."/> <comment> 10*21.666 = 216.66*mm </comment>
+        <constant name="VTXIB_curved_z4_1" value="(VTXIB_curved_nModules4_1*RSU_z)/2."/> <comment> 10*21.666 = 216.66*mm </comment>
+        <constant name="VTXIB_curved_z4_2" value="(VTXIB_curved_nModules4_2*RSU_z)/2."/> <comment> 8*21.666 = 173.328*mm </comment>
+
+        <constant name="VTXIB_curved_phi0_1" value="0.0*deg"/>  <comment> Layer rotations optimised by M. Ahmed, see https://indico.cern.ch/event/1593123/#6-updates-on-the-ultra-light-a </comment>
+        <constant name="VTXIB_curved_phi0_2" value="(-0.5*(360.0/(2.0*6)) - 0.5*VTXIB_curved_gap_phi/VTXIB_curved_r1*180.0/pi)*deg"/>
+        <constant name="VTXIB_curved_phi0_3" value="(VTXIB_curved_phi0_2/deg - 0.5*(360.0/(2.0*8)) - 0.5*VTXIB_curved_gap_phi/VTXIB_curved_r2*180.0/pi)*deg"/>
+        <constant name="VTXIB_curved_phi0_4" value="(VTXIB_curved_phi0_3/deg - 0.5*(360.0/(2.0*10)) - 0.5*VTXIB_curved_gap_phi/VTXIB_curved_r3*180.0/pi)*deg"/>
+
+        <constant name="VTXIB_curved_ring1_phi_offset" value="2*pi*0.5*RSU_phi/(4.*RSU_phi+2.*VTXIB_curved_gap_phi)"/>
+        <constant name="VTXIB_curved_ring2_phi_offset" value="2*pi*1.0*RSU_phi/(6.*RSU_phi+2.*VTXIB_curved_gap_phi)"/>
+        <constant name="VTXIB_curved_ring3_phi_offset" value="2*pi*1.5*RSU_phi/(8.*RSU_phi+2.*VTXIB_curved_gap_phi)"/>
+        <constant name="VTXIB_curved_ring4_phi_offset" value="2*pi*2.0*RSU_phi/(10.*RSU_phi+2.*VTXIB_curved_gap_phi)"/>
+
+        <constant name="VTXIB_curved_flex_Aluminium_thickness" value="0.050*mm"/>
+        <constant name="VTXIB_curved_flex_Kapton_thickness"    value="0.200*mm"/>
+        <constant name="VTXIB_curved_flex_length"              value="20.0*mm"/>
+        <constant name="VTXIB_curved_flex_length1"             value="12.0*mm"/>    <!-- Shorter flex for first layer to avoid lumical acceptance. atan(13.7/(21.666*10/2+3+12))=110 mrad -->
+
+        <comment> Properties of curved vertex support structures </comment>
+        <constant name="VTXIB_curved_longeron1_width" value="3.0*mm"/> <comment> width of support structure along z </comment>
+        <constant name="VTXIB_curved_longeron2_width" value="4.0*mm"/> <comment> width of support structure along z </comment>
+        <constant name="VTXIB_curved_longeron3_width" value="5.0*mm"/> <comment> width of support structure along z </comment>
+        <constant name="VTXIB_curved_longeron4_width" value="6.0*mm"/> <comment> width of support structure along z </comment>
+
+        <constant name="VTXIB_curved_longeron1_phi_offset" value="(0.5*RSU_phi+VTXIB_curved_longeron1_width/4.)/(4.*RSU_phi+2.*VTXIB_curved_gap_phi)*360.0*deg"/>
+        <constant name="VTXIB_curved_longeron2_phi_offset" value="(0.5*RSU_phi+VTXIB_curved_longeron2_width/4.)/(6.*RSU_phi+2.*VTXIB_curved_gap_phi)*360.0*deg"/>
+        <constant name="VTXIB_curved_longeron3_phi_offset" value="(0.5*RSU_phi+VTXIB_curved_longeron3_width/4.)/(8.*RSU_phi+2.*VTXIB_curved_gap_phi)*360.0*deg"/>
+        <constant name="VTXIB_curved_longeron4_phi_offset" value="(0.5*RSU_phi+VTXIB_curved_longeron4_width/4.)/(10.*RSU_phi+2.*VTXIB_curved_gap_phi)*360.0*deg"/>
+
+        <constant name="VTXIB_curved_support_ring_length" value="3.5*mm"/>
+        <constant name="VTXIB_curved_ring_zoffset" value="-1.5*mm"/>
+        <constant name="VTXIB_curved_intermed_ring1_width" value="(RSU_phi+0.5*VTXIB_curved_gap_phi)-VTXIB_curved_longeron1_width"/>
+        <constant name="VTXIB_curved_intermed_ring2_width" value="(1.5*RSU_phi+0.5*VTXIB_curved_gap_phi)-VTXIB_curved_longeron2_width"/>
+        <constant name="VTXIB_curved_intermed_ring3_width" value="(RSU_phi+0.5*VTXIB_curved_gap_phi)-VTXIB_curved_longeron3_width"/>
+        <constant name="VTXIB_curved_intermed_ring4_width" value="(RSU_phi+0.5*VTXIB_curved_gap_phi)-VTXIB_curved_longeron4_width"/>
+        
+        <comment> Properties of structures at sides of sensor </comment>
+        <constant name="VTXIB_curved_endcap1_length" value="3.0*mm"/>
+        <constant name="VTXIB_curved_endcap2_length" value="3.0*mm"/>
+        <constant name="VTXIB_curved_endcap3_length_center" value="1.5*mm"/>
+        <constant name="VTXIB_curved_endcap3_length_side" value="4.5*mm"/>
+        <constant name="VTXIB_curved_endcap4_length_center" value="3.0*mm"/>
+        <constant name="VTXIB_curved_endcap4_length_side" value="3.0*mm"/>
+
+        <constant name="VTXIB_curved_z1_passive" value="2.*VTXIB_curved_z1+2.0*VTXIB_curved_endcap1_length+2.0*VTXIB_curved_flex_length1"/> 
+        <constant name="VTXIB_curved_z2_passive" value="2.*VTXIB_curved_z2+2.0*VTXIB_curved_endcap2_length+2.0*VTXIB_curved_flex_length"/> 
+        <constant name="VTXIB_curved_z3_passive1" value="2.*VTXIB_curved_z3_1+VTXIB_curved_endcap3_length_center+VTXIB_curved_endcap3_length_side+VTXIB_curved_flex_length"/> 
+        <constant name="VTXIB_curved_z3_passive2" value="2.*VTXIB_curved_z3_2+VTXIB_curved_endcap3_length_center+VTXIB_curved_endcap3_length_side+VTXIB_curved_flex_length"/> 
+        <constant name="VTXIB_curved_z4_passive1" value="2.*VTXIB_curved_z4_1+VTXIB_curved_endcap4_length_center+VTXIB_curved_endcap4_length_side+VTXIB_curved_flex_length"/> 
+        <constant name="VTXIB_curved_z4_passive2" value="2.*VTXIB_curved_z4_2+VTXIB_curved_endcap4_length_center+VTXIB_curved_endcap4_length_side+VTXIB_curved_flex_length"/> 
+
+        <constant name="VTXIB_curved_z3_offset1" value="-(VTXIB_curved_z3_passive1+VTXIB_curved_z3_passive2+VTXIB_curved_gap_z3)/2. + VTXIB_curved_z3_passive1/2."/> 
+        <constant name="VTXIB_curved_z3_offset2" value="+(VTXIB_curved_z3_passive1+VTXIB_curved_z3_passive2+VTXIB_curved_gap_z3)/2. - VTXIB_curved_z3_passive2/2."/> 
+
+        <constant name="VTXIB_curved_z4_offset1" value="-(VTXIB_curved_z4_passive1+VTXIB_curved_z4_passive2+VTXIB_curved_gap_z4)/2. + VTXIB_curved_z4_passive1/2."/> 
+        <constant name="VTXIB_curved_z4_offset2" value="+(VTXIB_curved_z4_passive1+VTXIB_curved_z4_passive2+VTXIB_curved_gap_z4)/2. - VTXIB_curved_z4_passive2/2."/> 
+
+        <comment> Representation of curved sensitive elements by number of trapezoids with flat surface. The more, the more round the sensors are. Multiplies the number of surfaces by this number, careful!
+            Use '4' to be able to use conformal tracking. Use '1' to have perfect cylindrical surfaces.
+        </comment>
+        <constant name="VTXIB_curved_nsegments" value="4"/>
+
+        <constant name="VTXIB_curved_pitch_phi"  value="RSU_phi_pixelArray/VTXIB_curved_nsegments / ceil(RSU_phi_pixelArray/VTXIB_curved_nsegments/(VTXIB_pitch_phi))"/>  <comment> Make sure that the sensor size is a multiple of the pitch. Effective sensor size is RSU_phi_pixelArray*(VTXIB_r_min_layer+VTXIB_curved_insensitive_thickness_below)/VTXIB_r_min_layer (so a bit larger since the actually sensitive volume is at a larger radius). Choose a pitch as close as possible to target pitch </comment> 
+        <constant name="VTXIB_curved_pitch_z"    value="RSU_z_pixelArray / ceil(RSU_z_pixelArray/(VTXIB_pitch_z))"/> <comment> Make sure that the sensor size is a multiple of the pitch. Choose a pitch as close as possible to target pitch  </comment> 
+
+        <constant name="VTXIB_curved_tolerance_r" value="0.100*mm"/> <comment> Needed for curved inner vertex as otherwise overlaps would be detected. Can be reduced if `VTXIB_curved_nsegments` is increased </comment>
+    </define>
+
+    <define> <comment> Variables used for imported other subdetectors </comment>
+        <constant name="VTXIB_Kapton_beampipe_halfLength"   value="VTXIB_curved_z1_passive/2."/>
+        <constant name="VTXIB_tube_r"                       value="VTXIB_curved_r_outer-VTXIB_tube_thickness"/>
+        <constant name="VTXIB_tube_half_length"             value="(2.*VTXIB_curved_z4_1+2.*VTXIB_curved_z4_2+VTXIB_curved_support_ring_length+VTXIB_curved_gap_z4)/2."/>
+        <constant name="nInnerVertexLayers" value="4"/>
+    </define>
+
+    <detectors>
+        <detector name="VertexInnerBarrel" type="VertexBarrel_detailed_o1_v03" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VertexBarrelRegion">
+            <envelope vis="VXDVis">
+                <shape type="Assembly"/>
+            </envelope>
+
+            <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_BARREL"/>    
+
+            <comment> Definition of our "stave" object that is used to build the barrel, this time for the curved inner vertex layer </comment>
+            <stave name="VTXIBStave1Curved" r="VTXIB_curved_r1" length="2.*VTXIB_curved_z1">
+                <sensor name="sensor" thickness="VTXIB_curved_total_sensor_thickness" nx="2" material="Silicon">
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_curvedUltraLight_module.xml"/>
+                </sensor>
+
+                <components name="support_longeron" r="VTXIB_curved_total_sensor_thickness+VTXIB_curved_tolerance_r" length="VTXIB_curved_z1+VTXIB_curved_endcap1_length-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
+                    <component thickness="VTXIB_curved_r2-VTXIB_curved_r1-VTXIB_curved_total_sensor_thickness-2.0*VTXIB_curved_tolerance_r" width="VTXIB_curved_longeron1_width" offset="0.0*mm" phi_offset="0.0*deg-VTXIB_curved_longeron1_phi_offset" material="CarbonFoam" isCurved="true" vis="VTXCarbonFoamVis"/>
+                </components>
+
+                <end_z name="endcaps_flexes">    
+                    <component thickness="VTXIB_curved_flex_Aluminium_thickness"   width="2.0*RSU_phi" length="VTXIB_curved_flex_length1" phi_offset="VTXIB_curved_ring1_phi_offset" isCurved="true" vis="VTXCableVis" dz="VTXIB_curved_endcap1_length" material="Al"/>
+                    <component thickness="VTXIB_curved_flex_Kapton_thickness"      width="2.0*RSU_phi+2.*pi*(VTXIB_curved_flex_Aluminium_thickness+VTXIB_curved_tolerance_r)/2." length="VTXIB_curved_flex_length1" phi_offset="VTXIB_curved_ring1_phi_offset" isCurved="true" vis="VTXCableVis" dz="VTXIB_curved_endcap1_length" material="KaptonVtx" r="VTXIB_curved_flex_Aluminium_thickness+VTXIB_curved_tolerance_r"/>
+                </end_z>
+
+                <end_z name="support_rings" r="VTXIB_curved_total_sensor_thickness+VTXIB_curved_tolerance_r">
+                    <component thickness="VTXIB_curved_r2-VTXIB_curved_r1-VTXIB_curved_total_sensor_thickness-2.0*VTXIB_curved_tolerance_r" width="pi*(VTXIB_curved_r1+VTXIB_curved_total_sensor_thickness+VTXIB_curved_tolerance_r)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring1_phi_offset" isCurved="true" material="CarbonFoam" vis="VTXCarbonFoamVis" dz="+VTXIB_curved_endcap1_length-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
+                </end_z>
+            </stave>
+
+            <stave name="VTXIBStave2Curved" r="VTXIB_curved_r2" length="2.*VTXIB_curved_z2">
+                <sensor name="sensor" thickness="VTXIB_curved_total_sensor_thickness" nx="3" material="Silicon">
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_curvedUltraLight_module.xml"/>
+                </sensor>
+
+                <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r" length="VTXIB_curved_z2+VTXIB_curved_endcap2_length-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
+                    <component thickness="VTXIB_curved_r3-VTXIB_curved_r2-VTXIB_curved_sensitive_thickness-2.0*VTXIB_curved_tolerance_r" width="VTXIB_curved_longeron2_width" offset="0.0*mm" phi_offset="0.0*deg-VTXIB_curved_longeron2_phi_offset" material="CarbonFoam" isCurved="true" vis="VTXCarbonFoamVis"/>
+                </components> 
+                
+                <end_z name="endcaps_flexes">
+                    <component thickness="VTXIB_curved_sensitive_thickness"        width="3.0*RSU_phi" length="VTXIB_curved_endcap2_length" phi_offset="VTXIB_curved_ring2_phi_offset" isCurved="true" material="Silicon" vis="VTXPeripheryVis"/>
+                    <component thickness="VTXIB_curved_flex_Aluminium_thickness"   width="3.0*RSU_phi" length="VTXIB_curved_flex_length" phi_offset="VTXIB_curved_ring2_phi_offset" isCurved="true" material="Al" vis="VTXCableVis" dz="VTXIB_curved_endcap2_length"/>
+                    <component thickness="VTXIB_curved_flex_Kapton_thickness"      width="3.0*RSU_phi+2.*pi*(VTXIB_curved_flex_Aluminium_thickness+VTXIB_curved_tolerance_r)/2." length="VTXIB_curved_flex_length" phi_offset="VTXIB_curved_ring2_phi_offset" isCurved="true" material="KaptonVtx" vis="VTXCableVis" dz="VTXIB_curved_endcap2_length" r="VTXIB_curved_flex_Aluminium_thickness+VTXIB_curved_tolerance_r"/>
+                </end_z>
+
+                <end_z name="support_rings" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r">
+                    <component thickness="VTXIB_curved_r3-VTXIB_curved_r2-VTXIB_curved_sensitive_thickness-2.0*VTXIB_curved_tolerance_r" width="pi*(VTXIB_curved_r2+VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring2_phi_offset" isCurved="true" material="CarbonFoam" vis="VTXCarbonFoamVis" dz="+VTXIB_curved_endcap2_length-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
+                </end_z>
+            </stave>
+
+            <stave name="VTXIBStave3Curved_1" r="VTXIB_curved_r3" length="2.*VTXIB_curved_z3_1">
+                <sensor name="sensor" thickness="VTXIB_curved_total_sensor_thickness" nx="4" material="Silicon">
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_curvedUltraLight_module.xml"/>
+                </sensor>
+
+                <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r" length="VTXIB_curved_z3_1+VTXIB_curved_endcap3_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
+                    <component thickness="VTXIB_curved_r4-VTXIB_curved_r3-VTXIB_curved_sensitive_thickness-2.0*VTXIB_curved_tolerance_r" width="VTXIB_curved_longeron3_width" offset="0.0*mm" phi_offset="0.0*deg-VTXIB_curved_longeron3_phi_offset" material="CarbonFoam" isCurved="true" vis="VTXCarbonFoamVis"/>
+                </components>
+
+                <end_z name="endcaps_flexes">
+                    <component thickness="VTXIB_curved_flex_Aluminium_thickness"   width="4.0*RSU_phi" length="VTXIB_curved_flex_length" phi_offset="VTXIB_curved_ring3_phi_offset" isCurved="true" material="Al" vis="VTXCableVis" dz="VTXIB_curved_endcap3_length_side" side="-1"/>
+                    <component thickness="VTXIB_curved_flex_Kapton_thickness"      width="4.0*RSU_phi+2.*pi*(VTXIB_curved_flex_Aluminium_thickness+VTXIB_curved_tolerance_r)/2." length="VTXIB_curved_flex_length" phi_offset="VTXIB_curved_ring3_phi_offset" isCurved="true" material="KaptonVtx" vis="VTXCableVis" dz="VTXIB_curved_endcap3_length_side" side="-1" r="VTXIB_curved_flex_Aluminium_thickness+VTXIB_curved_tolerance_r"/>
+                    <component thickness="VTXIB_curved_sensitive_thickness" width="4.0*RSU_phi" length="VTXIB_curved_endcap3_length_center" phi_offset="VTXIB_curved_ring3_phi_offset" isCurved="true" material="Silicon" vis="VTXPeripheryVis" side="+1"/>
+                    <component thickness="VTXIB_curved_sensitive_thickness" width="4.0*RSU_phi" length="VTXIB_curved_endcap3_length_side"   phi_offset="VTXIB_curved_ring3_phi_offset" isCurved="true" material="Silicon" vis="VTXPeripheryVis" side="-1"/>
+                </end_z>
+
+                <end_z name="support_rings" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r">
+                    <component thickness="VTXIB_curved_r4-VTXIB_curved_r3-VTXIB_curved_sensitive_thickness-2.0*VTXIB_curved_tolerance_r" width="pi*(VTXIB_curved_r3+VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring3_phi_offset" isCurved="true" material="CarbonFoam" vis="VTXCarbonFoamVis" dz="+VTXIB_curved_endcap3_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
+                </end_z>
+            </stave>
+
+            <comment> Layer 3 is different on the +z and -z sides, define two 'stave' objects </comment>
+            <stave name="VTXIBStave3Curved_2" r="VTXIB_curved_r3" length="2.*VTXIB_curved_z3_2">
+                <sensor name="sensor" thickness="VTXIB_curved_total_sensor_thickness" nx="4" material="Silicon">
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_curvedUltraLight_module.xml"/>
+                </sensor>
+
+                <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r" length="VTXIB_curved_z3_2+VTXIB_curved_endcap3_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
+                    <component thickness="VTXIB_curved_r4-VTXIB_curved_r3-VTXIB_curved_sensitive_thickness-2.0*VTXIB_curved_tolerance_r" width="VTXIB_curved_longeron3_width" offset="0.0*mm" phi_offset="0.0*deg-VTXIB_curved_longeron3_phi_offset" material="CarbonFoam" isCurved="true" vis="VTXCarbonFoamVis"/>
+                </components>
+
+                <end_z name="endcaps_flexes">
+                    <component thickness="VTXIB_curved_flex_Aluminium_thickness"   width="4.0*RSU_phi" length="VTXIB_curved_flex_length" phi_offset="VTXIB_curved_ring3_phi_offset" isCurved="true" material="Al" vis="VTXCableVis" dz="VTXIB_curved_endcap3_length_side" side="+1"/>
+                    <component thickness="VTXIB_curved_flex_Kapton_thickness"      width="4.0*RSU_phi+2.*pi*(VTXIB_curved_flex_Aluminium_thickness+VTXIB_curved_tolerance_r)/2." length="VTXIB_curved_flex_length" phi_offset="VTXIB_curved_ring3_phi_offset" isCurved="true" material="KaptonVtx" vis="VTXCableVis" dz="VTXIB_curved_endcap3_length_side" side="+1" r="VTXIB_curved_flex_Aluminium_thickness+VTXIB_curved_tolerance_r"/>
+                    <component thickness="VTXIB_curved_sensitive_thickness" width="4.0*RSU_phi" length="VTXIB_curved_endcap3_length_center" phi_offset="VTXIB_curved_ring3_phi_offset" isCurved="true" material="Silicon" vis="VTXPeripheryVis" side="-1"/>
+                    <component thickness="VTXIB_curved_sensitive_thickness" width="4.0*RSU_phi" length="VTXIB_curved_endcap3_length_side"   phi_offset="VTXIB_curved_ring3_phi_offset" isCurved="true" material="Silicon" vis="VTXPeripheryVis" side="+1"/>
+                </end_z>
+
+                <end_z name="support_rings" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r">
+                    <component thickness="VTXIB_curved_r4-VTXIB_curved_r3-VTXIB_curved_sensitive_thickness-2.0*VTXIB_curved_tolerance_r" width="pi*(VTXIB_curved_r3+VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring3_phi_offset" isCurved="true" material="CarbonFoam" vis="VTXCarbonFoamVis" dz="+VTXIB_curved_endcap3_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
+                </end_z>
+            </stave>
+
+            <stave name="VTXIBStave4Curved_1" r="VTXIB_curved_r4" length="2.*VTXIB_curved_z4_1">
+                <sensor name="sensor" thickness="VTXIB_curved_total_sensor_thickness" nx="5" material="Silicon">
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_curvedUltraLight_module.xml"/>
+                </sensor>
+
+                <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r" length="VTXIB_curved_z4_1+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
+                    <component thickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_curved_sensitive_thickness-2.0*VTXIB_curved_tolerance_r-VTXIB_tube_thickness" width="VTXIB_curved_longeron4_width" offset="0.0*mm" phi_offset="0.0*deg-VTXIB_curved_longeron4_phi_offset" material="CarbonFoam" isCurved="true" vis="VTXCarbonFoamVis"/>
+                </components>
+
+                <end_z name="endcaps_flexes">
+                    <component thickness="VTXIB_curved_flex_Aluminium_thickness"   width="5.0*RSU_phi" length="VTXIB_curved_flex_length" phi_offset="VTXIB_curved_ring4_phi_offset" isCurved="true" material="Al" vis="VTXCableVis" dz="VTXIB_curved_endcap4_length_center" side="-1"/>
+                    <component thickness="VTXIB_curved_flex_Kapton_thickness"      width="5.0*RSU_phi+2.*pi*(VTXIB_curved_flex_Aluminium_thickness+VTXIB_curved_tolerance_r)/2." length="VTXIB_curved_flex_length" phi_offset="VTXIB_curved_ring4_phi_offset" isCurved="true" material="KaptonVtx" vis="VTXCableVis" dz="VTXIB_curved_endcap4_length_side" side="-1" r="VTXIB_curved_flex_Aluminium_thickness+VTXIB_curved_tolerance_r"/>
+                    <component thickness="VTXIB_curved_sensitive_thickness" width="5.0*RSU_phi" length="VTXIB_curved_endcap4_length_center" phi_offset="VTXIB_curved_ring4_phi_offset" isCurved="true" material="Silicon" vis="VTXPeripheryVis" side="+1"/>
+                    <component thickness="VTXIB_curved_sensitive_thickness" width="5.0*RSU_phi" length="VTXIB_curved_endcap4_length_side" phi_offset="VTXIB_curved_ring4_phi_offset" isCurved="true" material="Silicon" vis="VTXPeripheryVis" side="-1"/>
+                </end_z>
+
+                <end_z name="support_rings" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r">
+                    <component thickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_curved_sensitive_thickness-2.0*VTXIB_curved_tolerance_r-VTXIB_tube_thickness" width="pi*(VTXIB_curved_r4+VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring4_phi_offset" isCurved="true" material="CarbonFoam" vis="VTXCarbonFoamVis" dz="+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
+                </end_z>
+            </stave>
+
+            <comment> Layer 4 is different on the +z and -z sides, define two 'stave' objects </comment>
+            <stave name="VTXIBStave4Curved_2" r="VTXIB_curved_r4" length="2.*VTXIB_curved_z4_2">
+                <sensor name="sensor" thickness="VTXIB_curved_total_sensor_thickness" nx="5" material="Silicon">
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_curvedUltraLight_module.xml"/>
+                </sensor>
+
+                <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r" length="VTXIB_curved_z4_2+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
+                    <component thickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_curved_sensitive_thickness-2.0*VTXIB_curved_tolerance_r-VTXIB_tube_thickness" width="VTXIB_curved_longeron4_width" offset="0.0*mm" phi_offset="0.0*deg-VTXIB_curved_longeron4_phi_offset" material="CarbonFoam" isCurved="true" vis="VTXCarbonFoamVis"/>
+                </components>
+
+                <end_z name="endcaps_flexes">
+                    <component thickness="VTXIB_curved_flex_Aluminium_thickness"   width="5.0*RSU_phi" length="VTXIB_curved_flex_length" phi_offset="VTXIB_curved_ring4_phi_offset" isCurved="true" material="Al" vis="VTXCableVis" dz="VTXIB_curved_endcap4_length_center" side="+1"/>
+                    <component thickness="VTXIB_curved_flex_Kapton_thickness"      width="5.0*RSU_phi" length="VTXIB_curved_flex_length" phi_offset="VTXIB_curved_ring4_phi_offset" isCurved="true" material="KaptonVtx" vis="VTXCableVis" dz="VTXIB_curved_endcap4_length_side" side="+1" r="VTXIB_curved_flex_Aluminium_thickness+VTXIB_curved_tolerance_r"/>
+                    <component thickness="VTXIB_curved_sensitive_thickness" width="5.0*RSU_phi" length="VTXIB_curved_endcap4_length_center" phi_offset="VTXIB_curved_ring4_phi_offset" isCurved="true" material="Silicon" vis="VTXPeripheryVis" side="-1"/>
+                    <component thickness="VTXIB_curved_sensitive_thickness" width="5.0*RSU_phi" length="VTXIB_curved_endcap4_length_side" phi_offset="VTXIB_curved_ring4_phi_offset" isCurved="true" material="Silicon" vis="VTXPeripheryVis" side="+1"/>
+                </end_z>
+
+                <end_z name="support_rings" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r">
+                    <component thickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_curved_sensitive_thickness-2.0*VTXIB_curved_tolerance_r-VTXIB_tube_thickness" width="pi*(VTXIB_curved_r4+VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring4_phi_offset" isCurved="true" material="CarbonFoam" vis="VTXCarbonFoamVis" dz="+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
+                </end_z>
+            </stave>
+
+            <comment> Ultra-light inner vertex </comment>
+            <layer id="0" nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r1)*360.*deg+90.*deg+VTXIB_curved_phi0_1" r="VTXIB_curved_r1" nmodules="VTXIB_curved_nModules1" name="VTXIBStave1Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r2-VTXIB_curved_r1"        motherVolLength="VTXIB_curved_z1_passive" z_offset="VTXIB_zoffset1"/>
+            <layer id="1" nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r2)*360.*deg+90.*deg+VTXIB_curved_phi0_2" r="VTXIB_curved_r2" nmodules="VTXIB_curved_nModules2" name="VTXIBStave2Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r3-VTXIB_curved_r2"        motherVolLength="VTXIB_curved_z2_passive" z_offset="VTXIB_zoffset2"/>
+
+            <comment> Layer 3 and 4 are constructed out of two pieces on the +z and -z side, with different lengths in z to optimise coverage </comment>
+            <layer id="2" nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r3)*360.*deg+90.*deg+VTXIB_curved_phi0_3" r="VTXIB_curved_r3" nmodules="VTXIB_curved_nModules3_1" name="VTXIBStave3Curved_1" step="0.0*mm" motherVolThickness="VTXIB_curved_r4-VTXIB_curved_r3"        motherVolLength="VTXIB_curved_z3_passive1" motherVolOffset="+(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap3_length_center-VTXIB_curved_endcap3_length_side)/2.)" z_offset="VTXIB_curved_z3_offset1"/>
+            <layer id="2" nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r3)*360.*deg+90.*deg+VTXIB_curved_phi0_3" r="VTXIB_curved_r3" nmodules="VTXIB_curved_nModules3_2" name="VTXIBStave3Curved_2" step="0.0*mm" motherVolThickness="VTXIB_curved_r4-VTXIB_curved_r3"        motherVolLength="VTXIB_curved_z3_passive2" motherVolOffset="-(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap3_length_center-VTXIB_curved_endcap3_length_side)/2.)" z_offset="VTXIB_curved_z3_offset2"/>
+
+            <layer id="3" nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r4)*360.*deg+90.*deg+VTXIB_curved_phi0_4" r="VTXIB_curved_r4" nmodules="VTXIB_curved_nModules4_1" name="VTXIBStave4Curved_1" step="0.0*mm" motherVolThickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_tube_thickness"   motherVolLength="VTXIB_curved_z4_passive1" motherVolOffset="+(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap4_length_center-VTXIB_curved_endcap4_length_side)/2.)" z_offset="VTXIB_curved_z4_offset1"/>
+            <layer id="3" nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r4)*360.*deg+90.*deg+VTXIB_curved_phi0_4" r="VTXIB_curved_r4" nmodules="VTXIB_curved_nModules4_2" name="VTXIBStave4Curved_2" step="0.0*mm" motherVolThickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_tube_thickness"   motherVolLength="VTXIB_curved_z4_passive2" motherVolOffset="-(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap4_length_center-VTXIB_curved_endcap4_length_side)/2.)" z_offset="VTXIB_curved_z4_offset2"/>   
+
+        </detector>
+    </detectors>
+</lccdd>
