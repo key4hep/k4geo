@@ -2,7 +2,7 @@
 <lccdd>
 
   <includes>
-    <gdmlFile ref="../../../FCCee/IDEA/compact/IDEA_o2_v01/SCEPCal_properties_o1_v01.xml"/>
+    <gdmlFile ref="../SCEPCal_properties_o1_v01.xml"/>
   </includes>
 
 
