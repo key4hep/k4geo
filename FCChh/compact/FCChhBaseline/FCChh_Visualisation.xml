@@ -79,5 +79,9 @@
     <!-- Muon Air (retrieved from FCChh_MuonAir.xml; renamed from "MuonEnvelopeVis" to avoid collision) -->
     <vis name="MuonAirEnvelopeVis" r="0.90" g="0.72" b="0.48" a="0.2" showDaughters="false" visible="true"/>
 
+    <!-- Missing definitions. TrackerTkLayout (referenced in TrackerTkLayout/Tracker.xml) -->
+    <vis name="violet" r="0.56" g="0.0" b="1.0" alpha="1" showDaughters="false" visible="true"/>
+    <vis name="BlueVisTrans" r="0.0" g="0.0" b="1.0" alpha="0.3" showDaughters="true" visible="true"/>
+
   </display>
 </lccdd>
