@@ -186,20 +186,9 @@ add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_
 # Tests for MuonCollider geometries
 #--------------------------------------------------
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/MAIA_v0/MAIA_v0.xml)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/MAIA_v1/MAIA_v1.xml)
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuColl/compact/MuColl_v1/MuColl_v1.xml)
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuSIC/compact/MuSIC_v2/MuSIC_v2.xml)
-
-# MAIA with the computed field map instead of the idealised solenoid.  This is
-# the only test whose compact resolves ${k4geo_DIR}, which the test environment
-# below points at the source tree so the map in fieldmaps/ is found.
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/MAIA_v0/MAIA_v0_fieldmap.xml)
-
-# MAIA_v0_fieldmap.xml is a copy of MAIA_v0.xml; keep the two from drifting.
-add_test(NAME t_MAIA_v0_fieldmap_in_sync
-    COMMAND "${PROJECT_SOURCE_DIR}/utils/compareFieldVariantCompacts.sh"
-            "${PROJECT_SOURCE_DIR}/MuColl/MAIA/compact/MAIA_v0/MAIA_v0.xml"
-            "${PROJECT_SOURCE_DIR}/MuColl/MAIA/compact/MAIA_v0/MAIA_v0_fieldmap.xml"
-)
 
 #--------------------------------------------------
 # check if files named the same contain the same in FCCee
@@ -228,10 +217,7 @@ function(add_detector_name_checks_for glob_pattern)
 endfunction()
 
 add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/*/ILD_FCCee_v0?.xml)
-# Deliberately MAIA_v?.xml and not MAIA_v*.xml: the field variants such as
-# MAIA_v0_fieldmap.xml describe the same detector and keep the parent's header
-# name, so they are not expected to match their own file stem.
-add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/*/MAIA_v?.xml)
+add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/*/MAIA_v*.xml)
 add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuSIC/compact/*/MuSIC_v*.xml)
 add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_sl5_v02/ILD_l5_o?_v02.xml)
 add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/*/CLD_o?_v0?.xml)
