@@ -1,0 +1,65 @@
+/vis/open OGLIX 1000x1000+600+400
+#/vis/open DAWNFILE 1000x1000+600+400
+
+###
+# This Cuts trough the X-Plane showing both beampipes
+###
+/vis/viewer/reset
+/vis/viewer/set/upVector 1 0 0 
+/vis/viewer/set/viewpointVector 0 1 0  
+/vis/viewer/set/sectionPlane on 0 0 0 m 0 1 0
+#/vis/viewer/addCutawayPlane 0 0 0 m 0 1 0
+/vis/viewer/set/style w
+
+# focus on the lumical vs innnertracker issue
+/vis/viewer/zoomTo 30 
+/vis/viewer/panTo 1.08 0.16
+/vis/geometry/set/forceWireframe all -1 true
+/vis/drawVolume
+
+
+###
+# This Cuts Through Beamcal
+###
+#/vis/viewer/reset
+#/vis/viewer/set/upVector 0 1 0
+#/vis/viewer/set/viewpointVector 0 0 1
+#
+#/vis/viewer/set/sectionPlane on 0 0 3.50 m 0 0 1
+##/vis/viewer/addCutawayPlane 0 0 2.40 m 0 0 1
+#/vis/geometry/set/forceWireframe all -1 true
+#/vis/viewer/set/style s
+#/vis/viewer/panTo 0 0
+#/vis/viewer/zoomTo 10
+#/vis/viewer/flush
+##/vis/geometry/set/forceSolid all -1 true
+
+###
+# Lets try to make the detector visible!, been there done that!
+###
+
+
+#/vis/viewer/reset                        
+#
+#/vis/viewer/set/style s
+#/vis/viewer/set/cutawayMode union
+#/vis/viewer/addCutawayPlane 0 0 0 m 0 -1 0
+#/vis/viewer/addCutawayPlane 0 0 0 m 1 0 0
+#/vis/viewer/addCutawayPlane 0 0 0 m 0 0  -1
+#
+#/vis/viewer/set/upVector 0 1 0 
+#/vis/viewer/set/viewpointVector -1 1 1
+#
+##/vis/viewer/set/viewpointThetaPhi 130 70
+#/vis/viewer/zoomTo 1
+##/vis/geometry/set/forceSolid all
+#
+#
+#/vis/viewer/panTo 3. -1.5
+#/vis/viewer/panTo 2.8 -1.5
+#
+#
+##/vis/viewer/set/edge 1
+##/vis/viewer/set/hiddenEdge 1
+##/vis/geometry/set/forceAuxEdgeVisible all
+##/vis/geometry/set/forceSolid all 
