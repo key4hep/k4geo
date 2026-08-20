@@ -2,12 +2,12 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-    <info name="CLD_o2_v08"
-        title="FCCee detector model option 2 version 08"
-        author="Andre Sailer, Leonhard Reichenbach"
+    <info name="CLD_o2_v09"
+        title="FCCee detector model option 2 version 09"
+        author="Andre Sailer, Leonhard Reichenbach, Armin Ilg"
         url="http://ilcsoft.desy.de"
         status="development"
-        version="7">
+        version="9">
         <comment>The compact format for the FCCee Detector design</comment>
     </info>
 
@@ -128,6 +128,8 @@
         <constant name="Vertex_half_length" value="302*mm"/>
         <!-- cone to describe the upper acceptance of the LumiCal -->
         <constant name="Vertex_LumiCal_Clearence" value="110*mrad"/>
+        <constant name="VertexEndcap_zmin" value="160*mm"/>
+        <constant name="VertexEndcap_zmax" value="Vertex_half_length-2.0*mm"/>
 
         <constant name="InnerTracker_inner_radius" value="61*mm"/>
         <constant name="InnerTracker_outer_radius" value="696*mm"/>
@@ -314,7 +316,7 @@
 
     <include ref="LumiCal_o3_v02_05.xml"/>
 
-    <include ref="Vertex_o4_v07_smallBP.xml"/>
+    <include ref="Vertex_o4_v08_smallBP.xml"/>
 
     <include ref="InnerTracker_o2_v08.xml"/>
     <include ref="OuterTracker_o2_v08.xml"/>
@@ -377,9 +379,9 @@
         <argument value="(OuterTracker_Endcap_radius_2-OuterTracker_Barrel_radius_1)/(OuterTracker_half_length-OuterTracker_Barrel_half_length)" />
 
         <argument value="/VertexEndcap/" />
-        <argument value="VertexEndcap_z1" />
+        <argument value="VertexEndcap_zmin" />
         <argument value="VertexBarrel_r3+1*cm" />
-        <argument value="(VertexEndcap_rmax-VertexBarrel_r3+1*cm)/(VertexEndcap_z3-VertexEndcap_z1)" />
+        <argument value="(VertexEndcap_rmax-VertexBarrel_r3+1*cm)/(VertexEndcap_zmax-VertexEndcap_zmin)" />
 
         <argument value="/VertexVerticalCable" />
         <argument value="0" />
