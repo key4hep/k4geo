@@ -20,7 +20,7 @@
     <vis name="ScreenSolVis" alpha="1.0" r="1" g="1" b="0" showDaughters="true" visible="true"/>
     <vis name="TantalumVis" alpha="1.0" r="1" g="0.5" b="0.5" showDaughters="true" visible="true"/>
     <vis name="SupportVis" alpha="1" r="0.2" g="0.2" b="0.2" showDaughters="true" visible="true"/>
-    <vis name="InvisibleNoDaughters" showDaughters="false" visible="false"/>  <!-- Missing definition -->
+    <vis name="InvisibleNoDaughters" showDaughters="false" visible="false"/>
 
     <!-- Beampipe (retrieved from Beampipe_o4_v05.xml) -->
     <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
@@ -34,7 +34,7 @@
     <vis name="SiVertexPassiveVis" alpha="1.0" r="0.274" g="0.274" b="0.274" showDaughters="true" visible="true"/>
     <vis name="SiVertexCableVis" alpha="1.0" r="0.85" g="0.53" b="0.4" showDaughters="true" visible="true"/>
     <vis name="SiVertexAir" alpha="1.0" r="0" g="0" b="0" showDaughters="false" visible="false"/>
-    <vis name="SiVertexLayerVis" alpha="1.0" r="1" g="0.75" b="0" showDaughters="false" visible="true"/> <!-- Missing definition -->
+    <vis name="SiVertexLayerVis" alpha="1.0" r="1" g="0.75" b="0" showDaughters="false" visible="true"/>
 
     <!-- Inner tracker (retrieved from InnerTracker_o2_v07.xml) -->
     <vis name="InnerTrackerModuleVis" alpha="0.5" r="0.0" g="1.0" b="0.6" showDaughters="false" visible="true"/>
@@ -66,8 +66,8 @@
     <vis name="HCalAbsorberVis" alpha="1" r="0.4" g="0.4" b="0.6" showDaughters="true" visible="true"/>
     <vis name="HCalEndcapVis" alpha="1" r="1" g="1" b="0.1" showDaughters="false" visible="true"/>
     <vis name="HCalEndcapLayerVis" alpha="1" r="1" g="0" b="0.5" showDaughters="false" visible="true"/>
-    <vis name="HCalCopperVis" alpha="1.0" r="0.72" g="0.45" b="0.2" showDaughters="true" visible="true"/> <!-- Missing definition -->
-    <vis name="HCalPCBVis" alpha="1.0" r="0.0" g="0.4" b="0.0" showDaughters="true" visible="true"/> <!-- Missing definition -->
+    <vis name="HCalCopperVis" alpha="1.0" r="0.72" g="0.45" b="0.2" showDaughters="true" visible="true"/>
+    <vis name="HCalPCBVis" alpha="1.0" r="0.0" g="0.4" b="0.0" showDaughters="true" visible="true"/>
 
     <!-- Solenoid (retrieved from Solenoid_o1_v01_02.xml) -->
     <vis name="SolenoidBarrelLayerVis" alpha="1" r="0" g="0.3" b="0.3" showDaughters="false" visible="true"/>
@@ -83,12 +83,12 @@
 
     <!-- Yoke endcap (retrieved from YokeEndcap_o1_v01_02.xml) -->
     <vis name="YokeEndcapVis" alpha="1" r="1" g="0.4" b="0.62" showDaughters="true" visible="true"/>
-    <vis name="YokeEndcapLayerVis" alpha="1" r="0" g="1" b="0.3" showDaughters="true" visible="true"/> <!-- Missing definition -->
+    <vis name="YokeEndcapLayerVis" alpha="1" r="0" g="1" b="0.3" showDaughters="true" visible="true"/>
 
-    <!-- Missing definition. Beam instrumentation (referenced in BeamInstrumentation_o3_v02_fitShield.xml) -->
+    <!-- Beam instrumentation (referenced in BeamInstrumentation_o3_v02_fitShield.xml) -->
     <vis name="CoilVis" alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
 
-    <!-- Missing definitions. LumiCal (referenced in LumiCal_o3_v02_04.xml) -->
+    <!-- LumiCal (referenced in LumiCal_o3_v02_04.xml) -->
     <vis name="SeeThrough" alpha="0.0" r="0" g="0" b="0" showDaughters="true" visible="false"/>
     <vis name="BCLayerVis1" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="BCLayerVis2" alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
