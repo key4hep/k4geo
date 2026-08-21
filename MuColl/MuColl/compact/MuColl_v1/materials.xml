@@ -188,6 +188,7 @@
 
     <material name="BoronOxide">
         <D type="density" value="2.46" unit="g/cm3"/>
+        <composite n="2" ref="B"/>
         <composite n="3" ref="O"/>
     </material>
 
