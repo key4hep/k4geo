@@ -1,8 +1,5 @@
 # MAIA solenoid field map
 
-How `fieldmaps/MAIA_fieldMap_Solenoid5T_v1.root` is derived, how it is stored,
-and how it was validated.
-
 Generator: [`utils/make_maia_fieldmap.py`](../../../../utils/make_maia_fieldmap.py).
 Used by the compact [`MAIA_v1.xml`](./MAIA_v1.xml) via
 [`Field_Solenoid_Map_5T.xml`](./Field_Solenoid_Map_5T.xml).
@@ -20,15 +17,7 @@ Bz = 0                 everywhere else
 Br = 0                 everywhere
 ```
 
-Two consequences motivated this work:
-
-* `zmax` is a hard cliff. Track states at the calorimeter endcaps sit exactly
-  where the field drops from 5 T to 0 T. Pushing `zmax` outwards (PR #638)
-  mitigates but does not remove the discontinuity.
-* `Br = 0` everywhere, so there is no radial bending in the forward region and
-  no field at all outside the return annulus.
-
-The map replaces both with a physically self-consistent field that has a smooth
+The map replaces it with a physically self-consistent field that has a smooth
 fringe and a genuine radial component.
 
 ## 2. Methodology
@@ -62,8 +51,8 @@ with reluctivity `nu = 1/mu`. Note the pairing: `nu_z`, the reluctivity seen by
   right rather than smeared.
 * **Grid.** Uniform 25 mm out to r = 8 m and z = 8.5 m, then geometrically
   stretched (ratio 1.10) to a 40 m outer boundary. 371 x 391 = 145 061 nodes.
-  The far boundary is pushed well beyond the detector because, with no yoke
-  iron (section 2.4), the stray field is not negligible at the detector edge.
+  The far boundary is pushed well beyond the detector because the stray field
+  is not negligible at the detector edge.
 * **Symmetry.** Only z >= 0 is solved. The z = 0 plane is a Neumann boundary
   (`dpsi/dz = 0`, hence `Br = 0` there exactly).
 * **Boundary conditions.** `psi = 0` on the axis and on the far r and z
@@ -97,14 +86,10 @@ The steel fill factor follows from the slice list: `0.5 + 19 + 0.5` mm of
 `Steel235` in a 26.5 mm layer, so **f = 0.7547** (and 75 x 26.5 mm = 1987.5 mm
 = 4113.5 - 2126.0, exactly).
 
-> **The yoke carries no iron in this model.** The MAIA yoke absorber slices are
-> declared `Air` in `YokeBarrel_o1_v01_01.xml` (4 x 40.6 cm) and
-> `YokeEndcap_o1_v01_01.xml` (7 x 19.7 cm). They fill the yoke envelopes
-> exactly and are transparently placeholders for steel, but the model follows
-> what the geometry actually says, so the yoke is magnetically transparent and
-> some flux returns through air. The generator has a `--yoke-is-steel` flag that
-> treats those slices as steel (fill factors 0.931 barrel, 0.868 endcap) for
-> anyone wanting the comparison.
+> **The muon system carries no iron in this model.** The region is magnetically 
+> transparent and some flux returns through air. 
+> The generator has a `--yoke-is-steel` flag that treats those slices as steel 
+> (fill factors 0.931 barrel, 0.868 endcap) for anyone wanting the comparison.
 
 **Constitutive law.** Froelich-Kennelly, `B = mu0*H + Js*H/(H + H0)`, a standard
 closed-form model for soft magnetic materials, with `Js = 2.05 T` and initial
@@ -185,19 +170,6 @@ time or, worse, silently:
   phi += M_PI`), which is the correct symmetry for this field.
 * Outside the map the plugin returns **zero**, so the map has to extend to where
   the field is negligible (see section 4).
-
-### 3.2 Wiring
-
-`MAIA_v1.xml` is MAIA_v0 with the field map in place of the idealised solenoid.
-It includes the whole geometry from `../MAIA_v0/` rather than copying it, so the
-two versions cannot diverge in geometry; only the `<fields>` include differs.
-
-The map is located through `${k4geo_DIR}/fieldmaps/...`, matching the ILD field
-map XMLs. `k4geo_DIR` must point at this checkout rather than an installed
-k4geo; `test/CMakeLists.txt` sets it for ctest, and
-[`scripts/run_in_container.sh`](../../../../scripts/run_in_container.sh) sets it
-for interactive use. Note that the Muon Collider container's setup script
-overwrites `k4geo_DIR`, so it must be exported *after* sourcing.
 
 ## 4. Validation
 
@@ -286,7 +258,7 @@ physics performance, and it is the natural next step.
 
 ## 5. Limitations
 
-* **No yoke iron**, per section 2.4. This is the largest modelling choice in the
+* **No iron in muon system**. This is the largest modelling choice in the
   document. It leaves a stray field outside the detector and essentially no
   field in the muon system.
 * **Generic BH curve**, not measured S235 data.
