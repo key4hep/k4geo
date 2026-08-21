@@ -1,0 +1,19 @@
+<lccdd>
+
+    <!-- Idealised MAIA solenoid: DD4hep's built-in two-step field, uniform
+         inner_field inside the coil and uniform outer_field in the return
+         annulus, with no radial component and a hard cut at zmax.
+    -->
+
+    <fields>
+        <!-- Note that zmax is set here to go into the endcap region so that track states at the endcaps have non zero omega -->
+		<field name="GlobalSolenoid" type="solenoid"
+			inner_field="5.0*tesla"
+			outer_field="-0.936941*tesla"
+			zmax="ECalEndcap_min_z+2*env_safety"
+			inner_radius="Solenoid_inner_radius+SolenoidVacuumTank_thickness + SolenoidCoil_thickness/2"
+			outer_radius="HCalBarrel_outer_radius">
+		</field>
+    </fields>
+
+</lccdd>
