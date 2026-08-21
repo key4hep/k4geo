@@ -22,13 +22,36 @@
 
             <section type="Center" start="0*mm" end="Nozzle_zmin" rMin1="Beampipe_inner_radius" rMin2="Beampipe_inner_radius" rMax1="Beampipe_outer_radius" rMax2="Beampipe_outer_radius" material="Beryllium" name="VertexInnerBe" />
 
-            <!-- Vacuum tracking the tungsten nozzle's inner bore (NozzleW_right/left); no separate wall (rMin==rMax). -->
-            <section type="Center" start="Nozzle_zmin" end="15*cm" rMin1="1*cm - env_safety" rMin2="0.6*cm - env_safety" rMax1="1*cm - env_safety" rMax2="0.6*cm - env_safety" material="Vacuum" name="NozzleBoreVacuum1" />
+            <!-- Vacuum tracking the tungsten nozzle's inner bore (NozzleW_right/left); z=Nozzle_zmin-15cm handled below by NozzleTipVacuum_right/left. -->
             <section type="Center" start="15*cm" end="100*cm" rMin1="0.6*cm - env_safety" rMin2="0.3*cm - env_safety" rMax1="0.6*cm - env_safety" rMax2="0.3*cm - env_safety" material="Vacuum" name="NozzleBoreVacuum2" />
             <section type="Center" start="100*cm" end="204.48824*cm" rMin1="0.3*cm - env_safety" rMin2="0.6124092832*cm - env_safety" rMax1="0.3*cm - env_safety" rMax2="0.6124092832*cm - env_safety" material="Vacuum" name="NozzleBoreVacuum3" />
             <section type="Center" start="204.48824*cm" end="595*cm" rMin1="0.6124092832*cm - env_safety" rMin2="1.78*cm - env_safety" rMax1="0.6124092832*cm - env_safety" rMax2="1.78*cm - env_safety" material="Vacuum" name="NozzleBoreVacuum4" />
 
         </detector>
-        
+
+        <!-- z=Nozzle_zmin-15cm: vacuum disk with the tungsten tip's shape subtracted out, so the nozzle tip sits fully inside the vacuum. -->
+        <detector name="NozzleTipVacuum_right" type="MaterialEnvelope_o1_v01" vis="BeamPipeVis">
+            <envelope vis="BlueVis">
+                <shape type="BooleanShape" operation="Subtraction" material="Vacuum">
+                    <shape type="Tube" rmin="0" rmax="Beampipe_inner_radius" dz="(15*cm - Nozzle_zmin)/2"/>
+                    <shape type="Cone" rmin1="1*cm - env_safety" rmax1="1*cm + env_safety" rmin2="0.6*cm - env_safety" rmax2="2.58694*cm + env_safety" z="(15*cm - Nozzle_zmin)/2"/>
+                    <position x="0" y="0" z="0"/>
+                </shape>
+                <position x="0" y="0" z="(Nozzle_zmin + 15*cm)/2"/>
+            </envelope>
+        </detector>
+
+        <!-- Mirrored copy for -z; Cone z1/z2 ends swapped so a plain translation lands each end correctly. -->
+        <detector name="NozzleTipVacuum_left" type="MaterialEnvelope_o1_v01" vis="BeamPipeVis">
+            <envelope vis="BlueVis">
+                <shape type="BooleanShape" operation="Subtraction" material="Vacuum">
+                    <shape type="Tube" rmin="0" rmax="Beampipe_inner_radius" dz="(15*cm - Nozzle_zmin)/2"/>
+                    <shape type="Cone" rmin1="0.6*cm - env_safety" rmax1="2.58694*cm + env_safety" rmin2="1*cm - env_safety" rmax2="1*cm + env_safety" z="(15*cm - Nozzle_zmin)/2"/>
+                    <position x="0" y="0" z="0"/>
+                </shape>
+                <position x="0" y="0" z="-(Nozzle_zmin + 15*cm)/2"/>
+            </envelope>
+        </detector>
+
     </detectors>
 </lccdd>
