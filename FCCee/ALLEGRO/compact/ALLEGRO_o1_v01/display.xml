@@ -29,7 +29,7 @@
     <vis name="BPMVis" alpha="1.0" r="0.25" g="0.88" b="0.81" showDaughters="true" visible="true"/>
     <vis name="SupportVis" alpha="1" r="0.2" g="0.2" b="0.2" showDaughters="true" visible="true"/>
 
-    <!-- Missing definition. Beam Instrumentation (defined in BeamInstrumentation.xml) -->
+    <!-- Beam Instrumentation (defined in BeamInstrumentation.xml) -->
     <vis name="CoilVis" alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
 
     <!-- Beampipe (retrieved from Beampipe.xml) -->
@@ -37,9 +37,9 @@
     <vis name="GoldCoatingVis" alpha="0.0" r="0.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
     <vis name="TubeVis" alpha="1.0" r="1.0" g="0.7" b="0.5" showDaughters="true" visible="true"/>
     <vis name="VacVis" alpha="1.0" r="1.0" g="1.0" b="1.0" showDaughters="true" visible="false"/>
-    <vis name="BlueVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/> <!-- Missing definiton -->
+    <vis name="BlueVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
 
-    <!-- Missing definitions. LumiCal / HOMAbsorber (defined in LumiCal.xml and HOMAbsorber.xml) -->
+    <!-- LumiCal / HOMAbsorber (defined in LumiCal.xml and HOMAbsorber.xml) -->
     <vis name="SeeThrough" alpha="0.0" r="0" g="0" b="0" showDaughters="true" visible="false"/>
     <vis name="BCLayerVis1" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="BCLayerVis2" alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
@@ -97,7 +97,7 @@
     <vis name="SiVertexPassiveVis" alpha="1.0" r="0.274" g="0.274" b="0.274" showDaughters="true" visible="true"/>
     <vis name="SiVertexCableVis" alpha="1.0" r="0.85" g="0.53" b="0.4" showDaughters="true" visible="true"/>
     <vis name="SiVertexAir" alpha="1.0" r="0" g="0" b="0" showDaughters="false" visible="false"/>
-    <vis name="SiVertexLayerVis" alpha="1.0" r="1" g="0.75" b="0" showDaughters="false" visible="true"/> <!-- Missing definiton -->
+    <vis name="SiVertexLayerVis" alpha="1.0" r="1" g="0.75" b="0" showDaughters="false" visible="true"/>
 
     <!-- Solenoid (retrieved from Solenoid_o1_v01_02.xml; not currently included by ALLEGRO_o1_v01.xml) -->
     <vis name="SolenoidBarrelLayerVis" alpha="1" r="0" g="0.3" b="0.3" showDaughters="false" visible="true"/>
