@@ -22,6 +22,12 @@
 
             <section type="Center" start="0*mm" end="Nozzle_zmin" rMin1="Beampipe_inner_radius" rMin2="Beampipe_inner_radius" rMax1="Beampipe_outer_radius" rMax2="Beampipe_outer_radius" material="Beryllium" name="VertexInnerBe" />
 
+            <!-- Vacuum tracking the tungsten nozzle's inner bore (NozzleW_right/left); no separate wall (rMin==rMax). -->
+            <section type="Center" start="Nozzle_zmin" end="15*cm" rMin1="1*cm - env_safety" rMin2="0.6*cm - env_safety" rMax1="1*cm - env_safety" rMax2="0.6*cm - env_safety" material="Vacuum" name="NozzleBoreVacuum1" />
+            <section type="Center" start="15*cm" end="100*cm" rMin1="0.6*cm - env_safety" rMin2="0.3*cm - env_safety" rMax1="0.6*cm - env_safety" rMax2="0.3*cm - env_safety" material="Vacuum" name="NozzleBoreVacuum2" />
+            <section type="Center" start="100*cm" end="204.48824*cm" rMin1="0.3*cm - env_safety" rMin2="0.6124092832*cm - env_safety" rMax1="0.3*cm - env_safety" rMax2="0.6124092832*cm - env_safety" material="Vacuum" name="NozzleBoreVacuum3" />
+            <section type="Center" start="204.48824*cm" end="595*cm" rMin1="0.6124092832*cm - env_safety" rMin2="1.78*cm - env_safety" rMax1="0.6124092832*cm - env_safety" rMax2="1.78*cm - env_safety" material="Vacuum" name="NozzleBoreVacuum4" />
+
         </detector>
         
     </detectors>
