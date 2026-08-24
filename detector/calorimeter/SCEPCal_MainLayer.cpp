@@ -322,7 +322,7 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
   
   // Lambda for crystals
   auto CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId =
-    [&theDetector, &sens, &segmentation, &ScepcalDetElement, &USE_OPTICAL_SURFACES, &PbWO4_to_ESR, &D_PHI_GLOBAL](
+    [&theDetector, &sens, &segmentation, &ScepcalDetElement, &USE_OPTICAL_SURFACES, &PbWO4_to_ESR](
           const std::string& volName, double dz, const std::array<double, 16>& vertices, const xml_comp_t& compXml,
           const dd4hep::Transform3D& transform, const dd4hep::Volume& assemblyVol, int nSystem, int nTheta, int nGamma,
           int nEpsilon, int nDepth, const XYZVector& posGlobal, int phi_start, int phi_end, std::unordered_map<int, RotationZ> &phi_rotations ) {
