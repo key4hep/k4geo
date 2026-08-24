@@ -54,7 +54,7 @@ namespace sim {
     G4StepPoint* thePrePoint = step->GetPreStepPoint();
     G4TouchableHandle thePreStepTouchable = thePrePoint->GetTouchableHandle();
 
-    //lower 32 bits of cellID but for phi=0 slidce
+    //lower 32 bits of cellID but for phi=0 slice
     auto cellID_0 = thePreStepTouchable->GetCopyNumber(0);
     //get phi index from grandparent
     auto cellID_2 = thePreStepTouchable->GetCopyNumber(2);
@@ -62,13 +62,7 @@ namespace sim {
     dd4hep::Segmentation* _geoSeg = &m_segmentation;
     auto segmentation =
         dynamic_cast<dd4hep::DDSegmentation::SCEPCal_TimingSegmentation_k4geo*>(_geoSeg->segmentation());
-
-    //int system = segmentation->System(cellID_0);
-    //int theta = segmentation->Theta(cellID_0);
-    //int gamma = segmentation->Gamma(cellID_0);
-
-    //auto cellID_phi = segmentation->setVolumeID(system, cellID_2, theta, gamma);
-    
+   
     auto cellID_phi = segmentation->setPhi(cellID_0, cellID_2);
     auto cellID_phi32 = segmentation->getFirst32bits(cellID_phi);
 

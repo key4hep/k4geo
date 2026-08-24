@@ -240,26 +240,28 @@ static dd4hep::Ref_t create_detector_SCEPCal_TimingLayer(dd4hep::Detector& theDe
 
   ScepcalDetElement.setPlacement(tlbarrelAssemblyPlacedVol);
 
-  std::unordered_map<int, RotationZ> phi_barrel_rotations, phi_endcap_rotations;
+  std::vector<RotationZ> phi_barrel_rotations, phi_endcap_rotations;
+  phi_barrel_rotations.reserve(TIMING_PHI_END-TIMING_PHI_START);
+  phi_endcap_rotations.reserve(TLENDCAP_PHI_END-TLENDCAP_PHI_START);
   for (int iPhi = TIMING_PHI_START; iPhi < TIMING_PHI_END; iPhi++) {
     double phiGlobal = iPhi * D_PHI_GLOBAL;
     RotationZ rotZPhiGlobal(phiGlobal);
-    phi_barrel_rotations[iPhi]=rotZPhiGlobal;
+    phi_barrel_rotations.push_back(rotZPhiGlobal);
   }
   for (int iPhi = TLENDCAP_PHI_START; iPhi < TLENDCAP_PHI_END; iPhi++) {
     double phiGlobal = iPhi * D_PHI_GLOBAL;
     RotationZ rotZPhiGlobal(phiGlobal);
-    phi_endcap_rotations[iPhi]=rotZPhiGlobal;
+    phi_endcap_rotations.push_back(rotZPhiGlobal);
   }
   
   // Lambda for crystals
   auto CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId =
       [&theDetector, &sens, &segmentation, &ScepcalDetElement, &USE_OPTICAL_SURFACES,
-       &LYSO_to_ESR, &D_PHI_GLOBAL]
+       &LYSO_to_ESR]
                 (const std::string& volName, double dz, const double* vertices, const xml_comp_t& compXml,
                  const dd4hep::Transform3D& transform, const dd4hep::Volume& assemblyVol, int nSystem, int nTheta,
 		 int nGamma, const XYZVector& posGlobal, int phi_start, int phi_end,
-		 std::unordered_map<int, RotationZ> &phi_rotations) {
+		 std::vector<RotationZ> &phi_rotations, int phi0) {
         dd4hep::EightPointSolid theShape(dz, vertices);
         dd4hep::Volume theVolume(volName, theShape, theDetector.material(compXml.materialStr()));
         theVolume.setVisAttributes(theDetector, compXml.visStr());
@@ -281,10 +283,9 @@ static dd4hep::Ref_t create_detector_SCEPCal_TimingLayer(dd4hep::Detector& theDe
         thePlacedVol.addPhysVolID("gamma", nGamma);
 
 	for ( int iPhi=phi_start; iPhi< phi_end; iPhi++ ) {
-	  XYZVector posGlobalPhi = phi_rotations[iPhi] * posGlobal;
+	  XYZVector posGlobalPhi = phi_rotations[iPhi+phi0] * posGlobal;
 	  auto volID = segmentation->setVolumeID(nSystem, iPhi, nTheta, nGamma);
 	  int volID_32 = segmentation->getFirst32bits(volID);
-	  //std::cout << posGlobalPhi << " " << volID_32 << std::endl;
 	  segmentation->savePosition(volID_32, posGlobalPhi);
 	}
       };
@@ -368,7 +369,7 @@ static dd4hep::Ref_t create_detector_SCEPCal_TimingLayer(dd4hep::Detector& theDe
       CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
           "TimingCrystal", XTAL_DEPTH_T / 2, verticesT, crystalTXML, trans_dispT, timingThetaAssemblyVolume,
           TLBARREL_SYSTEM_NO, N_THETA_TLENDCAP + iTheta, nGamma, posGlobal, TIMING_PHI_START, TIMING_PHI_END,
-	  phi_barrel_rotations);
+	  phi_barrel_rotations,TIMING_PHI_START);
       numCrystalsTiming += 1;
     }
   }
@@ -494,13 +495,13 @@ static dd4hep::Ref_t create_detector_SCEPCal_TimingLayer(dd4hep::Detector& theDe
 
       CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
           "TlEndcapCrystal", XTAL_DEPTH_T / 2, verticesT, crystalTXML, Transform3D(dispT), tlendcapThetaAssemblyVolume,
-          TLENDCAP_SYSTEM_NO, iTheta, nGamma, posGlobal, TLENDCAP_PHI_START, TLENDCAP_PHI_END, phi_endcap_rotations);
+          TLENDCAP_SYSTEM_NO, iTheta, nGamma, posGlobal, TLENDCAP_PHI_START, TLENDCAP_PHI_END, phi_endcap_rotations, TLENDCAP_PHI_START);
       numCrystalsTlEndcap += 1;
 
       CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
           "TlEndcapCrystal_1", XTAL_DEPTH_T / 2, verticesT_1, crystalTXML, Transform3D(dispT),
-          tlendcapThetaAssemblyVolume_1, TLENDCAP_SYSTEM_NO, 2 * N_THETA_TLENDCAP + N_THETA_TLBARREL - iTheta, nGamma,
-          posGlobal_1, TLENDCAP_PHI_START, TLENDCAP_PHI_END, phi_endcap_rotations);
+          tlendcapThetaAssemblyVolume_1, TLENDCAP_SYSTEM_NO, 2 * N_THETA_TLENDCAP + N_THETA_TLBARREL - 1 - iTheta, nGamma,
+          posGlobal_1, TLENDCAP_PHI_START, TLENDCAP_PHI_END, phi_endcap_rotations, TLENDCAP_PHI_START);
       numCrystalsTlEndcap += 1;
     }
   }
