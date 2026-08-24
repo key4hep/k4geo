@@ -86,7 +86,7 @@ namespace sim {
       auto* hit = coll->findByKey<Geant4Calorimeter::Hit>(cIDwithChannel);
 
       if (!hit) {
-        DDSegmentation::Vector3D pos = segmentation->position(vID); // always use scintillation channel for position
+        DDSegmentation::Vector3D pos = segmentation->position(cellID_phi); // always use scintillation channel for position
 	Position global(pos.x(), pos.y(), pos.z());
         hit = new Geant4Calorimeter::Hit(global / dd4hep::mm);
 
