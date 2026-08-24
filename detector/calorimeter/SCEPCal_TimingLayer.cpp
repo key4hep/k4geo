@@ -227,7 +227,6 @@ static int buildTimingEndcap(dd4hep::Detector& theDetector, dd4hep::SensitiveDet
   dd4hep::Volume tlendcapPhiAssemblyVolume_1("tlendcapPhiVol_1", tlendcapPhiAssemblyShape_1,
                                              theDetector.material("Vacuum"));
   tlendcapPhiAssemblyVolume_1.setVisAttributes(theDetector, p.tlendcapAssemblyPhiVis);
-  tlendcapGlobalAssemblyVol_1.placeVolume(tlendcapPhiAssemblyVolume_1);
 
   for (int iTheta = p.TLENDCAP_THETA_START; iTheta < p.N_THETA_TLENDCAP; iTheta++) {
     double thC = p.D_THETA_TLENDCAP / 2 + iTheta * p.D_THETA_TLENDCAP;
@@ -327,6 +326,9 @@ static int buildTimingEndcap(dd4hep::Detector& theDetector, dd4hep::SensitiveDet
     RotationZ rotZphiGlobal(phiGlobal);
     auto pv = tlendcapGlobalAssemblyVol.placeVolume(tlendcapPhiAssemblyVolume, Transform3D(rotZphiGlobal));
     pv.addPhysVolID("phi", iPhi);
+    auto pv_1 = tlendcapGlobalAssemblyVol_1.placeVolume(tlendcapPhiAssemblyVolume_1);
+    pv_1.addPhysVolID("phi", iPhi);
+
     nPhiPlaced++;
   }
   return numCrystals * static_cast<int>(nPhiPlaced);
