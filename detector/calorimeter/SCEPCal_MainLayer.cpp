@@ -418,8 +418,8 @@ static int buildEndcap(dd4hep::Detector& theDetector, dd4hep::SensitiveDetector&
     double rE = r0e + (p.XTAL_LEN_F + p.XTAL_LEN_R) / 2.;
     RotationZYX rotE(M_PI / 2, thC, 0);
     RotationZYX rotE_1(M_PI / 2, -thC, 0);
-    Position dispE(rE * sin(thC) - p.PROJ_OFFSET_R, 0, rE * cos(thC));
-    Position dispE_1(rE * sin(thC) - p.PROJ_OFFSET_R, 0, -rE * cos(thC));
+    Position dispE(rE * sin_thC - p.PROJ_OFFSET_R, 0, rE * cos_thC);
+    Position dispE_1(rE * sin_thC - p.PROJ_OFFSET_R, 0, -rE * cos_thC);
 
     dd4hep::EightPointSolid endcapThetaAssemblyShape((p.XTAL_LEN_F + p.XTAL_LEN_R) / 2, verticesE);
     dd4hep::EightPointSolid endcapThetaAssemblyShape_1((p.XTAL_LEN_F + p.XTAL_LEN_R) / 2, verticesE_1);
@@ -924,14 +924,14 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
 
   int numCrystalsBarrel = 0;
   if (CONSTRUCT_BARREL)
-    buildBarrel(theDetector, sens, segmentation, ScepcalDetElement, USE_OPTICAL_SURFACES, PbWO4_to_ESR, p,
-                phi_barrel_rotations, barrelGlobalAssemblyVol);
+    numCrystalsBarrel = buildBarrel(theDetector, sens, segmentation, ScepcalDetElement, USE_OPTICAL_SURFACES,
+                                    PbWO4_to_ESR, p, phi_barrel_rotations, barrelGlobalAssemblyVol);
 
   int numCrystalsEndcap = 0;
   if (CONSTRUCT_ENDCAP)
-    numCrystalsEndcap +=
-        buildEndcap(theDetector, sens, segmentation, ScepcalDetElement, USE_OPTICAL_SURFACES, PbWO4_to_ESR, p,
-                    phi_endcap_rotations, endcapGlobalAssemblyVol, endcapGlobalAssemblyVol_1);
+    numCrystalsEndcap = buildEndcap(theDetector, sens, segmentation, ScepcalDetElement, USE_OPTICAL_SURFACES,
+                                    PbWO4_to_ESR, p, phi_endcap_rotations, endcapGlobalAssemblyVol,
+                                    endcapGlobalAssemblyVol_1);
 
   std::cout << std::endl;
   std::cout << "NUM_CRYSTALS_BARREL:  " << numCrystalsBarrel << std::endl;

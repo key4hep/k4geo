@@ -304,7 +304,7 @@ static int buildTimingEndcap(dd4hep::Detector& theDetector, dd4hep::SensitiveDet
       Position dispT(0, 0, 0);
 
       XYZVector posGlobal(rE * sin_thC, rE * sin_thC * tan(gamma), rE * cos_thC);
-      XYZVector posGlobal_1(rE * sin(thC), rE * sin_thC * tan(gamma), -rE * cos_thC);
+      XYZVector posGlobal_1(rE * sin_thC, rE * sin_thC * tan(gamma), -rE * cos_thC);
 
       placeCrystal(theDetector, sens, segmentation, ScepcalDetElement, USE_OPTICAL_SURFACES, LYSO_to_ESR,
                    "TlEndcapCrystal", p.XTAL_DEPTH_T / 2, verticesT, p.crystalTMaterial, p.crystalTVis,
@@ -326,7 +326,7 @@ static int buildTimingEndcap(dd4hep::Detector& theDetector, dd4hep::SensitiveDet
     RotationZ rotZphiGlobal(phiGlobal);
     auto pv = tlendcapGlobalAssemblyVol.placeVolume(tlendcapPhiAssemblyVolume, Transform3D(rotZphiGlobal));
     pv.addPhysVolID("phi", iPhi);
-    auto pv_1 = tlendcapGlobalAssemblyVol_1.placeVolume(tlendcapPhiAssemblyVolume_1);
+    auto pv_1 = tlendcapGlobalAssemblyVol_1.placeVolume(tlendcapPhiAssemblyVolume_1, Transform3D(rotZphiGlobal));
     pv_1.addPhysVolID("phi", iPhi);
 
     nPhiPlaced++;
@@ -606,13 +606,14 @@ static dd4hep::Ref_t create_detector_SCEPCal_TimingLayer(dd4hep::Detector& theDe
 
   int numCrystalsTiming = 0;
   if (CONSTRUCT_TLBARREL)
-    buildTimingBarrel(theDetector, sens, segmentation, ScepcalDetElement, USE_OPTICAL_SURFACES, LYSO_to_ESR, p,
-                      phi_barrel_rotations, timingGlobalAssemblyVol);
+    numCrystalsTiming = buildTimingBarrel(theDetector, sens, segmentation, ScepcalDetElement, USE_OPTICAL_SURFACES,
+                                          LYSO_to_ESR, p, phi_barrel_rotations, timingGlobalAssemblyVol);
 
   int numCrystalsTlEndcap = 0;
   if (CONSTRUCT_TLENDCAP)
-    buildTimingEndcap(theDetector, sens, segmentation, ScepcalDetElement, USE_OPTICAL_SURFACES, LYSO_to_ESR, p,
-                      phi_endcap_rotations, tlendcapGlobalAssemblyVol, tlendcapGlobalAssemblyVol_1);
+    numCrystalsTlEndcap = buildTimingEndcap(theDetector, sens, segmentation, ScepcalDetElement, USE_OPTICAL_SURFACES,
+                                             LYSO_to_ESR, p, phi_endcap_rotations, tlendcapGlobalAssemblyVol,
+                                             tlendcapGlobalAssemblyVol_1);
 
   std::cout << std::endl;
   std::cout << "NUM_CRYSTALS_TLBARREL:" << numCrystalsTiming << std::endl;
