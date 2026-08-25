@@ -119,7 +119,7 @@ endif()
 # wedge (IDEA_o2_v01_CI.xml) and fire a pi- into it to exercise the SCEPCal + DRBT sensitive
 # detectors.  The steering skips the DREndcapTubes SD when the compact file is a "*_CI.xml".
 if(DCH_INFO_H_EXIST)
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/compact/IDEA_o2_v01_CI/IDEA_o2_v01_CI.xml
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o2_v01_CI/IDEA_o2_v01_CI.xml
   N_EVENTS 1
   EXTRA_ARGS --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o2_v01.py
              --gun.particle pi- --gun.energy 10*GeV --gun.direction 0.966,0.259,0.01
@@ -186,6 +186,7 @@ add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_
 # Tests for MuonCollider geometries
 #--------------------------------------------------
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/MAIA_v0/MAIA_v0.xml)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/MAIA_v1/MAIA_v1.xml)
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuColl/compact/MuColl_v1/MuColl_v1.xml)
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuSIC/compact/MuSIC_v2/MuSIC_v2.xml)
 
@@ -224,7 +225,10 @@ add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/*/
 # add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/*/IDEA_o?_v0?.xml)
 
 
-set(test_environment "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/lib:$ENV{LD_LIBRARY_PATH}")
+# k4geo_DIR is what compact files use to locate the shipped field maps; point it
+# at the source tree so the tests use this checkout rather than an installed k4geo.
+set(test_environment "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/lib:$ENV{LD_LIBRARY_PATH}"
+                     "k4geo_DIR=${PROJECT_SOURCE_DIR}")
 get_property(test_names DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY TESTS)
 set_tests_properties(${test_names} PROPERTIES ENVIRONMENT "${test_environment}"
                                               FAIL_REGULAR_EXPRESSION " Exception; EXCEPTION;ERROR;Error")

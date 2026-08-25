@@ -1,16 +1,19 @@
 <lccdd>
-	<info name="MAIA_v0"
+	<info name="MAIA_v1"
 		title="MAIA detector concept for sqrt(s) = 10 TeV muon collisions"
 		author="Federico Meloni"
 		url="https://mcdwiki.docs.cern.ch/"
 		status="development"
-		version="0">
-		<comment>First import</comment>
+		version="1">
+		<comment>MAIA_v0 geometry with the computed solenoid field map</comment>
 	</info>
 
+	<!-- The geometry is shared with MAIA_v0 and included from ../MAIA_v0/.
+	     Only the field description below is specific to this version. -->
+
     <includes>
-        <gdmlFile  ref="elements.xml"/>
-        <gdmlFile  ref="materials.xml"/>
+        <gdmlFile  ref="../MAIA_v0/elements.xml"/>
+        <gdmlFile  ref="../MAIA_v0/materials.xml"/>
     </includes>
 
     <define>
@@ -44,7 +47,6 @@
 
         <constant name="Nozzle_zmin" value="6*cm"/>
         <constant name="Nozzle_zmax" value="600*cm"/>
-
 
         <!-- ################### ENVELOPE PARAMETERS ######################################################## -->
 
@@ -173,23 +175,23 @@
 
     <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
 
-	<include ref="Nozzle_10deg_v0.xml"/>
-	<include ref="Beampipe_o1_v01_02.xml"/>
+	<include ref="../MAIA_v0/Nozzle_10deg_v0.xml"/>
+	<include ref="../MAIA_v0/Beampipe_o1_v01_02.xml"/>
 
-	<include ref="Vertex_o2_v06_01.xml"/>
-	<include ref="InnerTracker_o2_v07_01.xml"/>
-	<include ref="OuterTracker_o2_v07_01.xml"/>
+	<include ref="../MAIA_v0/Vertex_o2_v06_01.xml"/>
+	<include ref="../MAIA_v0/InnerTracker_o2_v07_01.xml"/>
+	<include ref="../MAIA_v0/OuterTracker_o2_v07_01.xml"/>
 
-	<include ref="Solenoid_o1_v01_01.xml"/>
+	<include ref="../MAIA_v0/Solenoid_o1_v01_01.xml"/>
 
-	<include ref="ECalBarrel_o2_v01_02.xml"/>
-	<include ref="ECalEndcap_o2_v01_02.xml"/>
+	<include ref="../MAIA_v0/ECalBarrel_o2_v01_02.xml"/>
+	<include ref="../MAIA_v0/ECalEndcap_o2_v01_02.xml"/>
 
-	<include ref="HCalBarrel_o1_v01_01.xml"/>
-	<include ref="HCalEndcap_o1_v01_01.xml"/>
+	<include ref="../MAIA_v0/HCalBarrel_o1_v01_01.xml"/>
+	<include ref="../MAIA_v0/HCalEndcap_o1_v01_01.xml"/>
 
-    <include ref="YokeBarrel_o1_v01_01.xml"/>
-    <include ref="YokeEndcap_o1_v01_01.xml"/>
+    <include ref="../MAIA_v0/YokeBarrel_o1_v01_01.xml"/>
+    <include ref="../MAIA_v0/YokeEndcap_o1_v01_01.xml"/>
 
     <plugins>
         <plugin name="DD4hepVolumeManager"/>
@@ -249,7 +251,8 @@
 
     </plugins>
 
-    <include ref="Field_Solenoid_Analytic_5T.xml"/>
+    <!-- The idealised solenoid is swapped for the computed field map. -->
+    <include ref="Field_Solenoid_Map_5T.xml"/>
 
 </lccdd>
 
