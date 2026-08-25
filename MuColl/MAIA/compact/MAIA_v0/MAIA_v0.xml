@@ -45,6 +45,7 @@
         <constant name="Nozzle_zmin" value="6*cm"/>
         <constant name="Nozzle_zmax" value="600*cm"/>
 
+
         <!-- ################### ENVELOPE PARAMETERS ######################################################## -->
 
         <comment> suggested naming convention:
@@ -172,8 +173,8 @@
 
     <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
 
-	<include ref="Beampipe_o1_v01_02.xml"/>
 	<include ref="Nozzle_10deg_v0.xml"/>
+	<include ref="Beampipe_o1_v01_02.xml"/>
 
 	<include ref="Vertex_o2_v06_01.xml"/>
 	<include ref="InnerTracker_o2_v07_01.xml"/>
