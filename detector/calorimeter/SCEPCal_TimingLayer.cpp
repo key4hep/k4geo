@@ -611,9 +611,9 @@ static dd4hep::Ref_t create_detector_SCEPCal_TimingLayer(dd4hep::Detector& theDe
 
   int numCrystalsTlEndcap = 0;
   if (CONSTRUCT_TLENDCAP)
-    numCrystalsTlEndcap = buildTimingEndcap(theDetector, sens, segmentation, ScepcalDetElement, USE_OPTICAL_SURFACES,
-                                             LYSO_to_ESR, p, phi_endcap_rotations, tlendcapGlobalAssemblyVol,
-                                             tlendcapGlobalAssemblyVol_1);
+    numCrystalsTlEndcap =
+        buildTimingEndcap(theDetector, sens, segmentation, ScepcalDetElement, USE_OPTICAL_SURFACES, LYSO_to_ESR, p,
+                          phi_endcap_rotations, tlendcapGlobalAssemblyVol, tlendcapGlobalAssemblyVol_1);
 
   std::cout << std::endl;
   std::cout << "NUM_CRYSTALS_TLBARREL:" << numCrystalsTiming << std::endl;

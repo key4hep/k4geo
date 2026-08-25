@@ -69,9 +69,8 @@ namespace sim {
 
     auto vID = thePreStepTouchable->GetCopyNumber(0);
     G4Track* track = step->GetTrack();
-    //get phi from grandparent
+    // get phi from grandparent
     auto cellID2 = thePreStepTouchable->GetCopyNumber(2);
-
 
     dd4hep::Segmentation* _geoSeg = &m_segmentation;
     auto segmentation = dynamic_cast<dd4hep::DDSegmentation::SCEPCal_MainSegmentation_k4geo*>(_geoSeg->segmentation());
@@ -82,12 +81,13 @@ namespace sim {
 
       auto cellID_phi = segmentation->setPhi(vID, cellID2);
       auto cIDwithChannel = segmentation->setCellID(cellID_phi, isCherenkov);
-      
+
       auto* hit = coll->findByKey<Geant4Calorimeter::Hit>(cIDwithChannel);
 
       if (!hit) {
-        DDSegmentation::Vector3D pos = segmentation->position(cellID_phi); // always use scintillation channel for position
-	Position global(pos.x(), pos.y(), pos.z());
+        DDSegmentation::Vector3D pos =
+            segmentation->position(cellID_phi); // always use scintillation channel for position
+        Position global(pos.x(), pos.y(), pos.z());
         hit = new Geant4Calorimeter::Hit(global / dd4hep::mm);
 
         hit->cellID = cIDwithChannel;

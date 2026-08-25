@@ -568,8 +568,8 @@ static int buildEndcap(dd4hep::Detector& theDetector, dd4hep::SensitiveDetector&
   for (int iPhi = p.ENDCAP_PHI_START; iPhi < p.ENDCAP_PHI_END; iPhi++) {
     if (p.PHI_LOAD_START <= p.PHI_LOAD_END) {
       if ((iPhi >= p.PHI_LOAD_START) && (iPhi <= p.PHI_LOAD_END)) {
-        auto pv =
-	    endcapGlobalAssemblyVol.placeVolume(endcapPhiAssemblyVolume, iPhi, Transform3D(RotationZ(iPhi * p.D_PHI_GLOBAL)));
+        auto pv = endcapGlobalAssemblyVol.placeVolume(endcapPhiAssemblyVolume, iPhi,
+                                                      Transform3D(RotationZ(iPhi * p.D_PHI_GLOBAL)));
         auto pv1 = endcapGlobalAssemblyVol_1.placeVolume(endcapPhiAssemblyVolume_1, iPhi,
                                                          Transform3D(RotationZ(iPhi * p.D_PHI_GLOBAL)));
         nPhiSlice++;
@@ -578,8 +578,8 @@ static int buildEndcap(dd4hep::Detector& theDetector, dd4hep::SensitiveDetector&
       }
     } else {
       if ((iPhi >= p.PHI_LOAD_START) || (iPhi <= p.PHI_LOAD_END)) {
-        auto pv =
-  	    endcapGlobalAssemblyVol.placeVolume(endcapPhiAssemblyVolume, iPhi, Transform3D(RotationZ(iPhi * p.D_PHI_GLOBAL)));
+        auto pv = endcapGlobalAssemblyVol.placeVolume(endcapPhiAssemblyVolume, iPhi,
+                                                      Transform3D(RotationZ(iPhi * p.D_PHI_GLOBAL)));
         auto pv1 = endcapGlobalAssemblyVol_1.placeVolume(endcapPhiAssemblyVolume_1, iPhi,
                                                          Transform3D(RotationZ(iPhi * p.D_PHI_GLOBAL)));
         nPhiSlice++;
@@ -929,9 +929,9 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
 
   int numCrystalsEndcap = 0;
   if (CONSTRUCT_ENDCAP)
-    numCrystalsEndcap = buildEndcap(theDetector, sens, segmentation, ScepcalDetElement, USE_OPTICAL_SURFACES,
-                                    PbWO4_to_ESR, p, phi_endcap_rotations, endcapGlobalAssemblyVol,
-                                    endcapGlobalAssemblyVol_1);
+    numCrystalsEndcap =
+        buildEndcap(theDetector, sens, segmentation, ScepcalDetElement, USE_OPTICAL_SURFACES, PbWO4_to_ESR, p,
+                    phi_endcap_rotations, endcapGlobalAssemblyVol, endcapGlobalAssemblyVol_1);
 
   std::cout << std::endl;
   std::cout << "NUM_CRYSTALS_BARREL:  " << numCrystalsBarrel << std::endl;
