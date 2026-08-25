@@ -193,7 +193,7 @@ static int buildTimingBarrel(dd4hep::Detector& theDetector, dd4hep::SensitiveDet
   for (int iPhi = p.TIMING_PHI_START; iPhi < p.TIMING_PHI_END; iPhi++) {
     double phiGlobal = iPhi * p.D_PHI_GLOBAL;
     RotationZ rotZphiGlobal(phiGlobal);
-    auto pv = timingGlobalAssemblyVol.placeVolume(timingPhiAssemblyVolume, Transform3D(rotZphiGlobal));
+    auto pv = timingGlobalAssemblyVol.placeVolume(timingPhiAssemblyVolume, iPhi, Transform3D(rotZphiGlobal));
     pv.addPhysVolID("phi", iPhi);
     nPhiPlaced++;
   }
@@ -324,9 +324,9 @@ static int buildTimingEndcap(dd4hep::Detector& theDetector, dd4hep::SensitiveDet
   for (int iPhi = p.TLENDCAP_PHI_START; iPhi < p.TLENDCAP_PHI_END; iPhi++) {
     double phiGlobal = iPhi * p.D_PHI_GLOBAL;
     RotationZ rotZphiGlobal(phiGlobal);
-    auto pv = tlendcapGlobalAssemblyVol.placeVolume(tlendcapPhiAssemblyVolume, Transform3D(rotZphiGlobal));
+    auto pv = tlendcapGlobalAssemblyVol.placeVolume(tlendcapPhiAssemblyVolume, iPhi, Transform3D(rotZphiGlobal));
     pv.addPhysVolID("phi", iPhi);
-    auto pv_1 = tlendcapGlobalAssemblyVol_1.placeVolume(tlendcapPhiAssemblyVolume_1, Transform3D(rotZphiGlobal));
+    auto pv_1 = tlendcapGlobalAssemblyVol_1.placeVolume(tlendcapPhiAssemblyVolume_1, iPhi, Transform3D(rotZphiGlobal));
     pv_1.addPhysVolID("phi", iPhi);
 
     nPhiPlaced++;

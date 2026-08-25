@@ -343,7 +343,7 @@ static int buildBarrel(dd4hep::Detector& theDetector, dd4hep::SensitiveDetector&
     nPhiSlicePlaced++;
     double phiGlobal = iPhi * p.D_PHI_GLOBAL;
     RotationZ rotZphiGlobal(phiGlobal);
-    auto pv = barrelGlobalAssemblyVol.placeVolume(barrelPhiAssemblyVolume, Transform3D(rotZphiGlobal));
+    auto pv = barrelGlobalAssemblyVol.placeVolume(barrelPhiAssemblyVolume, iPhi, Transform3D(rotZphiGlobal));
     pv.addPhysVolID("phi", iPhi);
   }
   return numCrystals * static_cast<int>(nPhiSlicePlaced);
@@ -569,8 +569,8 @@ static int buildEndcap(dd4hep::Detector& theDetector, dd4hep::SensitiveDetector&
     if (p.PHI_LOAD_START <= p.PHI_LOAD_END) {
       if ((iPhi >= p.PHI_LOAD_START) && (iPhi <= p.PHI_LOAD_END)) {
         auto pv =
-            endcapGlobalAssemblyVol.placeVolume(endcapPhiAssemblyVolume, Transform3D(RotationZ(iPhi * p.D_PHI_GLOBAL)));
-        auto pv1 = endcapGlobalAssemblyVol_1.placeVolume(endcapPhiAssemblyVolume_1,
+	    endcapGlobalAssemblyVol.placeVolume(endcapPhiAssemblyVolume, iPhi, Transform3D(RotationZ(iPhi * p.D_PHI_GLOBAL)));
+        auto pv1 = endcapGlobalAssemblyVol_1.placeVolume(endcapPhiAssemblyVolume_1, iPhi,
                                                          Transform3D(RotationZ(iPhi * p.D_PHI_GLOBAL)));
         nPhiSlice++;
         pv.addPhysVolID("phi", iPhi);
@@ -579,8 +579,8 @@ static int buildEndcap(dd4hep::Detector& theDetector, dd4hep::SensitiveDetector&
     } else {
       if ((iPhi >= p.PHI_LOAD_START) || (iPhi <= p.PHI_LOAD_END)) {
         auto pv =
-            endcapGlobalAssemblyVol.placeVolume(endcapPhiAssemblyVolume, Transform3D(RotationZ(iPhi * p.D_PHI_GLOBAL)));
-        auto pv1 = endcapGlobalAssemblyVol_1.placeVolume(endcapPhiAssemblyVolume_1,
+  	    endcapGlobalAssemblyVol.placeVolume(endcapPhiAssemblyVolume, iPhi, Transform3D(RotationZ(iPhi * p.D_PHI_GLOBAL)));
+        auto pv1 = endcapGlobalAssemblyVol_1.placeVolume(endcapPhiAssemblyVolume_1, iPhi,
                                                          Transform3D(RotationZ(iPhi * p.D_PHI_GLOBAL)));
         nPhiSlice++;
         pv.addPhysVolID("phi", iPhi);
