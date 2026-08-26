@@ -2,13 +2,13 @@
 
   <info name="ALFA_o1_v00"
     title="Master file for the ALFA detector concept"
-    author="Various, Tracker by E.Ploerer"
+    author="Various, Tracker by E.Ploerer, Grainita ECAL by F.Guo"
     url="no"
     status="development"
     version="o1_v00">
     <comment>
       Based on IDEA master file.
-      Tracker corresponds to BAR352_EC353_VTX107 Delphes card.
+      Tracker corresponds to BAR354_EC353_VTX108 Delphes card.
     </comment>
   </info>
 
@@ -38,6 +38,8 @@
   <comment> Outer Tracker (OT) Barrel  </comment>
   <include ref="OuterTrackerBarrel_o1_v00.xml" />
 
+  <!-- <comment> Grainita ECAL </comment> -->
+  <!-- <include ref="Grainita_ECAL_Barrel_v02_Long4.xml" /> -->
 
   <comment> Include plugin to generate edm4hep::TrackerHitPlane </comment>
   <plugins>
