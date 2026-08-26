@@ -52,6 +52,7 @@ using dd4hep::RotationZYX;
 using dd4hep::SensitiveDetector;
 using dd4hep::Transform3D;
 using dd4hep::Translation3D;
+using dd4hep::Solid;
 using dd4hep::Trapezoid;
 using dd4hep::Tube;
 using dd4hep::Volume;
@@ -185,7 +186,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
       int iComponent = 0;
       for (c_component.reset(); c_component; ++c_component) {
         xml_comp_t component = c_component;
-        double thickness = component.thickness();
+        double thickness = (component.hasAttr(_Unicode(width))) ? component.thickness() : (2. * component.outer_radius()); // Use 2 * R_out for cylindrical components in rectangular stave
         if (thickness == 0.)
           continue; // Skip components with zero thickness
         components.thicknesses.push_back(thickness);
@@ -208,8 +209,13 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
           ele_vol = Volume(components.name + _toString(iComponent, "_%d"), ele_box,
                            theDetector.material(component.materialStr()));
         } else {
-          Box ele_box = Box(thickness / 2., component.width() / 2., components.length);
-          ele_vol = Volume(components.name + _toString(iComponent, "_%d"), ele_box,
+          Solid ele_shape;
+          if (component.hasAttr(_Unicode(width))){
+            ele_shape = Box(thickness / 2., component.width() / 2., components.length);
+          } else {
+            ele_shape = Tube(component.inner_radius(), component.outer_radius(), components.length); // Thickness ignored to follow TGeo constructor more closely
+          }
+          ele_vol = Volume(components.name + _toString(iComponent, "_%d"), ele_shape,
                            theDetector.material(component.materialStr()));
         }
         ele_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), component.visStr());
@@ -450,7 +456,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     string nameStr = x_layer.nameStr();
     int nmodules = x_layer.nmodules();
     int iModuleTot = iModuleTot_map[layer_id]; // Counter to give unique IDs to modules
-    double step = x_layer.step(0);             // Spacing of modules
+    double step_z = getAttrOrDefault(x_layer, dd4hep::xml::Strng_t("step_z"), x_layer.step(0)); // Spacing of modules in z, accept both "step" (backwards-comptible) and "step_z" as attributes
+    double step_rphi = getAttrOrDefault(x_layer, dd4hep::xml::Strng_t("step_rphi"), double(0.)); // Spacing of modules in rphi (Optional)
 
     // Use the correct stave
     auto m = *find_if(stave_information_list.cbegin(), stave_information_list.cend(),
@@ -605,15 +612,18 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
       }
 
       // Place sensor
-      for (auto& sensor : m.sensorsVec) {
+      bool multiType = m.sensorsVec.size() >  1; // Flag used to introducing sensor "type" if there are multiple sensors in .xml
+      for (size_t iSensorType = 0; iSensorType <  m.sensorsVec.size(); ++iSensorType) {
+        auto& sensor = m.sensorsVec[iSensorType];
         for (int iModule = 0; iModule < nmodules; iModule++) {
           x_pos = sensor.r + (iModule % 2 == 0 ? 0.0 : m.stave_dr);
           y_pos = sensor.offset;
-          z_pos = motherVolOffset + -(nmodules - 1) / 2. * (sensor.length) - (nmodules - 1) / 2. * step +
-                  iModule * sensor.length + iModule * step;
+          z_pos = motherVolOffset + -(nmodules - 1) / 2. * (sensor.length) - (nmodules - 1) / 2. * step_z +
+                  iModule * sensor.length + iModule * step_z;
           Position pos(x_pos, y_pos, z_pos);
 
           string module_name = stave_name + _toString(iModuleTot, "_module%d");
+          if (multiType) module_name += _toString(iSensorType, "_type%d"); // Append sensor type if multiple sensor types present
           Assembly module_assembly(module_name);
           if (m.motherVolThickness > 0.0 && m.motherVolWidth > 0.0)
             pv = whole_stave_volume_v.placeVolume(module_assembly, Position(-m.motherVolThickness / 2., 0., 0.));
@@ -625,8 +635,10 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                                                          // same module id for every nGroupingModules modules and
                                                          // distinguish them by the sensor id instead
 
-          pv.addPhysVolID("module", iModule_VolID);
-          DetElement moduleDE(layerDE, module_name, iModuleTot);
+          // pv.addPhysVolID("module", iModule_VolID);
+          pv.addPhysVolID("module", iModule_VolID + nmodules * iSensorType + (nmodules * m.sensorsVec.size()) * iStave);
+          // DetElement moduleDE(layerDE, module_name, iModuleTot);
+          DetElement moduleDE(layerDE, module_name, iModule_VolID + nmodules * iSensorType + (nmodules * m.sensorsVec.size()) * iStave);
           moduleDE.setPlacement(pv);
 
           // Place all sensor parts
@@ -643,8 +655,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 double r_component_curved = (iModule % 2 == 0 ? 0.0 : m.stave_dr);
                 x_pos = r_component_curved * cos(phi_i);
                 y_pos = r_component_curved * sin(phi_i);
-                z_pos = motherVolOffset - (nmodules - 1) / 2. * (sensor.length) - (nmodules - 1) / 2. * step +
-                        iModule * sensor.length + iModule * step;
+                z_pos = motherVolOffset - (nmodules - 1) / 2. * (sensor.length) - (nmodules - 1) / 2. * step_z +
+                        iModule * sensor.length + iModule * step_z;
 
                 pos = Position(x_pos, y_pos, z_pos);
                 Position pos2(0., 0., sensor.ymin[i] + abs(sensor.ymax[i] - sensor.ymin[i]) / 2.);
@@ -682,8 +694,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                       layer_r + sensor.thicknesses[i] / 2. + (iModule % 2 == 0 ? 0.0 : m.stave_dr) + sensor.rs[i];
                   x_pos = r_component_curved * cos(phi_i);
                   y_pos = r_component_curved * sin(phi_i);
-                  z_pos = motherVolOffset - (nmodules - 1) / 2. * (sensor.length) - (nmodules - 1) / 2. * step +
-                          iModule * sensor.length + iModule * step + sensor.ymin[i] +
+                  z_pos = motherVolOffset - (nmodules - 1) / 2. * (sensor.length) - (nmodules - 1) / 2. * step_z +
+                          iModule * sensor.length + iModule * step_z + sensor.ymin[i] +
                           abs(sensor.ymax[i] - sensor.ymin[i]) / 2.;
 
                   Position pos_offset(0., r_offset_component, 0.);
@@ -711,9 +723,10 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     iSensitive++;
                   }
                 }
-              } else { // not curved, use boxes
+              } else { // not curved (rectangular), use boxes
                 x_pos = sensor.rs[i] + sensor.thicknesses[i] / 2.;
-                y_pos = sensor.xmin[i] + abs(sensor.xmax[i] - sensor.xmin[i]) / 2.;
+                y_pos = 0. + -(sensor.nx - 1) / 2. * sensor.width - (sensor.nx - 1) / 2. * step_rphi + x_i * sensor.width + x_i * step_rphi; // Compute module centers in rphi
+                y_pos += sensor.xmin[i] + abs(sensor.xmax[i] - sensor.xmin[i]) / 2.; // Place volume within nth module
                 z_pos = sensor.ymin[i] + abs(sensor.ymax[i] - sensor.ymin[i]) / 2.;
                 Position pos2(x_pos, y_pos, z_pos);
 

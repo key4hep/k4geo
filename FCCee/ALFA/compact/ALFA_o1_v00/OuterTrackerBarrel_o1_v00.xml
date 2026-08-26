@@ -1,0 +1,415 @@
+<lccdd>
+
+    <info name="ALFA_Tracker"
+        title="ALFA Outer Tracker Barrel"
+        author="Eduardo Ploerer"
+        url="no_url"
+        status="development"
+        version="v01">
+    </info>
+
+
+    <display>
+        <vis name="OTBarEnvVis"          alpha="1.0" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+
+
+        <vis name="OTBarStaveVis"        alpha="1.0" r="1.0" g="0.5" b="0.0" showDaughters="true" visible="true"/>
+        <vis name="OTBarSupportTrussVis"       alpha="1.0" r="0.6" g="0.6" b="0.6" showDaughters="true" visible="true"/>
+        <vis name="OTBarSupportFilledVis"       alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
+        <vis name="OTBarCoolingPlateVis" alpha="1.0" r="0.621" g="0.793" b="1.000" showDaughters="true" visible="true"/>
+
+        <vis name="OTBarCoolingPipeVis"       alpha="1.0" r="1.0" g="1.0" b="1.0" showDaughters="true" visible="false"/>
+        <vis name="OTBarCoolingFluidVis"        alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="false"/>
+        <vis name="OTBarPeripheryVis" alpha="1.0" r="0.0" g="0.6" b="0.0" showDaughters="true" visible="false"/>
+        <vis name="OTBarSensitiveVis" alpha="1.0" r="0.08" g="0.75" b="0.08" showDaughters="true" visible="false"/>
+        <vis name="OTBarCopperVis" alpha="1.0" r="0.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
+        <vis name="OTBarHDIVis" alpha="1.0" r="1.000" g="0.500" b="0.000" showDaughters="true" visible="false"/>
+        <vis name="OTBarFlexVis" alpha="1.0" r="1.000" g="0.000" b="1.000" showDaughters="true" visible="false"/>
+        <vis name="OTBarSupportPlateVis" alpha="1.0" r="0.41" g="0.51" b="0.59" showDaughters="true" visible="false"/>
+        <vis name="OTBarConnectorVis" alpha="1.0" r="0.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
+
+        <!-- <vis name="OTBarCoolingPipeVis"       alpha="1.0" r="1.0" g="1.0" b="1.0" showDaughters="true" visible="true"/> -->
+        <!-- <vis name="OTBarCoolingFluidVis"        alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/> -->
+        <!-- <vis name="OTBarPeripheryVis" alpha="1.0" r="0.0" g="0.6" b="0.0" showDaughters="true" visible="true"/> -->
+        <!-- <vis name="OTBarSensitiveVis" alpha="1.0" r="0.08" g="0.75" b="0.08" showDaughters="true" visible="true"/> -->
+        <!-- <vis name="OTBarCopperVis" alpha="1.0" r="0.0" g="0.0" b="0.0" showDaughters="true" visible="true"/> -->
+        <!-- <vis name="OTBarHDIVis" alpha="1.0" r="1.000" g="0.500" b="0.000" showDaughters="true" visible="true"/> -->
+        <!-- <vis name="OTBarFlexVis" alpha="1.0" r="1.000" g="0.000" b="1.000" showDaughters="true" visible="true"/> -->
+        <!-- <vis name="OTBarSupportPlateVis" alpha="1.0" r="0.41" g="0.51" b="0.59" showDaughters="true" visible="true"/> -->
+        <!-- <vis name="OTBarConnectorVis" alpha="1.0" r="0.0" g="0.0" b="0.0" showDaughters="true" visible="true"/> -->
+
+
+    </display>
+
+
+    <comment> Barrel parameters (single layer) </comment>
+    <define>
+        <constant name="DetID_OTBar_Barrel"   value="67"/>   
+        <constant name="OTBar_inner_radius"   value="500*mm"/>   
+        <constant name="OTBar_outer_radius"   value="2000*mm"/>
+
+        <constant name="OTBar_tolerance"      value="0.05*mm"/>
+        <constant name="OTBar_holder_width"   value="10.0*mm"/>
+        <constant name="OTBar_stave_overlap"  value="2.0*mm"/>
+        <constant name="OTBar_nGroupingModules" value="1"/> <comment> Arbitrarily large number since not used </comment>
+    </define>
+
+    <comment> Sensor parameters </comment>
+    <define>
+        <constant name="OTBar_sens_rphi"    value="25.0*mm"/>
+        <constant name="OTBar_sens_rphi_periphery"    value="0.12*mm"/>
+        <constant name="OTBar_sens_rphi_sensitive"    value="OTBar_sens_rphi - OTBar_sens_rphi_periphery"/>
+        <constant name="OTBar_sens_rphi_spacing" value="0.05*mm"/>
+        <constant name="OTBar_sens_z"       value="32.0*mm"/>
+        <!-- <constant name="OTBar_sens_z_periphery"       value="2.4*mm"/> -->
+        <!-- <constant name="OTBar_sens_z_sensitive"       value="OTBar_sens_z"/> -->
+        <constant name="OTBar_sens_z_spacing"    value="0.05*mm"/>
+
+        <constant name="OTBar_Sensitive_thickness" value="0.05*mm"/>
+
+        <comment> Module parameters </comment>
+        <!-- <constant name="OTBar_mod_z_periphery"   value="2.0 * OTBar_sens_z_periphery + OTBar_sens_z_spacing"/> -->
+        <constant name="OTBar_mod_z"             value="4.0 * OTBar_sens_z"/>
+        <constant name="OTBar_mod_z_spacing"             value="0.1*mm"/> <comment> This describes the clearance between modules in z </comment>
+        <constant name="OTBar_mod_rphi_periphery"   value="2.0 * OTBar_sens_rphi_periphery + OTBar_sens_rphi_spacing"/>
+        <constant name="OTBar_mod_rphi"             value="2.0 * OTBar_sens_rphi_sensitive + OTBar_mod_rphi_periphery"/>
+        <constant name="OTBar_mod_rphi_spacing"      value="0.1*mm"/>    
+
+        <constant name="OTBar_sens_Copper_width"    value="2.0 * OTBar_mod_rphi"/> 
+        <constant name="OTBar_sens_Copper_thickness"    value="0.002*mm"/> <comment> Equivalent Copper on MAPS </comment>
+
+        <comment> Kept for compatibility, audit later </comment>
+        <!-- <constant name="OTBar_mod_rphi_spacing"      value="0.2*mm"/>     -->
+        <!-- <constant name="OTBar_mod_rphi_sensitive" value="OTBar_mod_rphi - OTBar_mod_rphi_spacing"/> -->
+
+        <!-- <constant name="OTBar_mod_overlap"       value="5.0*mm"/> -->
+        <constant name="OTBar_mod_overlap"       value="0.0*mm"/>
+
+        <!-- <constant name="OTBar_mod_quad_spacing"      value="0.2*mm"/>    <comment> Distance between quads in r-phi </comment> -->
+    </define>
+
+    <comment> Passive volumes </comment>
+    <define>
+
+        <!-- <constant name="OTBar_Cooling_Plate_width" value="2.0 * OTBar_mod_rphi + 2.0 * 0.4*mm"/> <comment> Note extra x 2 since two "true" modules are packed in rphi, 0.4 mm clearance between module edge and coldplate edge </comment> -->
+        <constant name="OTBar_Cooling_Plate_width" value="2.0 * OTBar_mod_rphi + 2.0 * 0.4*mm"/> <comment> Note extra x 2 since two "true" modules are packed in rphi, 0.4 mm clearance between module edge and coldplate edge </comment>
+        <constant name="OTBar_Cooling_Plate_CFleece_thickness" value="0.040*mm"/> <comment> Each plate corresponds to 0.02 mm </comment>
+        <constant name="OTBar_Cooling_Plate_K13D2U_thickness" value="0.120*mm"/>
+        <constant name="OTBar_Cooling_Plate_CPaper_thickness" value="0.030*mm"/>
+        <constant name="OTBar_Cooling_Plate_thickness" value="OTBar_Cooling_Plate_CFleece_thickness + OTBar_Cooling_Plate_K13D2U_thickness + OTBar_Cooling_Plate_CPaper_thickness"/>
+
+
+        <constant name="OTBar_Cooling_Pipe_thickness"    value="0.0762*mm"/>
+        <constant name="OTBar_Cooling_Pipe_inner_radius" value="0.8*mm"/> 
+        <constant name="OTBar_Cooling_Pipe_outer_radius" value="OTBar_Cooling_Pipe_inner_radius + OTBar_Cooling_Pipe_thickness"/> 
+        <constant name="OTBar_Cooling_Pipe_offset"       value="OTBar_mod_rphi_spacing / 2.0 + OTBar_sens_rphi + OTBar_sens_rphi_spacing / 2.0"/>
+        <constant name="OTBar_Cooling_Fluid_thickness"   value="OTBar_Cooling_Pipe_inner_radius"/> 
+        <constant name="OTBar_Cooling_Fluid_radius"   value="OTBar_Cooling_Pipe_inner_radius"/> 
+
+        <constant name="OTBar_HDI_width" value="2.0 * OTBar_mod_rphi"/> <comment> Note extra x 2 since two "true" modules are packed in rphi </comment>
+        <constant name="OTBar_HDI_Coverlay_thickness" value="0.040*mm"/> <comment> For now different materials are implemented as separate components, could be simplified using equivalent thickness of single material. Could even be done within code </comment>
+        <constant name="OTBar_HDI_Aluminium_thickness" value="0.002*mm"/>
+        <constant name="OTBar_HDI_Prepreg_thickness" value="0.045*mm"/>
+        <constant name="OTBar_HDI_thickness" value="OTBar_HDI_Coverlay_thickness + OTBar_HDI_Aluminium_thickness + OTBar_HDI_Prepreg_thickness"/>
+
+
+        <constant name="OTBar_HDI_Connector_Data_LCP_thickness" value="2.4375*mm"/>
+        <constant name="OTBar_HDI_Connector_Data_LCP_z" value="2.4375*mm"/>
+        <constant name="OTBar_HDI_Connector_Data_LCP_rphi" value="2.4375*mm"/>
+
+        <constant name="OTBar_HDI_Connector_Power_LCP_thickness" value="2.4375*mm"/>
+        <constant name="OTBar_HDI_Connector_Power_LCP_z" value="2.4375*mm"/>
+        <constant name="OTBar_HDI_Connector_Power_LCP_rphi" value="3.9*mm"/>
+
+        <constant name="OTBar_Flex_width" value="32.0*mm"/>
+        <constant name="OTBar_Flex_Kapton_thickness" value="0.025*mm"/>
+        <constant name="OTBar_Flex_Coverlay_thickness" value="0.040*mm"/>
+        <constant name="OTBar_Flex_Aluminium_thickness" value="0.024*mm"/>
+        <constant name="OTBar_Flex_Epoxy_thickness" value="0.020*mm"/>
+        <constant name="OTBar_Flex_thickness" value="OTBar_Flex_Kapton_thickness + OTBar_Flex_Coverlay_thickness + OTBar_Flex_Aluminium_thickness + OTBar_Flex_Epoxy_thickness"/>
+
+        <constant name="OTBar_Support_Plate_CFleece_width" value="0.060*mm"/> 
+        <constant name="OTBar_Support_Plate_K13D2U_width" value="0.120*mm"/> 
+        <constant name="OTBar_Support_Plate_width" value="OTBar_Support_Plate_CFleece_width + OTBar_Support_Plate_K13D2U_width"/> 
+        <constant name="OTBar_Support_Foam_width" value="5.0*mm"/> <comment> Width of foam </comment>
+        <constant name="OTBar_Support_Foam_thickness" value="50.0*mm"/> <comment> Height of foam </comment>
+        <constant name="OTBar_Support_Plate_thickness" value="OTBar_Support_Foam_thickness - 2.0 * 0.5*mm"/> <comment> Leave clearance of 0.5 mm from top and bottom of support foam </comment>
+        <constant name="OTBar_Support_Foam_offset" value="(OTBar_Cooling_Plate_width / 2.0) - 14.5*mm - OTBar_Support_Plate_width - (OTBar_Support_Foam_width / 2.0)"/> <comment> Assume 14.5 mm clearance from coldplate edge </comment>
+        <constant name="OTBar_Support_Foam_filled_half_length" value="58.9*mm - 15.0*mm"/> <comment> Assume filled volume of support foam is 58.9 mm - 15 mm clearance </comment>
+
+        <constant name="OTBar_Stave_thickness" value="OTBar_Cooling_Plate_thickness + OTBar_Sensitive_thickness + OTBar_sens_Copper_thickness + OTBar_HDI_thickness + OTBar_Flex_thickness"/>
+        <constant name="OTBar_Stave_width" value="2.0 * OTBar_mod_rphi"/> <comment> Doubling here since two modules in nx </comment>
+        <constant name="OTBar_module_distance_sides" value="0."/> <comment> Assume no shingling for now </comment>
+
+
+
+    </define>
+
+    <define>
+
+        <comment> Layer MID 1 parameters </comment>
+        <constant name="OTBar_nStaves1" value="52."/> <comment> This should be the quantity from which the rest are derived? </comment>
+        <!-- <constant name="OTBar_r1" value="OTBar_inner_radius + 15*mm"/> -->
+        <constant name="OTBar_r1" value="766.7*mm"/>
+        <constant name="OTBar_dr" value="5.0*mm"/> <comment> Radial offset of every second stave </comment>
+        <!-- <constant name="OTBar_nModules1" value="ceil(2 * OTBar_half_length / (OTBar_mod_z - OTBar_mod_overlap))"/> <comment> Shouldn't this be the floor value? Shouldn't place more modules than we have space for </comment> -->
+        <constant name="OTBar_nModules1" value="21"/> <comment> Input quantity : others are derived </comment>
+        <!-- <constant name="OTBar_nStaves1" value="ceil(2.*pi*OTBar_r1/(OTBar_mod_rphi_sensitive-OTBar_stave_overlap)/2.)"/> -->
+        <constant name="OTBar_phiOffset1" value="0."/>
+
+        <comment> Layer MID 2 parameters </comment>
+        <constant name="OTBar_nStaves2" value="60."/> <comment> This should be the quantity from which the rest are derived? </comment>
+        <constant name="OTBar_r2" value="893.0*mm"/>
+        <constant name="OTBar_nModules2" value="OTBar_nModules1"/> 
+        <constant name="OTBar_phiOffset2" value="0."/>
+
+        <comment> Layer OUT 1 parameters </comment>
+        <constant name="OTBar_nStaves4" value="104."/> <comment> This should be the quantity from which the rest are derived? </comment>
+        <constant name="OTBar_r4" value="1587.3*mm"/>
+        <constant name="OTBar_nModules4" value="OTBar_nModules1"/> 
+        <constant name="OTBar_phiOffset4" value="0."/>
+
+        <comment> Layer OUT 2 parameters </comment>
+        <constant name="OTBar_nStaves5" value="112."/> <comment> This should be the quantity from which the rest are derived? </comment>
+        <constant name="OTBar_r5" value="1713.5*mm"/>
+        <constant name="OTBar_nModules5" value="OTBar_nModules1"/> 
+        <constant name="OTBar_phiOffset5" value="0."/>
+
+
+        <constant name="OTBar_half_length"    value="(OTBar_nModules1 * OTBar_mod_z + (OTBar_nModules1 - 1) * OTBar_mod_z_spacing) / 2.0"/> <comment> Half-length of barrel, computed as in Excel </comment>
+
+
+    </define>
+
+
+
+    <readouts>
+        <readout name="OTBarCollection">
+            <!-- <id>system:8,layer:4,module:10,sensor:-16</id> -->
+            <!-- <id>system:8,layer:4,side:2,module:8,sensor:-16</id> -->
+            <id>system:8,layer:3,side:2,type:2,module:16,sensor:16</id>
+        </readout>
+    </readouts>
+
+    <detectors>
+        <detector name="OTBar" type="VertexBarrel_detailed_o1_v03" vis="OTBarEnvVis" 
+                  id="DetID_OTBar_Barrel" readout="OTBarCollection">
+
+            <envelope vis="OTBarEnvVis">
+                <shape type="Tube" rmin="OTBar_inner_radius" rmax="OTBar_outer_radius" 
+                       dz="OTBar_half_length" material="Air"/>
+            </envelope>
+
+            <!-- <type_flags type="DetType_TRACKER + DetType_PIXEL + DetType_BARREL"/> -->
+            <type_flags type="67"/>
+
+            <comment> Single Stave Definition </comment>
+            <stave name="OTBarStave_single" length="2.*OTBar_half_length" 
+                   dr="OTBar_module_distance_sides" 
+                   motherVolWidth="OTBar_Stave_width" 
+                   motherVolThickness="2.0 * OTBar_Stave_thickness + OTBar_Support_Foam_thickness" 
+                   vis="OTBarStaveVis">
+
+            <comment> Bot String </comment>
+
+                <comment> Flex </comment>
+                <components name="OTBarFlex" r="0." offset="0." length="OTBar_half_length">
+                    <component thickness="OTBar_Flex_Kapton_thickness"    width="OTBar_Flex_width" r="0." material="Kapton" vis="OTBarFlexVis"/>
+                    <component thickness="OTBar_Flex_Coverlay_thickness"    width="OTBar_Flex_width" r="0. + OTBar_Flex_Kapton_thickness" material="Coverlay" vis="OTBarFlexVis"/>
+                    <component thickness="OTBar_Flex_Aluminium_thickness" width="OTBar_Flex_width" r="0. + OTBar_Flex_Kapton_thickness + OTBar_Flex_Coverlay_thickness" material="Aluminum" vis="OTBarFlexVis"/>
+                    <component thickness="OTBar_Flex_Epoxy_thickness"      width="OTBar_Flex_width" r="0. + OTBar_Flex_Kapton_thickness + OTBar_Flex_Coverlay_thickness + OTBar_Flex_Aluminium_thickness" material="Epoxy" vis="OTBarFlexVis"/>
+                </components>
+
+                <comment> HDI </comment>
+                <components name="OTBarHDI" r="OTBar_Flex_thickness" offset="0." length="OTBar_half_length">
+                    <component thickness="OTBar_HDI_Coverlay_thickness" width="OTBar_HDI_width" r="0." material="Coverlay" vis="OTBarHDIVis"/>
+                    <component thickness="OTBar_HDI_Aluminium_thickness" width="OTBar_HDI_width" r="0. + OTBar_HDI_Coverlay_thickness" material="Aluminum" vis="OTBarHDIVis"/>
+                    <component thickness="OTBar_HDI_Prepreg_thickness" width="OTBar_HDI_width" r="0. + OTBar_HDI_Coverlay_thickness + OTBar_HDI_Aluminium_thickness" material="Prepreg" vis="OTBarHDIVis"/>
+                </components>
+                <comment> Works, placement seems believeable, update: color, thickness, material, radius? </comment>
+
+
+                <comment> Sensor Copper Layer (Equivalent) </comment>
+                <components name="OTBarSensorCu" r="OTBar_Flex_thickness + OTBar_HDI_thickness" offset="0." length="OTBar_half_length">
+                    <component thickness="OTBar_sens_Copper_thickness" width="OTBar_sens_Copper_width" r="0." material="Copper" vis="OTBarCopperVis"/>
+                </components>
+                <comment> Do not subdivide Copper layer, since gaps are less than .1 mm </comment>
+
+                <!-- <comment> Sensor Placeholder </comment> -->
+                <!-- <components name="SensorPlaceholder" r="OTBar_Flex_thickness + OTBar_HDI_thickness + OTBar_sens_Copper_thickness" offset="0." length="OTBar_half_length"> -->
+                <!--     <component thickness="OTBar_Sensitive_thickness" width="2. * OTBar_mod_rphi" r="0." material="Si" vis="OTBarPeripheryVis"/> -->
+                <!-- </components> -->
+                <!-- <comment> Placholder Silicon till bottom sensor strings are implemented </comment> -->
+
+                <comment> Sensor </comment>
+                <sensor name="OTBarSensor" r="OTBar_Flex_thickness + OTBar_HDI_thickness + OTBar_sens_Copper_thickness" thickness="OTBar_Sensitive_thickness" material="Silicon" nx="2." nGroupingModules="OTBar_nGroupingModules">
+                    <include ref="OuterTracker_module.xml"/>
+                </sensor>
+                <comment> Looks ok, update: module dimensions, module number (following stave geometry updates above), module periphery,  ? </comment>
+                <comment> Are sensor planes direction agnostic? </comment>
+
+
+
+                <comment> Cooling </comment>
+                <components name="OTBarCooling" r="OTBar_Flex_thickness + OTBar_HDI_thickness + OTBar_Sensitive_thickness + OTBar_sens_Copper_thickness" offset="0." length="OTBar_half_length">
+
+                    <component thickness="OTBar_Cooling_Plate_CFleece_thickness" width="OTBar_Cooling_Plate_width" r="0." material="CarbonFleece" vis="OTBarCoolingPlateVis"/>
+                    <component thickness="OTBar_Cooling_Plate_K13D2U_thickness" width="OTBar_Cooling_Plate_width" r="0. + OTBar_Cooling_Plate_CFleece_thickness" material="K13D2U" vis="OTBarCoolingPlateVis"/>
+                    <component thickness="OTBar_Cooling_Plate_CPaper_thickness" width="OTBar_Cooling_Plate_width" r="0. + OTBar_Cooling_Plate_CFleece_thickness + OTBar_Cooling_Plate_K13D2U_thickness" material="CarbonPaper" vis="OTBarCoolingPlateVis"/>
+
+                    <component inner_radius="OTBar_Cooling_Pipe_inner_radius"  outer_radius="OTBar_Cooling_Pipe_outer_radius" offset="+OTBar_Cooling_Pipe_offset" r="OTBar_Cooling_Plate_thickness" material="Kapton" vis="OTBarCoolingPipeVis"/>
+                    <component inner_radius="0."  outer_radius="OTBar_Cooling_Fluid_radius" offset="+OTBar_Cooling_Pipe_offset" r="OTBar_Cooling_Plate_thickness + (OTBar_Cooling_Pipe_outer_radius - OTBar_Cooling_Pipe_inner_radius)" material="OpteonSF10" vis="OTBarCoolingFluidVis"/>
+
+
+                    <component inner_radius="OTBar_Cooling_Pipe_inner_radius"  outer_radius="OTBar_Cooling_Pipe_outer_radius" offset="-OTBar_Cooling_Pipe_offset" r="OTBar_Cooling_Plate_thickness" material="Kapton" vis="OTBarCoolingPipeVis"/>
+                    <component inner_radius="0."  outer_radius="OTBar_Cooling_Fluid_radius" offset="-OTBar_Cooling_Pipe_offset" r="OTBar_Cooling_Plate_thickness + (OTBar_Cooling_Pipe_outer_radius - OTBar_Cooling_Pipe_inner_radius)" material="OpteonSF10" vis="OTBarCoolingFluidVis"/>
+
+
+
+                </components>
+
+            <comment> Support Foam </comment>
+
+                <components name="Support_Foam_filled" r="OTBar_Stave_thickness" length="OTBar_Support_Foam_filled_half_length" z_offset="OTBar_half_length - OTBar_Support_Foam_filled_half_length">
+                    <component thickness="OTBar_Support_Foam_thickness"  width="OTBar_Support_Foam_width" offset="+OTBar_Support_Foam_offset" r="0." material="FR3703" vis="OTBarSupportFilledVis"/>
+                    <component thickness="OTBar_Support_Foam_thickness"  width="OTBar_Support_Foam_width" offset="-OTBar_Support_Foam_offset" r="0." material="FR3703" vis="OTBarSupportFilledVis"/>
+                </components>
+
+                <components name="Support_Foam_truss" r="OTBar_Stave_thickness" length="OTBar_half_length - 2. * OTBar_Support_Foam_filled_half_length">
+                    <component thickness="OTBar_Support_Foam_thickness"  width="OTBar_Support_Foam_width" offset="+OTBar_Support_Foam_offset" r="0." material="FR3703_truss" vis="OTBarSupportTrussVis"/>
+                    <component thickness="OTBar_Support_Foam_thickness"  width="OTBar_Support_Foam_width" offset="-OTBar_Support_Foam_offset" r="0." material="FR3703_truss" vis="OTBarSupportTrussVis"/>
+                </components>
+
+                <components name="Support_Foam_filled" r="OTBar_Stave_thickness" length="OTBar_Support_Foam_filled_half_length" z_offset="-OTBar_half_length + OTBar_Support_Foam_filled_half_length">
+                    <component thickness="OTBar_Support_Foam_thickness"  width="OTBar_Support_Foam_width" offset="+OTBar_Support_Foam_offset" r="0." material="FR3703" vis="OTBarSupportFilledVis"/>
+                    <component thickness="OTBar_Support_Foam_thickness"  width="OTBar_Support_Foam_width" offset="-OTBar_Support_Foam_offset" r="0." material="FR3703" vis="OTBarSupportFilledVis"/>
+                </components>
+
+                <comment> Carbon plate added in BAR354_EC353_VTX108 </comment>
+                <components name="Support_Plate" r="OTBar_Stave_thickness" length="OTBar_half_length">
+
+                  <component thickness="OTBar_Support_Plate_thickness" width="OTBar_Support_Plate_K13D2U_width" offset="+OTBar_Support_Foam_offset + OTBar_Support_Foam_width / 2.0 + OTBar_Support_Plate_K13D2U_width / 2.0" r="0.5*mm" material="K13D2U" vis="OTBarSupportPlateVis"/>
+                  <component thickness="OTBar_Support_Plate_thickness" width="OTBar_Support_Plate_CFleece_width" offset="+OTBar_Support_Foam_offset + OTBar_Support_Foam_width / 2.0 + OTBar_Support_Plate_K13D2U_width + OTBar_Support_Plate_CFleece_width / 2.0" r="0.5*mm" material="CarbonFleece" vis="OTBarSupportPlateVis"/>
+
+                  <component thickness="OTBar_Support_Plate_thickness" width="OTBar_Support_Plate_K13D2U_width" offset="+OTBar_Support_Foam_offset - OTBar_Support_Foam_width / 2.0 - OTBar_Support_Plate_K13D2U_width / 2.0" r="0.5*mm" material="K13D2U" vis="OTBarSupportPlateVis"/>
+                  <component thickness="OTBar_Support_Plate_thickness" width="OTBar_Support_Plate_CFleece_width" offset="+OTBar_Support_Foam_offset - OTBar_Support_Foam_width / 2.0 - OTBar_Support_Plate_K13D2U_width - OTBar_Support_Plate_CFleece_width / 2.0" r="0.5*mm" material="CarbonFleece" vis="OTBarSupportPlateVis"/>
+
+                  <component thickness="OTBar_Support_Plate_thickness" width="OTBar_Support_Plate_K13D2U_width" offset="-OTBar_Support_Foam_offset - OTBar_Support_Foam_width / 2.0 - OTBar_Support_Plate_K13D2U_width / 2.0" r="0.5*mm" material="K13D2U" vis="OTBarSupportPlateVis"/>
+                  <component thickness="OTBar_Support_Plate_thickness" width="OTBar_Support_Plate_CFleece_width" offset="-OTBar_Support_Foam_offset - OTBar_Support_Foam_width / 2.0 - OTBar_Support_Plate_K13D2U_width - OTBar_Support_Plate_CFleece_width / 2.0" r="0.5*mm" material="CarbonFleece" vis="OTBarSupportPlateVis"/>
+
+                  <component thickness="OTBar_Support_Plate_thickness" width="OTBar_Support_Plate_K13D2U_width" offset="-OTBar_Support_Foam_offset + OTBar_Support_Foam_width / 2.0 + OTBar_Support_Plate_K13D2U_width / 2.0" r="0.5*mm" material="K13D2U" vis="OTBarSupportPlateVis"/>
+                  <component thickness="OTBar_Support_Plate_thickness" width="OTBar_Support_Plate_CFleece_width" offset="-OTBar_Support_Foam_offset + OTBar_Support_Foam_width / 2.0 + OTBar_Support_Plate_K13D2U_width + OTBar_Support_Plate_CFleece_width / 2.0" r="0.5*mm" material="CarbonFleece" vis="OTBarSupportPlateVis"/>
+
+                </components>
+
+            <comment> Top String </comment>
+
+                <comment> Cooling </comment>
+                <components name="OTBarCooling" r="OTBar_Stave_thickness + OTBar_Support_Foam_thickness + 0." offset="0." length="OTBar_half_length">
+
+                    <component thickness="OTBar_Cooling_Plate_CFleece_thickness" width="OTBar_Cooling_Plate_width" r="0. + OTBar_Cooling_Plate_CPaper_thickness + OTBar_Cooling_Plate_K13D2U_thickness" material="CarbonFleece" vis="OTBarCoolingPlateVis"/>
+                    <component thickness="OTBar_Cooling_Plate_K13D2U_thickness" width="OTBar_Cooling_Plate_width" r="0. + OTBar_Cooling_Plate_CPaper_thickness" material="K13D2U" vis="OTBarCoolingPlateVis"/>
+                    <component thickness="OTBar_Cooling_Plate_CPaper_thickness" width="OTBar_Cooling_Plate_width" r="0." material="CarbonPaper" vis="OTBarCoolingPlateVis"/>
+
+                    <component inner_radius="OTBar_Cooling_Pipe_inner_radius"  outer_radius="OTBar_Cooling_Pipe_outer_radius" offset="+OTBar_Cooling_Pipe_offset" r="0. - 2.0 * OTBar_Cooling_Pipe_outer_radius" material="Kapton" vis="OTBarCoolingPipeVis"/>
+                    <component inner_radius="0."  outer_radius="OTBar_Cooling_Fluid_radius" offset="+OTBar_Cooling_Pipe_offset" r="0. - OTBar_Cooling_Pipe_outer_radius - OTBar_Cooling_Pipe_inner_radius" material="OpteonSF10" vis="OTBarCoolingFluidVis"/>
+
+                    <component inner_radius="OTBar_Cooling_Pipe_inner_radius"  outer_radius="OTBar_Cooling_Pipe_outer_radius" offset="-OTBar_Cooling_Pipe_offset" r="0. - 2.0 * OTBar_Cooling_Pipe_outer_radius" material="Kapton" vis="OTBarCoolingPipeVis"/>
+                    <component inner_radius="0."  outer_radius="OTBar_Cooling_Fluid_radius" offset="-OTBar_Cooling_Pipe_offset" r="0. - OTBar_Cooling_Pipe_outer_radius - OTBar_Cooling_Pipe_inner_radius" material="OpteonSF10" vis="OTBarCoolingFluidVis"/>
+
+
+                </components>
+                <comment> Works, placement seems believeable, update: color, thickness, material, radius? </comment>
+
+                <comment> Sensor </comment>
+                <sensor name="OTBarSensor" r="OTBar_Stave_thickness + OTBar_Support_Foam_thickness + OTBar_Cooling_Plate_thickness" thickness="OTBar_Sensitive_thickness" material="Silicon" nx="2." nGroupingModules="OTBar_nGroupingModules">
+                    <include ref="OuterTracker_module.xml"/>
+
+                    <comment> Moved to module definition above, since geo builder does not support .xml and inline both as handles </comment>
+                    <!-- <comment> Include HDI connectors here, since these are localized and repeated across modules </comment> -->
+                    <!-- <component name="OTBar_HDI_Connector_Data_LCP"  sensitive="False" r="OTBar_Sensitive_thickness + OTBar_sens_Copper_thickness" thickness="OTBar_HDI_Connector_Data_LCP_thickness" ymin="-OTBar_HDI_Connector_Data_LCP_z / 2." ymax="OTBar_HDI_Connector_Data_LCP_z / 2." xmin="-OTBar_HDI_Connector_Data_LCP_rphi / 2." xmax="OTBar_HDI_Connector_Data_LCP_rphi / 2." vis="OTBarConnectorVis"/> -->
+
+                </sensor>
+                <comment> Looks ok, update: module dimensions, module number (following stave geometry updates above), module periphery,  ? </comment>
+
+                <comment> Sensor Copper Layer (Equivalent) </comment>
+                <components name="OTBarSensorCu" r="OTBar_Stave_thickness + OTBar_Support_Foam_thickness + OTBar_Cooling_Plate_thickness + OTBar_Sensitive_thickness" offset="0." length="OTBar_half_length">
+                    <component thickness="OTBar_sens_Copper_thickness" width="OTBar_sens_Copper_width" r="0." material="Copper" vis="OTBarCopperVis"/>
+                </components>
+                <comment> Do not subdivide Copper layer, since gaps are less than .1 mm </comment>
+
+                <comment> HDI </comment>
+                <components name="OTBarHDI" r="OTBar_Stave_thickness + OTBar_Support_Foam_thickness + OTBar_Cooling_Plate_thickness + OTBar_Sensitive_thickness + OTBar_sens_Copper_thickness" offset="0." length="OTBar_half_length">
+                    <component thickness="OTBar_HDI_Coverlay_thickness" width="OTBar_HDI_width" r="0. + OTBar_HDI_Prepreg_thickness + OTBar_HDI_Aluminium_thickness" material="Coverlay" vis="OTBarHDIVis"/>
+                    <component thickness="OTBar_HDI_Aluminium_thickness" width="OTBar_HDI_width" r="0. + OTBar_HDI_Prepreg_thickness" material="Aluminum" vis="OTBarHDIVis"/>
+                    <component thickness="OTBar_HDI_Prepreg_thickness" width="OTBar_HDI_width" r="0." material="Prepreg" vis="OTBarHDIVis"/>
+                </components>
+                <comment> Works, placement seems believeable, update: color, thickness, material, radius? </comment>
+
+
+                <comment> Flex </comment>
+                <components name="OTBarFlex" r="OTBar_Stave_thickness + OTBar_Support_Foam_thickness + OTBar_Cooling_Plate_thickness + OTBar_Sensitive_thickness + OTBar_sens_Copper_thickness + OTBar_HDI_thickness" offset="0." length="OTBar_half_length">
+                    <component thickness="OTBar_Flex_Kapton_thickness"    width="OTBar_Flex_width" r="0. + OTBar_Flex_Epoxy_thickness + OTBar_Flex_Aluminium_thickness + OTBar_Flex_Coverlay_thickness" material="Kapton" vis="OTBarFlexVis"/>
+                    <component thickness="OTBar_Flex_Coverlay_thickness"    width="OTBar_Flex_width" r="0. + OTBar_Flex_Epoxy_thickness + OTBar_Flex_Aluminium_thickness" material="Coverlay" vis="OTBarFlexVis"/>
+                    <component thickness="OTBar_Flex_Aluminium_thickness" width="OTBar_Flex_width" r="0. + OTBar_Flex_Epoxy_thickness" material="Aluminum" vis="OTBarFlexVis"/>
+                    <component thickness="OTBar_Flex_Epoxy_thickness"      width="OTBar_Flex_width" r="0." material="Epoxy" vis="OTBarFlexVis"/>
+                </components>
+
+
+            </stave>
+
+            <!-- <comment> Test Layer </comment> -->
+            <!-- <layer nLadders="4"  -->
+            <!--        r="OTBar_r1"  -->
+            <!--        dr="OTBar_dr"  -->
+            <!--        id="0"  -->
+            <!--        nmodules="OTBar_nModules1"  -->
+            <!--        name="OTBarStave_single"  -->
+            <!--        step="OTBar_mod_z_spacing"  -->
+            <!--        phi0="OTBar_phiOffset1"/> -->
+
+            <comment> Layer MID 1 </comment>
+            <layer nLadders="OTBar_nStaves1" 
+                   r="OTBar_r1" 
+                   dr="OTBar_dr" 
+                   id="0" 
+                   nmodules="OTBar_nModules1" 
+                   name="OTBarStave_single" 
+                   step="OTBar_mod_z_spacing" 
+                   phi0="OTBar_phiOffset1"/>
+
+            <comment> Layer MID 2 </comment>
+            <layer nLadders="OTBar_nStaves2" 
+                   r="OTBar_r2" 
+                   dr="OTBar_dr" 
+                   id="1" 
+                   nmodules="OTBar_nModules2" 
+                   name="OTBarStave_single" 
+                   step="OTBar_mod_z_spacing" 
+                   phi0="OTBar_phiOffset2"/>
+            <comment> Layer OUT 1 </comment>
+            <layer nLadders="OTBar_nStaves4" 
+                   r="OTBar_r4" 
+                   dr="OTBar_dr" 
+                   id="3" 
+                   nmodules="OTBar_nModules4" 
+                   name="OTBarStave_single" 
+                   step="OTBar_mod_z_spacing" 
+                   phi0="OTBar_phiOffset4"/>
+            <comment> Layer OUT 2 </comment>
+            <layer nLadders="OTBar_nStaves5" 
+                   r="OTBar_r5" 
+                   dr="OTBar_dr" 
+                   id="4" 
+                   nmodules="OTBar_nModules5" 
+                   name="OTBarStave_single" 
+                   step="OTBar_mod_z_spacing" 
+                   phi0="OTBar_phiOffset5"/>
+
+        </detector>
+    </detectors>
+
+
+
+
+</lccdd>

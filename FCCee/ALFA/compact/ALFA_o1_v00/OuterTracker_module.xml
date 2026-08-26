@@ -1,0 +1,18 @@
+<lccdd>
+
+    <comment> Sensor components of the silicon outer tracker barrel and disk </comment>
+
+    <component name="Left_Sensor_Column" sensitive="True" ymin="-OTBar_mod_z / 2." ymax="OTBar_mod_z / 2." xmin="-OTBar_mod_rphi / 2." xmax="-OTBar_mod_rphi_periphery / 2." vis="OTBarSensitiveVis"/>
+    <component name="Right_Sensor_Column" sensitive="True" ymin="-OTBar_mod_z / 2." ymax="OTBar_mod_z / 2." xmin="+OTBar_mod_rphi_periphery / 2." xmax="OTBar_mod_rphi / 2." vis="OTBarSensitiveVis"/>
+    <component name="Sensor_Periphery" sensitive="False" ymin="-OTBar_mod_z / 2." ymax="OTBar_mod_z / 2." xmin="-OTBar_mod_rphi_periphery" xmax="OTBar_mod_rphi_periphery" vis="OTBarPeripheryVis"/>
+
+
+
+
+    <!-- <comment> Include HDI connectors here, since these are localized and repeated across modules </comment> -->
+    <!---->
+    <!-- <component name="OTBar_HDI_Connector_Data_LCP"  sensitive="False" r="OTBar_Sensitive_thickness + OTBar_sens_Copper_thickness" thickness="OTBar_HDI_Connector_Data_LCP_thickness" ymin="-OTBar_HDI_Connector_Data_LCP_z / 2." ymax="OTBar_HDI_Connector_Data_LCP_z / 2." xmin="-OTBar_HDI_Connector_Data_LCP_rphi / 2." xmax="OTBar_HDI_Connector_Data_LCP_rphi / 2." vis="OTBarConnectorVis"/> -->
+    <!---->
+    <!-- <component name="OTBar_HDI_Connector_Power_LCP"  sensitive="False" r="OTBar_Sensitive_thickness + OTBar_sens_Copper_thickness" thickness="OTBar_HDI_Connector_Power_LCP_thickness" ymin="-OTBar_mod_z / 2." ymax="-OTBar_mod_z / 2.0 + OTBar_HDI_Connector_Power_LCP_z" xmin="-OTBar_HDI_Connector_Power_LCP_rphi / 2." xmax="OTBar_HDI_Connector_Power_LCP_rphi / 2." vis="OTBarConnectorVis"/> -->
+
+</lccdd>

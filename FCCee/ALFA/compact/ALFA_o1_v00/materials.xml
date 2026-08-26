@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<materials>
+
+  <material name="Vacuum">
+    <D type="density" unit="g/cm3" value="0.0000000001" />
+    <fraction n="0.754" ref="N"/>
+    <fraction n="0.234" ref="O"/>
+    <fraction n="0.012" ref="Ar"/>
+  </material>
+
+  <material name="Air">
+    <D type="density" unit="g/cm3" value="0.0012"/>
+    <fraction n="0.754" ref="N"/>
+    <fraction n="0.234" ref="O"/>
+    <fraction n="0.012" ref="Ar"/>
+  </material>
+
+  <material name="AlBeMet162">
+    <D value="2.1" unit="g/cm3"/>
+    <fraction n="0.38" ref="Al"/>
+    <fraction n="0.62" ref="Be"/>
+  </material>
+
+  <material name="LiquidNDecane">
+    <D value="0.73" unit="g/cm3"/>
+    <composite n="10" ref="C" />
+    <composite n="22" ref="H" />
+  </material>
+
+
+  <material name="beam" state="gas">
+    <P unit="pascal" value="6.25e-06"/>
+    <MEE unit="eV" value="38.5760755714278"/>
+    <D unit="g/cm3" value="1.7e-14"/>
+    <fraction n="0.36264" ref="H"/>
+    <fraction n="0.36276" ref="N"/>
+    <fraction n="0.117748421296248" ref="C"/>
+    <fraction n="0.156851578703752" ref="O"/>
+  </material>
+
+  <material name="SolenoidMixture">
+    <D value="4.38" unit="g/cm3"/>
+    <fraction n="0.666" ref="Al"/>
+    <fraction n="0.166" ref="Cu"/>
+    <fraction n="0.084" ref="Ti"/>
+    <fraction n="0.084" ref="Nb"/>
+  </material>
+
+  <material name="CarbonPaper">
+    <D type="density" unit="g/cm3" value="1.6"/>
+    <fraction n="1.0" ref="C"/>
+  </material>
+
+  <material name="CarbonFleece">
+    <D type="density" unit="g/cm3" value="0.4"/>
+    <fraction n="1.0" ref="C"/>
+  </material>
+
+  <material name="K13D2U">
+    <D type="density" unit="g/cm3" value="1.0"/>
+    <fraction n="1.0" ref="C"/>
+  </material>
+
+  <material name="Kapton">
+    <D type="density" unit="g/cm3" value="1.42"/>
+    <composite n="22" ref="C"/>
+    <composite n="10" ref="H"/>
+    <composite n="2"  ref="N"/>
+    <composite n="5"  ref="O"/>
+  </material>
+
+  <material name="OpteonSF10">
+    <D type="density" unit="g/cm3" value="1.58"/>
+    <composite n="8"  ref="C"/>
+    <composite n="3"  ref="H"/>
+    <composite n="13" ref="F"/>
+    <composite n="1"  ref="O"/>
+  </material>
+  <comment> https://tmcindustries.com/products/opteon-sf10?variant=32229492228163 </comment>
+
+  <material name="FR3703">
+    <D type="density" unit="g/cm3" value="0.048"/>
+    <composite n="17" ref="C"/>
+    <composite n="16" ref="H"/>
+    <composite n="2"  ref="N"/>
+    <composite n="4"  ref="O"/>
+  </material>
+  <comment> https://www.curbellplastics.com/product/w10-00064/ </comment>
+  <comment> Chemical formula from repeating unit of Polyurethane </comment>
+
+  <material name="FR3703_truss"> 
+    <D type="density" unit="g/cm3" value="0.048 * 0.328"/> 
+    <composite n="17" ref="C"/>
+    <composite n="16" ref="H"/>
+    <composite n="2"  ref="N"/>
+    <composite n="4"  ref="O"/>
+  </material>
+  <comment> As above but the density is reduced by a fill factor 0.328 to account for Warren truss at side </comment>
+
+  <material name="Epoxy">
+    <D type="density" unit="g/cm3" value="1.16"/>
+    <composite n="21" ref="C"/>
+    <composite n="24" ref="H"/>
+    <composite n="4"  ref="O"/>
+  </material>
+  <comment> https://pubchem.ncbi.nlm.nih.gov/compound/Epoxy-Resin#section=IUPAC-Name </comment>
+
+  <material name="Coverlay">
+    <D type="density" unit="g/cm3" value="1.20"/>
+    <fraction n="0.50" ref="Kapton"/>
+    <fraction n="0.50" ref="Epoxy"/>
+  </material>
+
+  <material name="Prepreg">
+    <D type="density" unit="g/cm3" value="1.85"/>
+    <fraction n="1.0" ref="Epoxy"/>
+  </material>
+
+</materials>
