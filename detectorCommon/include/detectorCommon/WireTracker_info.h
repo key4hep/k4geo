@@ -510,7 +510,9 @@ namespace rec {
     void Add_nsectors(int _val) { nsectors.push_back(_val); }
     void Add_ntubesPerSector(int _val) { ntubesPerSector.push_back(_val); }
     void Add_delta_phi(angle_t _val) { delta_phi.push_back(_val); }
-    void Add_stereo(angle_t _val) { stereo.push_back(_val); }
+    // The stereo angle as implemented in the geometry is the opposite rotation to the one implemented by
+    // WireTracker_info
+    void Add_stereo(angle_t _val) { stereo.push_back(-_val); }
     void Add_innermost_radius(length_t _val) { innermost_radius.push_back(_val); }
     void Add_offset(angle_t _val) { offset.push_back(_val); }
 
