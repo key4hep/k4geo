@@ -205,7 +205,7 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
 
         } // repeat (tubes in the phi direction)
       } // sectors within superlayer
-      layerRadius += (tubeThickness + tube_gap) * std::sqrt(3)/2; // equal tube gap
+      layerRadius += (tubeThickness + tube_gap) * std::sqrt(3) / 2; // equal tube gap
       ++ilayer;
     } // layers within superlayer
     SLInnerRadius += SLThickness;
