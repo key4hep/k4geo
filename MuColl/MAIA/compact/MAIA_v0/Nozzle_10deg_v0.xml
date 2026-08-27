@@ -1,8 +1,25 @@
 <lccdd>
     <!--  Definition of global dictionary constants          -->
     <define>
-        <constant name="Nozzle_kink_z"  value="100*cm"/>
-        <constant name="Nozzle_kink_max_r"  value="17.57473619*cm"/>
+        <!-- Nozzle profile, used by this file and by Beampipe_o1_v01_02.xml so
+             that the beam pipe wall and the beam volume inside the bore follow the nozzle
+             automatically. Only the independent numbers are given: the outer surface is a
+             single 10 degree cone starting at (Nozzle_zmin, Nozzle_rmax_zmin), and the
+             bore is a straight cone between Nozzle_kink_z and Nozzle_end_z. Every radius
+             lying on one of those two lines is derived below rather than written out. -->
+        <constant name="Nozzle_angle"        value="10*degree"/>
+        <constant name="Nozzle_tip_zmax"     value="15*cm"/>
+        <constant name="Nozzle_kink_z"       value="100*cm"/>
+        <constant name="Nozzle_end_z"        value="595*cm"/>
+        <constant name="Nozzle_rmax_zmin"    value="1*cm"/>     <!-- outer radius at Nozzle_zmin   -->
+        <constant name="Nozzle_rmin_tip"     value="0.6*cm"/>   <!-- bore radius at Nozzle_tip_zmax -->
+        <constant name="Nozzle_rmin_kink"    value="0.3*cm"/>   <!-- bore radius at Nozzle_kink_z   -->
+        <constant name="Nozzle_rmin_end"     value="1.78*cm"/>  <!-- bore radius at Nozzle_end_z    -->
+
+        <constant name="Nozzle_outer_slope"  value="tan(Nozzle_angle)"/>
+        <constant name="Nozzle_bore_slope"   value="(Nozzle_rmin_end - Nozzle_rmin_kink)/(Nozzle_end_z - Nozzle_kink_z)"/>
+        <constant name="Nozzle_rmax_tip"     value="Nozzle_rmax_zmin + Nozzle_outer_slope*(Nozzle_tip_zmax - Nozzle_zmin)"/>
+        <constant name="Nozzle_kink_max_r"   value="Nozzle_rmax_zmin + Nozzle_outer_slope*(Nozzle_kink_z - Nozzle_zmin)"/>
     </define>
     
     <!--  Definition of the used visualization attributes    -->
@@ -17,23 +34,23 @@
         <detector name="NozzleW_right" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
             <comment>Internal part of the nozzle: Tungsten</comment>
             <material name="Tungsten_Alloy"/>
-            <zplane z="Nozzle_zmin" rmin="1*cm" rmax="1*cm" />
-            <zplane z="15*cm" rmin="0.6*cm" rmax="2.58694*cm" />
-            <zplane z="Nozzle_kink_z" rmin="0.3*cm" rmax="Nozzle_kink_max_r" />
-            <zplane z="Nozzle_kink_z" rmin="0.3*cm" rmax="13.47473619*cm" />
-            <zplane z="204.48824*cm" rmin="0.6124092832*cm" rmax="13.47473619*cm" />
-            <zplane z="595*cm" rmin="1.78*cm" rmax="43*cm" />
+            <zplane z="Nozzle_zmin" rmin="Nozzle_rmax_zmin" rmax="Nozzle_rmax_zmin" />
+            <zplane z="Nozzle_tip_zmax" rmin="Nozzle_rmin_tip" rmax="Nozzle_rmax_tip" />
+            <zplane z="Nozzle_kink_z" rmin="Nozzle_rmin_kink" rmax="Nozzle_kink_max_r" />
+            <zplane z="Nozzle_kink_z" rmin="Nozzle_rmin_kink" rmax="13.47473619*cm" />
+            <zplane z="204.48824*cm" rmin="Nozzle_rmin_kink + Nozzle_bore_slope*(204.48824*cm - Nozzle_kink_z)" rmax="13.47473619*cm" />
+            <zplane z="Nozzle_end_z" rmin="Nozzle_rmin_end" rmax="43*cm" />
         </detector>
 
         <detector name="NozzleW_left" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
             <comment>Internal part of the nozzle: Tungsten</comment>
             <material name="Tungsten_Alloy"/>
-            <zplane z="-Nozzle_zmin" rmin="1*cm" rmax="1*cm" />
-            <zplane z="-15*cm" rmin="0.6*cm" rmax="2.58694*cm" />
-            <zplane z="-Nozzle_kink_z" rmin="0.3*cm" rmax="Nozzle_kink_max_r" />
-            <zplane z="-Nozzle_kink_z" rmin="0.3*cm" rmax="13.47473619*cm" />
-            <zplane z="-204.48824*cm" rmin="0.6124092832*cm" rmax="13.47473619*cm" />
-            <zplane z="-595*cm" rmin="1.78*cm" rmax="43*cm" />
+            <zplane z="-Nozzle_zmin" rmin="Nozzle_rmax_zmin" rmax="Nozzle_rmax_zmin" />
+            <zplane z="-Nozzle_tip_zmax" rmin="Nozzle_rmin_tip" rmax="Nozzle_rmax_tip" />
+            <zplane z="-Nozzle_kink_z" rmin="Nozzle_rmin_kink" rmax="Nozzle_kink_max_r" />
+            <zplane z="-Nozzle_kink_z" rmin="Nozzle_rmin_kink" rmax="13.47473619*cm" />
+            <zplane z="-204.48824*cm" rmin="Nozzle_rmin_kink + Nozzle_bore_slope*(204.48824*cm - Nozzle_kink_z)" rmax="13.47473619*cm" />
+            <zplane z="-Nozzle_end_z" rmin="Nozzle_rmin_end" rmax="43*cm" />
         </detector>
 
 
