@@ -39,7 +39,7 @@
   <include ref="OuterTrackerBarrel_o1_v00.xml" />
 
   <!-- <comment> Grainita ECAL </comment> -->
-  <!-- <include ref="Grainita_ECAL_Barrel_v02_Long4.xml" /> -->
+  <include ref="Grainita_ECAL_Barrel_v02.xml" /> 
 
   <comment> Include plugin to generate edm4hep::TrackerHitPlane </comment>
   <plugins>
@@ -51,7 +51,7 @@
   <define>
     <constant name="Solenoid_field"   value="3.0*tesla"/>
     <constant name="Solenoid_coil_half_length"      value="2.0*m"/>
-    <constant name="Solenoid_coil_outer_radius"      value="2.0*m"/>
+    <constant name="Solenoid_coil_outer_radius"      value="2.7*m"/>
   </define>
 
   <comment> Magnetic field definition </comment>
