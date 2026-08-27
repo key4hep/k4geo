@@ -69,6 +69,7 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
   int tubeNum = 0;
   double tubeThickness = 0.0;
   double mloffset = 0.0;
+  int ilayer = 1;
 
   // convenience class to add all slice thicknesses together
   dd4hep::Layering layering(x_det);
@@ -115,7 +116,7 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
 
     // check that the phi repeat is set
     // and it is a sensible value
-    double maxRepeat = std::floor((2 * 3.14159 * layerRadius / SLSectors - SLphiGap) / (tubeThickness + tube_gap));
+    double maxRepeat = std::floor((dd4hep::twopi * layerRadius / SLSectors - SLphiGap) / (tubeThickness + tube_gap));
     if (SLphiRepeat < 0) {
       SLphiRepeat = maxRepeat;
     }
@@ -131,6 +132,7 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
     STT_i->Add_delta_phi(SLDelta_phi);
     STT_i->Add_stereo(Angle);
     STT_i->Add_innermost_radius(layerRadius);
+    STT_i->Add_offset(mloffset);
 
     // all asserts passed, can start building!
 
@@ -177,21 +179,21 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
       for (int l = 0; l < SLSectors; ++l) {
         for (int i = 0; i < SLphiRepeat; ++i) {
           // place the envelope volume in the superlayer envelope
-          double phi = STT_i->Get_cell_phi_angle(SLNum, j, l, i);
+          double phi = STT_i->Get_cell_phi_angle(SLNum, ilayer, l, i);
 
           std::string placedTubeName = SLName + dd4hep::_toString(l, "sector%d") + dd4hep::_toString(j, "layer%d") +
                                        dd4hep::_toString(i, "tube%d");
           dd4hep::DetElement tubeElement = dd4hep::DetElement(sdet, placedTubeName, tubeNum++);
 
           // Position vector of the tube barycenter
-          ROOT::Math::XYZVector axis(layerRadius * cos(phi + mloffset), layerRadius * sin(phi + mloffset), 0);
+          ROOT::Math::XYZVector axis(layerRadius * cos(phi), layerRadius * sin(phi), 0);
 
           // Rotation around the tube barycenter position vector --> stereo angle
           ROOT::Math::AxisAngle rot(axis, Angle);
 
           // Position (=displacement) vector of the tube barycenter, required for Transform3D
-          ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>> pos(layerRadius * cos(phi + mloffset),
-                                                                                layerRadius * sin(phi + mloffset), 0);
+          ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>> pos(layerRadius * cos(phi),
+                                                                                layerRadius * sin(phi), 0);
           // Rotation + translation of the tube (ROOT::Math::Transform3D)
           dd4hep::Transform3D tubeTransform = dd4hep::Transform3D(rot, pos);
           dd4hep::PlacedVolume tubePlacedVolume = SLVol.placeVolume(singleVol, tubeTransform);
@@ -203,7 +205,8 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
 
         } // repeat (tubes in the phi direction)
       } // sectors within superlayer
-      layerRadius += (tubeThickness + tube_gap) * 0.866; // equal tube gap
+      layerRadius += (tubeThickness + tube_gap) * std::sqrt(3)/2; // equal tube gap
+      ++ilayer;
     } // layers within superlayer
     SLInnerRadius += SLThickness;
     mloffset += SLoffset;
