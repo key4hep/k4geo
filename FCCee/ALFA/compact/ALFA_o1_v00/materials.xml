@@ -1,4 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+
+<properties>
+  <!-- Default optical properties for the v02 mixed-grain material.
+    These are intentionally simple placeholders for enabling optical
+    photon production. They are only used when optical physics is enabled
+    in the steering file. Replace them with measured Grainita values when
+  available. -->
+  <matrix name="RI_MixGrains_Default" coldim="2" values="
+    1.0*eV 1.80
+    6.0*eV 1.80
+    "/>
+  <matrix name="AbsLen_MixGrains_Default" coldim="2" values="
+    1.0*eV 1.0*m
+    6.0*eV 1.0*m
+    "/>
+  <matrix name="ScintFast_MixGrains_Default" coldim="2" values="
+    1.5*eV 0.0
+    2.8*eV 1.0
+    4.5*eV 0.0
+    "/>
+</properties>
+
 <materials>
 
 
@@ -134,31 +157,8 @@
     <fraction n="1.0" ref="Epoxy"/>
   </material>
 
-</materials>
 
-<comment> Grainita Materials </comment>
-<properties>
-  <!-- Default optical properties for the v02 mixed-grain material.
-    These are intentionally simple placeholders for enabling optical
-    photon production. They are only used when optical physics is enabled
-    in the steering file. Replace them with measured Grainita values when
-  available. -->
-  <matrix name="RI_MixGrains_Default" coldim="2" values="
-    1.0*eV 1.80
-    6.0*eV 1.80
-    "/>
-  <matrix name="AbsLen_MixGrains_Default" coldim="2" values="
-    1.0*eV 1.0*m
-    6.0*eV 1.0*m
-    "/>
-  <matrix name="ScintFast_MixGrains_Default" coldim="2" values="
-    1.5*eV 0.0
-    2.8*eV 1.0
-    4.5*eV 0.0
-    "/>
-</properties>
-
-<materials>
+  <comment> Grainita Materials </comment>
 
 
   <material name="ZnWO4">
@@ -244,4 +244,5 @@
   </material>
 
 </materials>
+</lccdd>
 

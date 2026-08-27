@@ -49,7 +49,7 @@
 
   <includes>
     <gdmlFile  ref="elements.xml"/>
-    <gdmlFile  ref="material.xml"/>
+    <gdmlFile  ref="materials.xml"/>
   </includes>
   
 
