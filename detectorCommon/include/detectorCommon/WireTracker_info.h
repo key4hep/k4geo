@@ -545,7 +545,7 @@ namespace rec {
 
     /// Calculate the global layer starting form the layer index within the super layer
     /// (super)layer counting starts at 0, while global layer numbers starts at 1.
-    int CalculateLocalLayerFromILayer(layer_t ilayer, int superlayer) const {
+    layer_t CalculateLocalLayerFromILayer(layer_t ilayer, int superlayer) const {
       auto sum_begin = nlayersPerSuperlayer.begin();
       int inner_layers = std::accumulate(sum_begin, sum_begin + superlayer, 0);
       return ilayer - inner_layers - 1;
