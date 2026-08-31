@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+
+  <!-- Consolidated visualization (color) definitions -->
+
+  <display>
+
+    <!-- Global palette (originally retrieved from FCCee_DectDimensions.xml) -->
+    <vis name="VXDVis" alpha="0.1" r="0.1" g=".5" b=".5" showDaughters="true" visible="false"/>
+    <vis name="VXDLayerVis" alpha="1.0" r="0.1" g=".5" b=".5" showDaughters="true" visible="true"/>
+    <vis name="VXDSupportVis" alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="ITVis" alpha="1.0" r="0.54" g="0.43" b="0.04" showDaughters="true" visible="true"/>
+    <vis name="OTVis" alpha="1.0" r="0.8" g="0.8" b="0.4" showDaughters="true" visible="false"/>
+    <vis name="ECALVis" alpha="1.0" r="0.2" g="0.6" b="0" showDaughters="true" visible="true"/>
+    <vis name="HCALVis" alpha="1.0" r="0.078" g="0.01176" b="0.588" showDaughters="true" visible="true"/>
+    <vis name="SOLVis" alpha="1.0" r="0.4" g="0.4" b="0.4" showDaughters="true" visible="true"/>
+    <vis name="MUONVis" alpha="1.0" r="0.6" g="0.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="LCALInstrVis" alpha="1.0" r="0.35" g="0.0" b="0.47" showDaughters="true" visible="true"/>
+    <vis name="LCALVis" alpha="1.0" r="0.25" g="0.88" b="0.81" showDaughters="true" visible="true"/>
+    <vis name="LCALCoolVis" alpha="1.0" r="0.2" g="0.6" b="0" showDaughters="true" visible="true"/>
+    <vis name="BCALVis" alpha="1.0" r="0.0" g="0.4" b="0.4" showDaughters="true" visible="true"/>
+    <vis name="KICKVis" alpha="1.0" r="1.0" g="0.498" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="QD0CoilIVis" alpha="1.0" r="1.0" g="0.498" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="QD0CoilOVis" alpha="1.0" r="1.0" g="0.25" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="CompSolVis" alpha="1.0" r="0.5" g="0.5" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="ScreenSolVis" alpha="1.0" r="1" g="1" b="0" showDaughters="true" visible="true"/>
+    <vis name="ColliVis" alpha="1.0" r="0.7" g="0.5" b="1" showDaughters="true" visible="true"/>
+    <vis name="TantalumVis" alpha="1.0" r="1" g="0.5" b="0.5" showDaughters="true" visible="true"/>
+    <vis name="BPMVis" alpha="1.0" r="0.25" g="0.88" b="0.81" showDaughters="true" visible="true"/>
+    <vis name="SupportVis" alpha="1" r="0.2" g="0.2" b="0.2" showDaughters="true" visible="true"/>
+
+    <!-- Beam Instrumentation (originally defined  in BeamInstrumentation.xml) -->
+    <vis name="CoilVis" alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
+
+    <!-- Beampipe (originally retrieved from Beampipe.xml) -->
+    <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
+    <vis name="GoldCoatingVis" alpha="0.0" r="0.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="TubeVis" alpha="1.0" r="1.0" g="0.7" b="0.5" showDaughters="true" visible="true"/>
+    <vis name="VacVis" alpha="1.0" r="1.0" g="1.0" b="1.0" showDaughters="true" visible="false"/>
+    <vis name="BlueVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+
+    <!-- LumiCal / HOMAbsorber (originally defined  in LumiCal.xml and HOMAbsorber.xml) -->
+    <vis name="SeeThrough" alpha="0.0" r="0" g="0" b="0" showDaughters="true" visible="false"/>
+    <vis name="BCLayerVis1" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="BCLayerVis2" alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="BCLayerVis3" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="LCALShieldVis" alpha="1.0" r="0.6" g="0.3" b="0.0" showDaughters="true" visible="true"/>
+
+    <!-- ECAL Barrel (originally retrieved from FCCee_ECalBarrel.xml) -->
+    <vis name="ecal_envelope" r="0.1" g="0.2" b="0.6" alpha="1" showDaughters="false" visible="true" />
+
+    <!-- ECAL Endcaps (originally retrieved from FCCee_EcalEndcaps_coneCryo.xml) -->
+    <vis name="emec_cryo_vis" r="0.6" g="0.6" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_bath_vis" r="0.6" g="0.4" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_layer_vis" r="0.6" g="0.3" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_lar_vis" r="0.5" g="0.3" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_pb_vis" r="0.5" g="0.5" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_readout_vis" r="0.5" g="0.1" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_envelope_vis" r="0.6" g="0.3" b="0" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+
+    <!-- HCAL Barrel (originally retrieved from FCCee_HCalBarrel_TileCal.xml) -->
+    <vis name="hcal_steel_vis" r="0.5" g="0.5" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="hcal_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="hcal_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="hcal_face_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="hcal_end_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="hcal_polystyrene_vis" r="0.0" g="0.6" b="0.3" alpha="0.8" showDaughters="true" visible="true" />
+    <vis name="hcal_envelope" r="0.6" g="0.8" b="0.6" alpha="1" showDaughters="true" visible="true" />
+    <vis name="hcal_barrel_seq1_vis" r="0.1" g="0.8" b="0.6" alpha="1" showDaughters="true" visible="true" />
+    <vis name="hcal_barrel_seq2_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
+    <vis name="hcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
+    <vis name="hcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" />
+
+    <!-- HCAL Endcaps (originally retrieved from FCCee_HCalEndcaps_ThreeParts_TileCal.xml) -->
+    <vis name="endcapHcal_steel_vis" r="0.5" g="0.5" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_face_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_end_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_polystyrene_vis" r="0.0" g="0.6" b="0.3" alpha="0.8" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_envelope" r="0.6" g="0.8" b="0.6" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_barrel_seq1_vis" r="0.1" g="0.8" b="0.6" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_barrel_seq2_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" />
+
+    <!-- Muon Tagger (originally retrieved from MuonTagger.xml) -->
+    <vis name="muon_vis" r="1.0" g="0.1" b="0.1" showDaughters="true" visible="true" />
+
+    <!-- Simplified Drift Chamber (originally retrieved from SimplifiedDriftChamber.xml) -->
+    <vis name="GasVis" alpha="1.0" r="0.0" g="0.8" b="0.7" showDaughters="true" visible="true"/>
+    <vis name="envelopeVis" alpha="0.1" r="0.0" g="0.1" b="0.6" showDaughters="true" visible="false"/>
+
+    <!-- Vertex (originally retrieved from Vertex.xml) -->
+    <vis name="SiVertexModuleVis" alpha="1.0" r="1" g="1" b="0.6" showDaughters="true" visible="false"/>
+    <vis name="SiVertexSensitiveVis" alpha="1.0" r="1" g="0.2" b="0.2" showDaughters="true" visible="true"/>
+    <vis name="SiVertexPassiveVis" alpha="1.0" r="0.274" g="0.274" b="0.274" showDaughters="true" visible="true"/>
+    <vis name="SiVertexCableVis" alpha="1.0" r="0.85" g="0.53" b="0.4" showDaughters="true" visible="true"/>
+    <vis name="SiVertexAir" alpha="1.0" r="0" g="0" b="0" showDaughters="false" visible="false"/>
+    <vis name="SiVertexLayerVis" alpha="1.0" r="1" g="0.75" b="0" showDaughters="false" visible="true"/>
+
+    <!-- Solenoid (originally retrieved from Solenoid_o1_v01_02.xml; not currently included by ALLEGRO_o1_v01.xml) -->
+    <vis name="SolenoidBarrelLayerVis" alpha="1" r="0" g="0.3" b="0.3" showDaughters="false" visible="true"/>
+    <vis name="SolenoidCoilEndsVis" alpha="1" r="0" g="0.9" b="0.9" showDaughters="false" visible="true"/>
+    <vis name="SOLVis2" r="0.20703125" g="0.453125" b="0.77734375" />
+
+
+  </display>
+
+</lccdd>
