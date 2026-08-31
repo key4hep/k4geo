@@ -85,7 +85,7 @@
     - Solenoid_o1_v01.xml
     - EndPlateAbsorber_o1_v01.xml
       
-    The vis entries below are duplicated from that version colors.xml file to keep this file self-contained
+    The vis entries below are duplicated from that version display.xml file to keep this file self-contained
     
     -->
 

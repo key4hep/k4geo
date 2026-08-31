@@ -88,7 +88,7 @@
     - VertexComplete_o1_v04.xml
     - SiliconWrapper_o1_v02.xml
 
-    The vis entries below are duplicated from those versions' colors.xml to keep this file self-contained.
+    The vis entries below are duplicated from those versions display.xml to keep this file self-contained.
 
     -->
 
