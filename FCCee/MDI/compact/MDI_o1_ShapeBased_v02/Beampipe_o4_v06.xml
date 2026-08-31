@@ -27,7 +27,7 @@
       -->
         <comment>Part of beampipe made of AlBeMet162 and Paraffin flow</comment>
 
-        <detector name="BeBeampipe" type="DD4hep_Beampipe_o1_v02" insideTrackingVolume="true" nocore="true" vis="BeamPipeVis">
+        <detector name="BeBeampipe" type="DD4hep_Beampipe_o1_v01" insideTrackingVolume="true" nocore="true" vis="BeamPipeVis">
             <parameter crossingangle="CrossingAngle" />
             <envelope vis="BlueVis">
                 <shape type="Assembly"/>
@@ -40,7 +40,7 @@
 
         </detector>
 
-	<detector name="BeamPipe" type="DD4hep_Beampipe_o1_v02" insideTrackingVolume="true" vis="BeamPipeVis" >
+	<detector name="BeamPipe" type="DD4hep_Beampipe_o1_v01" insideTrackingVolume="true" vis="BeamPipeVis" >
         <envelope vis="BlueVis">
             <shape type="Assembly"/>
         </envelope>
