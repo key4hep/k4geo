@@ -5,7 +5,7 @@
 
   <display>
 
-    <!-- Global palette (retrieved from DectDimensions_IDEA_o1_v01.xml) -->
+    <!-- Global palette (originally retrieved from DectDimensions_IDEA_o1_v01.xml) -->
     <vis name="VXDVis" alpha="0.2" r="0.1" g=".5" b=".5" showDaughters="true" visible="false"/>
     <vis name="VXDLayerVis" alpha="1.0" r="0.1" g=".5" b=".5" showDaughters="true" visible="true"/>
     <vis name="VXDSupportVis" alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
@@ -35,25 +35,25 @@
     <vis name="RohacellVis" alpha="1.0" r="1.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
     <vis name="AirVis" alpha="0.1" r="0.1" g="0.1" b="1.0" showDaughters="false" visible="true"/>
 
-    <!-- Vertex (retrieved from Vertex_IDEA_o1_v01.xml) -->
+    <!-- Vertex (originally retrieved from Vertex_IDEA_o1_v01.xml) -->
     <vis name="VTXSensitiveVis" alpha="1.0" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="VTXPeripheryVis" alpha="1.0" r="1.0" g="0.9" b="0.1" showDaughters="true" visible="true"/>
     <vis name="TerminalPartVis" alpha="1.0" r="1.0" g="0.65" b="0.0" showDaughters="true" visible="true"/>
     <vis name="TrussStructureVis" alpha="0.3" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
 
-    <!-- Beampipe (retrieved from Beampipe_o4_v05.xml) -->
+    <!-- Beampipe (originally retrieved from Beampipe_o4_v05.xml) -->
     <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
     <vis name="GoldCoatingVis" alpha="0.0" r="0.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
     <vis name="TubeVis" alpha="1.0" r="1.0" g="0.7" b="0.5" showDaughters="true" visible="true"/>
     <vis name="VacVis" alpha="1.0" r="1.0" g="1.0" b="1.0" showDaughters="true" visible="false"/>
     <vis name="BlueVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>  <!-- Missing definiton -->
 
-    <!-- Solenoid (retrieved from Solenoid_o1_v01.xml) -->
+    <!-- Solenoid (originally retrieved from Solenoid_o1_v01.xml) -->
     <vis name="SolenoidBarrelLayerVis" alpha="1" r="0" g="0.3" b="0.3" showDaughters="false" visible="true"/>
     <vis name="SolenoidCoilEndsVis" alpha="1" r="0" g="0.9" b="0.9" showDaughters="false" visible="true"/>
     <vis name="SolenoidVacuum" alpha="0" r="1" g="1" b="1" showDaughters="false" visible="true"/>
 
-    <!-- Drift chamber (retrieved from DriftChamber_o1_v01.xml) -->
+    <!-- Drift chamber (originally retrieved from DriftChamber_o1_v01.xml) -->
     <vis name="vCDCH:Pb" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
     <vis name="vCDCH:Sc" alpha="0.6" r="0.8" g="0.8" b="0.0" showDaughters="true" visible="true"/>
     <vis name="vCDCH:Plastic" alpha="1.0" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
@@ -72,17 +72,17 @@
     <vis name="vCDCH:Air" showDaughters="true" visible="false"/>
     <vis name="CDCH" alpha="1.0" r="0.0" g="0.8" b="0.7" showDaughters="true" visible="true"/>  <!-- Missing definiton -->
 
-    <!-- Missing definition. Beam instrumentation (defined in BeamInstrumentation_o1_v01.xml) -->
+    <!-- Missing definition. Beam instrumentation (originally defined  in BeamInstrumentation_o1_v01.xml) -->
     <vis name="CoilVis" alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
 
-    <!-- Missing definitions. LumiCal (defined in LumiCal_o1_v01.xml) -->
+    <!-- Missing definitions. LumiCal (originally defined  in LumiCal_o1_v01.xml) -->
     <vis name="SeeThrough" alpha="0.0" r="0" g="0" b="0" showDaughters="true" visible="false"/>
     <vis name="BCLayerVis1" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="BCLayerVis2" alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="BCLayerVis3" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
     <vis name="LCALShieldVis" alpha="1.0" r="0.6" g="0.3" b="0.0" showDaughters="true" visible="true"/>
 
-    <!-- Missing definition. End plate absorber (defined in EndPlateAbsorber_o1_v01.xml) -->
+    <!-- Missing definition. End plate absorber (originally defined  in EndPlateAbsorber_o1_v01.xml) -->
     <vis name="muon_vis" alpha="1.0" r="0.5" g="0.0" b="0.5" showDaughters="true" visible="true"/>
   </display>
 
