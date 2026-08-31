@@ -104,6 +104,7 @@
     <vis name="SolenoidCoilEndsVis" alpha="1" r="0" g="0.9" b="0.9" showDaughters="false" visible="true"/>
     <vis name="SOLVis2" r="0.20703125" g="0.453125" b="0.77734375" />
 
+
   </display>
 
 </lccdd>
