@@ -110,15 +110,6 @@ namespace sim {
 
     G4Track* track = aStep->GetTrack();
     if (track->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) {
-      const G4VProcess* creator = track->GetCreatorProcess();
-      const bool isCerenkov = creator && creator->GetProcessSubType() == G4EmProcessSubType::fCerenkov;
-
-#ifdef DEBUG
-      std::cout << "--> GrainitaCalo: optical photon from "
-                << (creator ? creator->GetProcessName() : "unknown")
-                << " isCerenkov=" << isCerenkov << std::endl;
-#endif
-
       track->SetTrackStatus(fStopAndKill);
       return true;
     }
@@ -228,6 +219,7 @@ namespace sim {
       }
     }
 
+    // Note: keep cell id for future development: modular segmentation.
     auto transverseDistance = [&](CellID id, const G4ThreeVector& cellPos) {
       G4ThreeVector axis = cellPos.unit();
       // if (modularSeg) {

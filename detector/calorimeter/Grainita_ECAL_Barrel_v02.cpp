@@ -66,26 +66,28 @@ static Ref_t create_detector(Detector &description, xml_h e,
   std::cout<<"  -- Dimension: inner R "<<innerR<<", outer R "<<outerR<<", inner half Z "<<halfZ<<std::endl;
   std::cout<<"     Z segmentation: "<<nModule_z<<", Phi segmentation: "<<nSec_phi<<std::endl;
 
-  //Calculate the shift from phi direction tilt. 
-  // Note: The tilt works on the outer vertex.
-  // The section of sector in phi-plane is defined with 4 points (in R-theta coordinate):
-  //    Inner: A(Rin, -dphi_sec/2.),  D(Rin, dphi_sec/2.)
-  //    Original outer withouth tilt: (Rout, -dphi_sec/2.), (Rout, dphi_sec/2.)
-  //    Outer with tilt: B(Rout, -dphi_sec/2. + tilt), C(Rout, dphi_sec/2. + tilt)
-  // BUT this gives non-parallel inner and outer surface. We force the outer surface be parallel with inner surface
-  // in the plane of x=Rout*cos(dphi_sec/2.). 
-  //    (in x-y coordinate)
-  //    B' (Rout*cos(dphi_sec/2.), y_B'), C'(Rout*cos(dphi_sec/2.), y_C')
-  // where B' and C' are from extending AB and DC to x=Rout*cos(dphi_sec/2.) plane. 
-  // To get y_B' and y_C', we calculated the function of AB and DC. 
-  //
-  //        \
-  //     \   \ /|C'
-  //      \  // |
-  //       \//  |
-  //      D |   |
-  //        |   |
-  //       A --- B'
+  /*
+  Calculate the shift from phi direction tilt. 
+   Note: The tilt works on the outer vertex.
+   The section of sector in phi-plane is defined with 4 points (in R-theta coordinate):
+      Inner: A(Rin, -dphi_sec/2.),  D(Rin, dphi_sec/2.)
+      Original outer withouth tilt: (Rout, -dphi_sec/2.), (Rout, dphi_sec/2.)
+      Outer with tilt: B(Rout, -dphi_sec/2. + tilt), C(Rout, dphi_sec/2. + tilt)
+   BUT this gives non-parallel inner and outer surface. We force the outer surface be parallel with inner surface
+   in the plane of x=Rout*cos(dphi_sec/2.). 
+      (in x-y coordinate)
+      B' (Rout*cos(dphi_sec/2.), y_B'), C'(Rout*cos(dphi_sec/2.), y_C')
+   where B' and C' are from extending AB and DC to x=Rout*cos(dphi_sec/2.) plane. 
+   To get y_B' and y_C', we calculated the function of AB and DC. 
+  
+          \
+       \   \ /|C'
+        \  // |
+         \//  |
+        D |   |
+          |   |
+         A --- B'
+  */
 
   //Slope and intercept of line AB
   double tmp_slope1 = -(outerR*sin(dphi_sec/2.-module_tilt_rad) - innerR*tan(dphi_sec/2.)) / 
