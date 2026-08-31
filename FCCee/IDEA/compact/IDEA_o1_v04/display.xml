@@ -61,8 +61,8 @@
     <vis name="VTXtrussStructureVis" alpha="0.3" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
     <vis name="VTXIBTube" alpha="0.8" r="0.25" g="0.25" b="0.2" showDaughters="true" visible="true"/>
     <vis name="VTXDiskSupportVis" alpha="0.2" r="0.2" g="0.2" b="0.2" showDaughters="true" visible="true"/>
-    <vis name="VTXVis" alpha="0.2" r="0.1" g="0.5" b="0.5" showDaughters="true" visible="true"/> <!-- Missing definition -->
-    <vis name="KaptonVis" alpha="1.0" r="1.0" g="0.6" b="0.0" showDaughters="true" visible="true"/> <!-- Missing definition -->
+    <vis name="VTXVis" alpha="0.2" r="0.1" g="0.5" b="0.5" showDaughters="true" visible="true"/>
+    <vis name="KaptonVis" alpha="1.0" r="1.0" g="0.6" b="0.0" showDaughters="true" visible="true"/>
 
     <!-- Silicon wrapper (originally retrieved from SiliconWrapper_o1_v02.xml) -->
     <vis name="SiWrEnvVis" alpha="0.2" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
@@ -74,7 +74,7 @@
     <vis name="SiWrSupportVis" alpha="0.8" r="0.25" g="0.25" b="0.2" showDaughters="true" visible="true"/>
     <vis name="SiWrStaveVis" alpha="0.8" r="1.0" g="0.5" b="0.0" showDaughters="false" visible="true"/> <comment>Hide details on weaker systems, otherwise use 'showDaughters="true"'</comment>
 
-    <!-- Missing definition. Parallel world volume outline (originally defined  in IDEA_o1_v04.xml) -->
+    <!-- Parallel world volume outline (originally defined in IDEA_o1_v04.xml) -->
     <vis name="VisibleBlue" alpha="0.1" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
 
     <!-- 
@@ -89,7 +89,7 @@
     
     -->
 
-    <!-- Drift chamber (reused as-is from ../IDEA_o1_v03/DriftChamber_o1_v02.xml) -->
+    <!-- Drift chamber (reused as-is from ../IDEA_o1_v03/display.xml) -->
     <vis name="dch_aerogel_vis" r="236/256" g="237/256" b="232/256" alpha="0.5" showDaughters="true" visible="true"/>
     <vis name="dch_gas_vis" r="227/256" g="239/256" b="217/256" alpha="0.5" showDaughters="true" visible="true"/>
     <vis name="dch_vessel_vis" r="244/256" g="177/256" b="132/256" alpha="0.5" showDaughters="true" visible="true"/>
@@ -122,19 +122,19 @@
     <vis name="dch_envelope_vis" r="0/256" g="96/256" b="156/256" alpha="0.3" showDaughters="true" visible="true"/>
     <vis name="dch_vessel_bulk_vis" r="236/256" g="000/256" b="000/256" alpha="1.00" showDaughters="true" visible="false"/>
 
-    <!-- Solenoid (reused as-is from ../IDEA_o1_v03/Solenoid_o1_v01.xml) -->
+    <!-- Solenoid (reused as-is from ../IDEA_o1_v03/display.xml) -->
     <vis name="SolenoidBarrelLayerVis" alpha="1" r="0" g="0.3" b="0.3" showDaughters="false" visible="true"/>
     <vis name="SolenoidCoilEndsVis" alpha="1" r="0" g="0.9" b="0.9" showDaughters="false" visible="true"/>
     <vis name="SolenoidVacuum" alpha="0" r="1" g="1" b="1" showDaughters="false" visible="true"/>
 
-    <!-- LumiCal (reused as-is from ../IDEA_o1_v03/LumiCal_o1_v01.xml) -->
+    <!-- LumiCal (reused as-is from ../IDEA_o1_v03/display.xml) -->
     <vis name="SeeThrough" alpha="0.0" r="0" g="0" b="0" showDaughters="true" visible="false"/>
     <vis name="BCLayerVis1" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="BCLayerVis2" alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="BCLayerVis3" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
     <vis name="LCALShieldVis" alpha="1.0" r="0.6" g="0.3" b="0.0" showDaughters="true" visible="true"/>
 
-    <!-- End plate absorber (reused as-is from ../IDEA_o1_v03/EndPlateAbsorber_o1_v01.xml) -->
+    <!-- End plate absorber (reused as-is from ../IDEA_o1_v03/display.xml) -->
     <vis name="muon_vis" alpha="1.0" r="0.5" g="0.0" b="0.5" showDaughters="true" visible="true"/>
 
   </display>

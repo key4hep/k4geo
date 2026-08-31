@@ -38,7 +38,8 @@
     The vis entries below are duplicated from that version display.xml file to keep this one self-contained
     
     -->
-    <!-- Vertex (reused as-is from IDEA_o1_v04/VertexComplete_o1_v04.xml) -->
+
+    <!-- Vertex (reused as-is from IDEA_o1_v04/display.xml) -->
     <vis name="VTXSensitiveVis" alpha="1.0" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="VTXPeripheryVis" alpha="1.0" r="200/255" g="254/255" b="0.0" showDaughters="true" visible="true"/>
     <vis name="VTXSupportVis" alpha="1.0" r="0.2" g="0.2" b="0.2" showDaughters="true" visible="true"/>
@@ -56,7 +57,7 @@
     <vis name="VTXVis" alpha="0.2" r="0.1" g="0.5" b="0.5" showDaughters="true" visible="true"/>
     <vis name="KaptonVis" alpha="1.0" r="1.0" g="0.6" b="0.0" showDaughters="true" visible="true"/>
 
-    <!-- Silicon wrapper (reused as-is from IDEA_o1_v04/SiliconWrapper_o1_v02.xml) -->
+    <!-- Silicon wrapper (reused as-is from IDEA_o1_v04/display.xml) -->
     <vis name="SiWrEnvVis" alpha="0.2" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="SiWrCableVis" alpha="1.0" r="0.0" g="1.0" b="0.4" showDaughters="true" visible="true"/>
     <vis name="SiWrPipingVis" alpha="1.0" r="1.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
@@ -64,14 +65,14 @@
     <vis name="SiWrSupportVis" alpha="0.8" r="0.25" g="0.25" b="0.2" showDaughters="true" visible="true"/>
     <vis name="SiWrStaveVis" alpha="0.8" r="1.0" g="0.5" b="0.0" showDaughters="false" visible="true"/>
 
-    <!-- ECAL Barrel (reused as-is from ALLEGRO_o1_v03/ECalBarrel_thetamodulemerged.xml) -->
+    <!-- ECAL Barrel (reused as-is from ALLEGRO_o1_v03/display.xml) -->
     <vis name="ecal_envelope" r="0.1" g="0.2" b="0.6" alpha="1" showDaughters="false" visible="true"/>
     <vis name="service_bath" r="0." g="1" b="0." alpha="1" showDaughters="true" visible="true"/>
     <vis name="sensitive_bath" r="0.0" g="0." b="1" alpha="1" showDaughters="true" visible="true"/>
     <vis name="absorbers" r="1" g="0." b="0." alpha="1" showDaughters="true" visible="true"/>
     <vis name="pcb" r="0." g="1." b="0." alpha="1" showDaughters="true" visible="true"/>
 
-    <!-- ECAL Endcaps (reused as-is from ALLEGRO_o1_v03/ECalEndcaps_Turbine_o1_v03.xml) -->
+    <!-- ECAL Endcaps (reused as-is from ALLEGRO_o1_v03/display.xml) -->
     <vis name="emec_cryo_vis" r="0.6" g="0.6" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="emec_bath_vis" r="0.6" g="0.4" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="emec_layer_vis" r="0.6" g="0.3" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
@@ -81,7 +82,7 @@
     <vis name="electrode_vis" r="0.5" g="0.0" b="0.0" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="emec_envelope_vis" r="0.6" g="0.3" b="0" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
 
-    <!-- HCAL Barrel (reused as-is from ALLEGRO_o1_v03/HCalBarrel_TileCal_v03.xml) -->
+    <!-- HCAL Barrel (reused as-is from ALLEGRO_o1_v03/display.xml) -->
     <vis name="hcal_steel_vis" r="0.5" g="0.5" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="hcal_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="hcal_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
@@ -94,7 +95,7 @@
     <vis name="hcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
     <vis name="hcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" />
 
-    <!-- HCAL Endcaps (reused as-is from ALLEGRO_o1_v03/HCalEndcaps_ThreeParts_TileCal_v03.xml) -->
+    <!-- HCAL Endcaps (reused as-is from ALLEGRO_o1_v03/display.xml) -->
     <vis name="endcapHcal_steel_vis" r="0.5" g="0.5" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="endcapHcal_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="endcapHcal_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
@@ -107,10 +108,10 @@
     <vis name="endcapHcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
     <vis name="endcapHcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" />
 
-    <!-- Muon Tagger (reused as-is from ALLEGRO_o1_v03/MuonTaggerPhiTheta.xml) -->
+    <!-- Muon Tagger (reused as-is from ALLEGRO_o1_v03/display.xml) -->
     <vis name="muon_vis" r="1.0" g="0.1" b="0.1" showDaughters="true" visible="true" />
 
-    <!-- LumiCal (reused as-is from ALLEGRO_o1_v03/LumiCal.xml) -->
+    <!-- LumiCal (reused as-is from ALLEGRO_o1_v03/display.xml) -->
     <vis name="SeeThrough" alpha="0.0" r="0" g="0" b="0" showDaughters="true" visible="false"/>
     <vis name="BCLayerVis1" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="BCLayerVis2" alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
