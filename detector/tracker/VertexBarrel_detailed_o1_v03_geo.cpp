@@ -46,6 +46,7 @@ using dd4hep::NamedObject;
 using dd4hep::PlacedVolume;
 using dd4hep::Position;
 using dd4hep::Ref_t;
+using dd4hep::RotationX;
 using dd4hep::RotationY;
 using dd4hep::RotationZ;
 using dd4hep::RotationZYX;
@@ -732,6 +733,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
                 pv = module_assembly.placeVolume(sensor.volumes[i], Translation3D(pos + pos2) * RotationY(M_PI / 2.) *
                                                                         RotationZ(M_PI / 2.));
+
+
 
                 if (sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
                   pv.addPhysVolID("sensor", iSensitive);

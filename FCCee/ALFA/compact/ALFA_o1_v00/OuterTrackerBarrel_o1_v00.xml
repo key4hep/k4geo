@@ -113,13 +113,15 @@
         <constant name="OTBar_HDI_thickness" value="OTBar_HDI_Coverlay_thickness + OTBar_HDI_Aluminium_thickness + OTBar_HDI_Prepreg_thickness"/>
 
 
+        <constant name="OTBar_HDI_Connector_Data_z" value="3.5*mm"/>
+        <constant name="OTBar_HDI_Connector_Data_rphi" value="2.7*mm"/>
+        <constant name="OTBar_HDI_Connector_Data_rphi_offset" value="1.4*mm"/>
         <constant name="OTBar_HDI_Connector_Data_LCP_thickness" value="2.4375*mm"/>
-        <constant name="OTBar_HDI_Connector_Data_LCP_z" value="2.4375*mm"/>
-        <constant name="OTBar_HDI_Connector_Data_LCP_rphi" value="2.4375*mm"/>
 
+        <constant name="OTBar_HDI_Connector_Power_z" value="2.7*mm"/>
+        <constant name="OTBar_HDI_Connector_Power_z_offset" value="1.61*mm"/>
+        <constant name="OTBar_HDI_Connector_Power_rphi" value="4.3*mm"/>
         <constant name="OTBar_HDI_Connector_Power_LCP_thickness" value="2.4375*mm"/>
-        <constant name="OTBar_HDI_Connector_Power_LCP_z" value="2.4375*mm"/>
-        <constant name="OTBar_HDI_Connector_Power_LCP_rphi" value="3.9*mm"/>
 
         <constant name="OTBar_Flex_width" value="32.0*mm"/>
         <constant name="OTBar_Flex_Kapton_thickness" value="0.025*mm"/>
@@ -138,7 +140,7 @@
         <constant name="OTBar_Support_Foam_filled_half_length" value="58.9*mm - 15.0*mm"/> <comment> Assume filled volume of support foam is 58.9 mm - 15 mm clearance </comment>
 
         <constant name="OTBar_Stave_thickness" value="OTBar_Cooling_Plate_thickness + OTBar_Sensitive_thickness + OTBar_sens_Copper_thickness + OTBar_HDI_thickness + OTBar_Flex_thickness"/>
-        <constant name="OTBar_Stave_width" value="2.0 * OTBar_mod_rphi"/> <comment> Doubling here since two modules in nx </comment>
+        <constant name="OTBar_Stave_width" value="OTBar_Cooling_Plate_width"/> <comment> Doubling here since two modules in nx </comment>
         <constant name="OTBar_module_distance_sides" value="0."/> <comment> Assume no shingling for now </comment>
 
 
@@ -204,10 +206,10 @@
             <type_flags type="67"/>
 
             <comment> Single Stave Definition </comment>
+
+              
             <stave name="OTBarStave_single" length="2.*OTBar_half_length" 
                    dr="OTBar_module_distance_sides" 
-                   motherVolWidth="OTBar_Stave_width" 
-                   motherVolThickness="2.0 * OTBar_Stave_thickness + OTBar_Support_Foam_thickness" 
                    vis="OTBarStaveVis">
 
             <comment> Bot String </comment>
@@ -359,7 +361,7 @@
             </stave>
 
             <!-- <comment> Test Layer </comment> -->
-            <!-- <layer nLadders="4"  -->
+            <!-- <layer nLadders="1"  -->
             <!--        r="OTBar_r1"  -->
             <!--        dr="OTBar_dr"  -->
             <!--        id="0"  -->

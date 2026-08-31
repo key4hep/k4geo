@@ -28,17 +28,24 @@
     <constant name="world_z"      value="world_side / 2.0"/>
   </define>
 
-  <!-- <comment> Shape-based beam pipe </comment> -->
-  <!-- <include ref="MDI_params.xml" /> -->
-  <!-- <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" /> -->
-  <!-- <include ref="../../../MDI/compact/MDI_o1_v00/BeamInstrumentation_o1_v01.xml" /> -->
+  <comment> Tracker dimensions </comment>
+  <define>
+    <constant name="tracker_region_zmax"   value="2.1*m"/>
+    <constant name="tracker_region_rmax"      value="1.8*m"/>
+  </define>
+
+
+  <comment> Shape-based beam pipe </comment>
+  <include ref="MDI_params.xml" />
+  <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
+  <include ref="../../../MDI/compact/MDI_o1_v00/BeamInstrumentation_o1_v01.xml" />
 
   <comment> Sub-detector definitions </comment>
 
   <comment> Outer Tracker (OT) Barrel  </comment>
   <include ref="OuterTrackerBarrel_o1_v00.xml" />
 
-  <!-- <comment> Grainita ECAL </comment> -->
+  <comment> Grainita ECAL </comment>
   <include ref="Grainita_ECAL_Barrel_v02.xml" /> 
 
   <comment> Include plugin to generate edm4hep::TrackerHitPlane </comment>
