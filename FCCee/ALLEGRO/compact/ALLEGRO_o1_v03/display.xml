@@ -5,7 +5,7 @@
 
   <display>
 
-    <!-- Global palette (retrieved from DectDimensions.xml) -->
+    <!-- Global palette (originally retrieved from DectDimensions.xml) -->
     <vis name="VXDVis" alpha="0.2" r="0.1" g=".5" b=".5" showDaughters="false" visible="true"/>
     <vis name="SiWrVis" alpha="0.2" r="1.0" g="1.0" b="0.0" showDaughters="false" visible="true"/>
     <vis name="ITVis" alpha="1.0" r="0.54" g="0.43" b="0.04" showDaughters="true" visible="true"/>
@@ -28,14 +28,14 @@
     <vis name="BPMVis" alpha="1.0" r="0.25" g="0.88" b="0.81" showDaughters="true" visible="true"/>
     <vis name="SupportVis" alpha="1" r="0.2" g="0.2" b="0.2" showDaughters="true" visible="true"/>
 
-    <!-- ECAL Barrel (retrieved from ECalBarrel_thetamodulemerged_*.xml) -->
+    <!-- ECAL Barrel (originally retrieved from ECalBarrel_thetamodulemerged_*.xml) -->
     <vis name="ecal_envelope" r="0.1" g="0.2" b="0.6" alpha="1" showDaughters="false" visible="true"/>
     <vis name="service_bath" r="0." g="1" b="0." alpha="1" showDaughters="true" visible="true"/>
     <vis name="sensitive_bath" r="0.0" g="0." b="1" alpha="1" showDaughters="true" visible="true"/>
     <vis name="absorbers" r="1" g="0." b="0." alpha="1" showDaughters="true" visible="true"/>
     <vis name="pcb" r="0." g="1." b="0." alpha="1" showDaughters="true" visible="true"/>
 
-    <!-- ECAL Endcaps (retrieved from ECalEndcaps_Turbine_o1_*.xml) -->
+    <!-- ECAL Endcaps (originally retrieved from ECalEndcaps_Turbine_o1_*.xml) -->
     <vis name="emec_cryo_vis" r="0.6" g="0.6" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="emec_bath_vis" r="0.6" g="0.4" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="emec_layer_vis" r="0.6" g="0.3" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
@@ -45,7 +45,7 @@
     <vis name="electrode_vis" r="0.5" g="0.0" b="0.0" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="emec_envelope_vis" r="0.6" g="0.3" b="0" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
 
-    <!-- HCAL Barrel (retrieved from HCalBarrel_TileCal_*.xml) -->
+    <!-- HCAL Barrel (originally retrieved from HCalBarrel_TileCal_*.xml) -->
     <vis name="hcal_steel_vis" r="0.5" g="0.5" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="hcal_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="hcal_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
@@ -58,7 +58,7 @@
     <vis name="hcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
     <vis name="hcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" />
 
-    <!-- HCAL Endcaps (retrieved from HCalEndcaps_ThreeParts_TileCal_*.xml) -->
+    <!-- HCAL Endcaps (originally retrieved from HCalEndcaps_ThreeParts_TileCal_*.xml) -->
     <vis name="endcapHcal_steel_vis" r="0.5" g="0.5" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="endcapHcal_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="endcapHcal_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
@@ -71,14 +71,14 @@
     <vis name="endcapHcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
     <vis name="endcapHcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" />
 
-    <!-- LumiCal (defined in LumiCal.xml) -->
+    <!-- LumiCal (originally defined  in LumiCal.xml) -->
     <vis name="SeeThrough" alpha="0.0" r="0" g="0" b="0" showDaughters="true" visible="false"/>
     <vis name="BCLayerVis1" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="BCLayerVis2" alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="BCLayerVis3" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
     <vis name="LCALShieldVis" alpha="1.0" r="0.6" g="0.3" b="0.0" showDaughters="true" visible="true"/>
 
-    <!-- Muon Tagger (retrieved from MuonTaggerPhiTheta.xml) -->
+    <!-- Muon Tagger (originally retrieved from MuonTaggerPhiTheta.xml) -->
     <vis name="muon_vis" r="1.0" g="0.1" b="0.1" showDaughters="true" visible="true" />
 
     <!-- 
