@@ -55,7 +55,7 @@ static void placeCrystal(dd4hep::Detector& theDetector, dd4hep::SensitiveDetecto
   thePlacedVol.addPhysVolID("gamma", nGamma);
 
   for (int iPhi = phi_start; iPhi < phi_end; iPhi++) {
-    XYZVector posGlobalPhi = phi_rotations[iPhi + phi0] * posGlobal;
+    XYZVector posGlobalPhi = phi_rotations[iPhi - phi0] * posGlobal;
     auto volID = segmentation->setVolumeID(nSystem, iPhi, nTheta, nGamma);
     int volID_32 = segmentation->getFirst32bits(volID);
     segmentation->savePosition(volID_32, posGlobalPhi);
