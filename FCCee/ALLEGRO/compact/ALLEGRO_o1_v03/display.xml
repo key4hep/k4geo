@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lccdd>
 
-  <!-- FCCee IDEA_o2_v01: consolidated visualization (color) definitions -->
+  <!-- Consolidated visualization (color) definitions -->
 
   <display>
 
-    <!-- Global palette (retrieved from DectDimensions_IDEA_o2_v01.xml; also covers MuonSystem_o1_v01.xml) -->
-    <vis name="VXDVis" alpha="0.2" r="0.1" g=".5" b=".5" showDaughters="true" visible="true"/>
+    <!-- Global palette (originally retrieved from DectDimensions.xml) -->
+    <vis name="VXDVis" alpha="0.2" r="0.1" g=".5" b=".5" showDaughters="false" visible="true"/>
     <vis name="SiWrVis" alpha="0.2" r="1.0" g="1.0" b="0.0" showDaughters="false" visible="true"/>
+    <vis name="ITVis" alpha="1.0" r="0.54" g="0.43" b="0.04" showDaughters="true" visible="true"/>
+    <vis name="OTVis" alpha="1.0" r="0.8" g="0.8" b="0.4" showDaughters="true" visible="false"/>
     <vis name="ECALVis" alpha="1.0" r="0.2" g="0.6" b="0" showDaughters="true" visible="true"/>
     <vis name="HCALVis" alpha="1.0" r="0.078" g="0.01176" b="0.588" showDaughters="true" visible="true"/>
     <vis name="SOLVis" alpha="1.0" r="0.4" g="0.4" b="0.4" showDaughters="true" visible="true"/>
-    <vis name="YOKEVis" alpha="1.0" r="0.6" g="0.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="MUONVis" alpha="1.0" r="0.6" g="0.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="LCALInstrVis" alpha="1.0" r="0.35" g="0.0" b="0.47" showDaughters="true" visible="true"/>
     <vis name="LCALVis" alpha="1.0" r="0.25" g="0.88" b="0.81" showDaughters="true" visible="true"/>
+    <vis name="LCALCoolVis" alpha="1.0" r="0.2" g="0.6" b="0" showDaughters="true" visible="true"/>
     <vis name="BCALVis" alpha="1.0" r="0.0" g="0.4" b="0.4" showDaughters="true" visible="true"/>
     <vis name="KICKVis" alpha="1.0" r="1.0" g="0.498" b="0.0" showDaughters="true" visible="true"/>
     <vis name="QD0CoilIVis" alpha="1.0" r="1.0" g="0.498" b="0.0" showDaughters="true" visible="true"/>
@@ -22,77 +26,70 @@
     <vis name="ColliVis" alpha="1.0" r="0.7" g="0.5" b="1" showDaughters="true" visible="true"/>
     <vis name="TantalumVis" alpha="1.0" r="1" g="0.5" b="0.5" showDaughters="true" visible="true"/>
     <vis name="BPMVis" alpha="1.0" r="0.25" g="0.88" b="0.81" showDaughters="true" visible="true"/>
-    <vis name="AirVis" alpha="0.1" r="0.1" g="0.1" b="1.0" showDaughters="false" visible="true"/>
-    <!-- Dual-Readout Endcap Tubes vis -->
-    <vis name="DRETAssemblyVis" alpha="0.05" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
-    <vis name="DRETStaveVis" alpha="0.1" r="0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
-    <vis name="DRETTowerVis" alpha="0.5" r="1.0" g="0.624" b="0.0" showDaughters="false" visible="true"/>
-    <vis name="DRETtube_S_Vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
-    <vis name="DRETtube_C_Vis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
-    <vis name="DRETclad_S_Vis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="false"/>
-    <vis name="DRETclad_C_Vis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="false"/>
-    <vis name="DRETcore_S_Vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
-    <vis name="DRETcore_C_Vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
-    <!-- end of DRET vis-->
-    <!-- Dual-Readout Barrel Tubes vis -->
-    <vis name="DRBTVis" alpha="0.1" r="0.1" g=".5" b=".5" showDaughters="true" visible="false"/>
-    <vis name="DRBTcapillary_vis" alpha="1.0" r="0.855" g="0.647" b="0.125" showDaughters="false" visible="false"/>
-    <vis name="DRBTscin_clad_vis" alpha="1.0" r="0.800" g="0.188" b="0.078" showDaughters="false" visible="false"/>
-    <vis name="DRBTscin_core_vis" alpha="1.0" r="1.000" g="0.388" b="0.278" showDaughters="false" visible="false"/>
-    <vis name="DRBTcher_clad_vis" alpha="1.0" r="0.192" g="0.484" b="0.729" showDaughters="false" visible="false"/>
-    <vis name="DRBTcher_core_vis" alpha="1.0" r="0.392" g="0.584" b="0.929" showDaughters="false" visible="false"/>
-    <vis name="DRBTair_vis" alpha="0.10" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
-    <vis name="DRBTtrap_vis" alpha="1.0" r="0.855" g="0.647" b="0.125" showDaughters="false" visible="true"/>
-    <vis name="DRBTstave_vis" alpha="0.1" r="0.2" g="0.2" b="0.2" showDaughters="true" visible="true"/>
-    <vis name="DRBTassembly_vis" alpha="0.0" r="0.33" g="0.33" b="0.33" showDaughters="true" visible="true"/>
-    <!-- end of DRET vis-->
-    <vis name="yoke_vis" r="255/256" g="0/256" b="0/256" alpha="1.0" showDaughters="true" visible="true"/>
-    <vis name="no_vis" showDaughters="true" visible="false"/>
-    <vis name="G10_FR4_vis" r="0.6" g="0.4" b="0.2" alpha="1.0" showDaughters="true" visible="true"/>
-    <vis name="Cu_vis" r="0.8" g="0.5" b="0.2" alpha="1.0" showDaughters="true" visible="true"/>
-    <vis name="GasLayer_vis" r="0.0" g="0.8" b="0.2" alpha="1.0" showDaughters="true" visible="true"/>
-    <vis name="Kapton_vis" r="1.0" g="0.6" b="0.0" alpha="1.0" showDaughters="true" visible="true"/>
-    <vis name="CarbonFiber_vis" r="0.4" g="0.4" b="0.4" alpha="1.0" showDaughters="true" visible="true"/>
-    <vis name="Si_vis" r="0.6" g="0.6" b="0.6" alpha="1.0" showDaughters="true" visible="true"/>
-    <vis name="Sensitive_vis" r="0.0" g="0.0" b="1.0" alpha="1.0" showDaughters="true" visible="true"/>
     <vis name="SupportVis" alpha="1" r="0.2" g="0.2" b="0.2" showDaughters="true" visible="true"/>
-    <vis name="LCALInstrVis" alpha="1.0" r="0.35" g="0.0" b="0.47" showDaughters="true" visible="true"/>
-    <vis name="LCALCoolVis" alpha="1.0" r="0.2" g="0.6" b="0" showDaughters="true" visible="true"/>
 
-    <!-- SCEPCal (retrieved from SCEPCal_o1_v01.xml) -->
-    <vis name="crystalFVis" alpha="1" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="false"/>
-    <vis name="crystalRVis" alpha="1" r="0.0" g="0.5" b="1.0" showDaughters="true" visible="false"/>
-    <vis name="crystalTVis" alpha="1" r="0.0" g="1.0" b="0.1" showDaughters="true" visible="false"/>
-    <vis name="barrelAssemblyGlobalVis" alpha="0.1" r="1." g="0." b="0." showDaughters="true" visible="false"/>
-    <vis name="barrelAssemblyPhiVis" alpha="0.1" r="0." g="1." b="0." showDaughters="true" visible="true"/>
-    <vis name="barrelAssemblyThetaVis" alpha="0.1" r="0." g="0." b="1." showDaughters="true" visible="false"/>
-    <vis name="endcapAssemblyGlobalVis" alpha="0.1" r="1." g="0." b="0." showDaughters="true" visible="false"/>
-    <vis name="endcapAssemblyPhiVis" alpha="0.1" r="0." g="1." b="0." showDaughters="true" visible="true"/>
-    <vis name="endcapAssemblyThetaVis" alpha="0.1" r="0." g="0." b="1." showDaughters="true" visible="false"/>
-    <vis name="tlbarrelAssemblyGlobalVis" alpha="0.1" r="1." g="0." b="0." showDaughters="true" visible="false"/>
-    <vis name="tlbarrelAssemblyPhiVis" alpha="0.1" r="0." g="1." b="0." showDaughters="true" visible="false"/>
-    <vis name="tlbarrelAssemblyThetaVis" alpha="0.1" r="0." g="0." b="1." showDaughters="true" visible="false"/>
-    <vis name="tlendcapAssemblyGlobalVis" alpha="0.1" r="1." g="0." b="0." showDaughters="true" visible="false"/>
-    <vis name="tlendcapAssemblyPhiVis" alpha="0.1" r="0." g="1." b="0." showDaughters="true" visible="false"/>
-    <vis name="tlendcapAssemblyThetaVis" alpha="0.1" r="0." g="0." b="1." showDaughters="true" visible="false"/>
-    <vis name="scepcalAssemblyGlobalVis" alpha="0.5" r="0.1" g="0.2" b="0.1" showDaughters="true" visible="false"/>
+    <!-- ECAL Barrel (originally retrieved from ECalBarrel_thetamodulemerged_*.xml) -->
+    <vis name="ecal_envelope" r="0.1" g="0.2" b="0.6" alpha="1" showDaughters="false" visible="true"/>
+    <vis name="service_bath" r="0." g="1" b="0." alpha="1" showDaughters="true" visible="true"/>
+    <vis name="sensitive_bath" r="0.0" g="0." b="1" alpha="1" showDaughters="true" visible="true"/>
+    <vis name="absorbers" r="1" g="0." b="0." alpha="1" showDaughters="true" visible="true"/>
+    <vis name="pcb" r="0." g="1." b="0." alpha="1" showDaughters="true" visible="true"/>
 
-    <!--
-    
-    This version reuses some subparts from ../IDEA_o1_v03/ and ../IDEA_o1_v04/ as-is:
-    - LumiCal_o1_v01.xml
-    - DriftChamber_o1_v02.xml
-    - Solenoid_o1_v01.xml
-    - EndPlateAbsorber_o1_v01.xml
-    - MuonSystem_o1_v01.xml
-    - VertexComplete_o1_v04.xml
-    - SiliconWrapper_o1_v02.xml
+    <!-- ECAL Endcaps (originally retrieved from ECalEndcaps_Turbine_o1_*.xml) -->
+    <vis name="emec_cryo_vis" r="0.6" g="0.6" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_bath_vis" r="0.6" g="0.4" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_layer_vis" r="0.6" g="0.3" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_lar_vis" r="0.5" g="0.3" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_pb_vis" r="0.5" g="0.5" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_readout_vis" r="0.5" g="0.1" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="electrode_vis" r="0.5" g="0.0" b="0.0" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_envelope_vis" r="0.6" g="0.3" b="0" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
 
-    The vis entries below are duplicated from those versions' colors.xml to keep this file self-contained.
+    <!-- HCAL Barrel (originally retrieved from HCalBarrel_TileCal_*.xml) -->
+    <vis name="hcal_steel_vis" r="0.5" g="0.5" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="hcal_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="hcal_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="hcal_face_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="hcal_end_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="hcal_polystyrene_vis" r="0.0" g="0.6" b="0.3" alpha="0.8" showDaughters="true" visible="true" />
+    <vis name="hcal_envelope" r="0.6" g="0.8" b="0.6" alpha="1" showDaughters="true" visible="true" />
+    <vis name="hcal_barrel_seq1_vis" r="0.1" g="0.8" b="0.6" alpha="1" showDaughters="true" visible="true" />
+    <vis name="hcal_barrel_seq2_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
+    <vis name="hcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
+    <vis name="hcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" />
+
+    <!-- HCAL Endcaps (originally retrieved from HCalEndcaps_ThreeParts_TileCal_*.xml) -->
+    <vis name="endcapHcal_steel_vis" r="0.5" g="0.5" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_face_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_end_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_polystyrene_vis" r="0.0" g="0.6" b="0.3" alpha="0.8" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_envelope" r="0.6" g="0.8" b="0.6" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_barrel_seq1_vis" r="0.1" g="0.8" b="0.6" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_barrel_seq2_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" />
+
+    <!-- LumiCal (originally defined  in LumiCal.xml) -->
+    <vis name="SeeThrough" alpha="0.0" r="0" g="0" b="0" showDaughters="true" visible="false"/>
+    <vis name="BCLayerVis1" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="BCLayerVis2" alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="BCLayerVis3" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="LCALShieldVis" alpha="1.0" r="0.6" g="0.3" b="0.0" showDaughters="true" visible="true"/>
+
+    <!-- Muon Tagger (originally retrieved from MuonTaggerPhiTheta.xml) -->
+    <vis name="muon_vis" r="1.0" g="0.1" b="0.1" showDaughters="true" visible="true" />
+
+    <!-- 
+        
+    This version reuses some files from IDEA_o1_v03, IDEA_o1_v04 and MDI_o1_v01 as-is:
+
+    The vis entries below are duplicated from that version display.xml file to keep this one self-contained
 
     -->
 
-    <!-- Drift chamber (reused as-is from ../IDEA_o1_v03/DriftChamber_o1_v02.xml) -->
+    <!-- Drift chamber (reused as-is from IDEA_o1_v03/display.xml) -->
     <vis name="dch_aerogel_vis" r="236/256" g="237/256" b="232/256" alpha="0.5" showDaughters="true" visible="true"/>
     <vis name="dch_gas_vis" r="227/256" g="239/256" b="217/256" alpha="0.5" showDaughters="true" visible="true"/>
     <vis name="dch_vessel_vis" r="244/256" g="177/256" b="132/256" alpha="0.5" showDaughters="true" visible="true"/>
@@ -125,22 +122,7 @@
     <vis name="dch_envelope_vis" r="0/256" g="96/256" b="156/256" alpha="0.3" showDaughters="true" visible="true"/>
     <vis name="dch_vessel_bulk_vis" r="236/256" g="000/256" b="000/256" alpha="1.00" showDaughters="true" visible="false"/>
 
-    <!-- Solenoid (reused as-is from ../IDEA_o1_v03/Solenoid_o1_v01.xml) -->
-    <vis name="SolenoidBarrelLayerVis" alpha="1" r="0" g="0.3" b="0.3" showDaughters="false" visible="true"/>
-    <vis name="SolenoidCoilEndsVis" alpha="1" r="0" g="0.9" b="0.9" showDaughters="false" visible="true"/>
-    <vis name="SolenoidVacuum" alpha="0" r="1" g="1" b="1" showDaughters="false" visible="true"/>
-
-    <!-- LumiCal (reused as-is from ../IDEA_o1_v03/LumiCal_o1_v01.xml) -->
-    <vis name="SeeThrough" alpha="0.0" r="0" g="0" b="0" showDaughters="true" visible="false"/>
-    <vis name="BCLayerVis1" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
-    <vis name="BCLayerVis2" alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
-    <vis name="BCLayerVis3" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
-    <vis name="LCALShieldVis" alpha="1.0" r="0.6" g="0.3" b="0.0" showDaughters="true" visible="true"/>
-
-    <!-- End plate absorber (reused as-is from ../IDEA_o1_v03/EndPlateAbsorber_o1_v01.xml) -->
-    <vis name="muon_vis" alpha="1.0" r="0.5" g="0.0" b="0.5" showDaughters="true" visible="true"/>
-
-    <!-- Vertex (reused as-is from ../IDEA_o1_v04/VertexComplete_o1_v04.xml) -->
+    <!-- Vertex (reused as-is from IDEA_o1_v04/display.xml) -->
     <vis name="VTXSensitiveVis" alpha="1.0" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="VTXPeripheryVis" alpha="1.0" r="200/255" g="254/255" b="0.0" showDaughters="true" visible="true"/>
     <vis name="VTXMetalLayerVis" alpha="0.2" r="200/255" g="254/255" b="0.0" showDaughters="true" visible="true"/>
@@ -159,7 +141,7 @@
     <vis name="VTXVis" alpha="0.2" r="0.1" g="0.5" b="0.5" showDaughters="true" visible="true"/>
     <vis name="KaptonVis" alpha="1.0" r="1.0" g="0.6" b="0.0" showDaughters="true" visible="true"/>
 
-    <!-- Silicon wrapper (reused as-is from ../IDEA_o1_v04/SiliconWrapper_o1_v02.xml) -->
+    <!-- Silicon wrapper (reused as-is from IDEA_o1_v04/display.xml) -->
     <vis name="SiWrEnvVis" alpha="0.2" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="SiWrSensitiveVis" alpha="1.0" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="SiWrPeripheryVis" alpha="1.0" r="200/255" g="254/255" b="0.0" showDaughters="true" visible="true"/>
@@ -169,8 +151,10 @@
     <vis name="SiWrSupportVis" alpha="0.8" r="0.25" g="0.25" b="0.2" showDaughters="true" visible="true"/>
     <vis name="SiWrStaveVis" alpha="0.8" r="1.0" g="0.5" b="0.0" showDaughters="false" visible="true"/>
 
-    <!-- Beam pipe / beam instrumentation (reused as-is from ../../../MDI/compact/MDI_o1_v00/) -->
+    <!-- Beampipe (reused as-is from MDI_o1_v00/Beampipe_o4_v05.xml) -->
     <vis name="BlueVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+
+    <!-- Beam Instrumentation (reused as-is from MDI_o1_v00/BeamInstrumentation_o1_v01.xml) -->
     <vis name="CoilVis" alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
 
   </display>
