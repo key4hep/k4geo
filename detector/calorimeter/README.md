@@ -48,6 +48,9 @@ Adjusted to propagate detector flags.
 ### o1_v02
 Changes wrt o1_v01: Added extension (LayeredCalorimeterData) to store radial layer radii and dimensions. Added several checks for the geometry building and made small changes in the code to improve readibility.
 
+### o1_v04
+Geometry update to fix positioning bugs, make the detector structure more realistic and improve code readability. Details available in [these slides](https://github.com/user-attachments/files/31649468/26_07_soldani_allegro_hcal_k4geo_update.pdf).
+
 ## HCalTileExtBarrel
 Tile hadronic calorimeter extended barrel, as used in the FCChh concept.
 
@@ -63,6 +66,9 @@ Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetecto
 
 ### o1_v02
 Changes wrt o1_v01: Added extension (LayeredCalorimeterData) to store radial layer radii and dimensions. To make this work, the whole code had to be reshuffled, but the way how the geometry and individual volumes are built remains the same as in o1_v01. 
+
+### o1_v04
+Geometry update to fix positioning bugs, make the detector structure more realistic and improve code readability. Details available in [these slides](https://github.com/user-attachments/files/31649468/26_07_soldani_allegro_hcal_k4geo_update.pdf).
 
 ## Monolithic fiber dual-readout (subdirectory `dual-readout`)
 
