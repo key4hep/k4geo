@@ -6,6 +6,7 @@
   Extended Barrel Calorimeter.
   C. Neubueser, J. Faltova, M. Mlynarikova, updated by A. Durglishvili in 2024
   HCal layout based on ATLAS HCal, with realistic longitudinal segmentation and steel support
+  Oct 2025, M. Soldani: tweak geometry
   -->
   <define>
     <!-- dimensions in R / rho of actual detector modules (face-plate is placed inside)-->
@@ -32,7 +33,6 @@
     <constant name="EndcapHCal_numSequencesZ2" value="floor(((HCalEndcap_max_z2-HCalEndcap_min_z2)-2*(EndcapHCal_end_plate_thickness+EndcapHCal_plate_space))/EndcapHCal_sequence_thickness)" />
     <constant name="EndcapHCal_numSequencesZ3" value="floor(((HCalEndcap_max_z3-HCalEndcap_min_z3)-2*(EndcapHCal_end_plate_thickness+EndcapHCal_plate_space))/EndcapHCal_sequence_thickness)" />
   </define>
-
 
   <readouts>
     <!-- Default readout of DetailedWedge geometry -->
@@ -118,7 +118,7 @@
        nPads is the number of radial layers in the third part --> 
 
   <detectors>
-    <detector id="DetID_HCAL_Endcap" name="HCalThreePartsEndcap" type="CaloThreePartsEndcap_o1_v02" readout="HCalEndcapReadout" >
+    <detector id="DetID_HCAL_Endcap" name="HCalThreePartsEndcap" type="CaloThreePartsEndcap_o1_v04" readout="HCalEndcapReadout" >
       <type_flags type="DetType_CALORIMETER + DetType_HADRONIC + DetType_ENDCAP"/>
       <!-- vis="endcapHcal_envelope"> -->
       <sensitive type="calorimeter"/>
@@ -127,7 +127,7 @@
 		  width="(HCalEndcap_max_z1 - HCalEndcap_min_z1)*0.5"  dz="(HCalEndcap_max_z2 - HCalEndcap_min_z2)*0.5" z_length="(HCalEndcap_max_z3 - HCalEndcap_min_z3)*0.5"
 		  offset="HCalEndcap_min_z1 + (HCalEndcap_max_z1 - HCalEndcap_min_z1)*0.5"  z_offset="HCalEndcap_min_z2 + (HCalEndcap_max_z2 - HCalEndcap_min_z2)*0.5" v_offset="HCalEndcap_min_z3 + (HCalEndcap_max_z3 - HCalEndcap_min_z3)*0.5"/>
       <layers>
-	<layer id="0" name="type_1" material="Air" vis="endcapHcal_barrel_layer_vis">
+	<layer id="0" name="type_1" material="Air" vis="endcaphcal_barrel_layer_vis">
           <dimensions
               dr="EndcapHCal_layer_size1"
 	      nmodules="5"
@@ -135,7 +135,7 @@
 	      nPads="4"
              />
 	</layer>
-	<layer id="1" name="type_2" material="Air" vis="endcapHcal_barrel_layer_vis">
+	<layer id="1" name="type_2" material="Air" vis="endcaphcal_barrel_layer_vis">
 	  <dimensions
               dr="EndcapHCal_layer_size2"
 	      nmodules="1"
@@ -143,7 +143,7 @@
         nPads="10"
              />
 	</layer>
-	<layer id="2" name="type_3" material="Air" vis="endcapHcal_barrel_layer_vis">
+	<layer id="2" name="type_3" material="Air" vis="endcaphcal_barrel_layer_vis">
 	  <dimensions
               dr="EndcapHCal_layer_size3"
 	      nmodules="0"
@@ -153,18 +153,18 @@
 	</layer>
       </layers>
       
-      <sequence_a id="3" name="sequence_1" material="Air" vis="endcapHcal_barrel_seq1_vis">
+      <sequence_a id="3" name="sequence_1" material="Air" vis="endcaphcal_barrel_seq1_vis">
 	<dimensions
 	   dz="2*EndcapHCal_master_plate_thickness + EndcapHCal_spacer_plate_thickness + EndcapHCal_scintillator_thickness + 2*EndcapHCal_air_space_thickness"
 	   phiBins="EndcapHCal_n_phi_modules"
 	   x="EndcapHCAL_module_spacing_phi"
 	   />
 	<!-- Master plate -->
-	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_master_vis" />
+	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_steel_master_vis" />
 	<!-- Spacer plate -->
 	<module_component thickness="EndcapHCal_spacer_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_steel_vis" />
 	<!-- Master plate -->
-	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_master_vis" />
+	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_steel_master_vis" />
 	<!-- Air -->
 	<module_component thickness="EndcapHCal_air_space_thickness"    y_offset="0" material="Air" sensitive="false" vis="endcapHcal_air_vis" />
 	<!-- Scintillator plate -->
@@ -179,7 +179,7 @@
 	   x="EndcapHCAL_module_spacing_phi"
 	   />
 	<!-- Master plate -->
-	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_master_vis" />
+	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_steel_master_vis" />
 	<!-- Air -->
 	<module_component thickness="EndcapHCal_air_space_thickness"    y_offset="0" material="Air" sensitive="false" vis="endcapHcal_air_vis" />
 	<!-- Scintillator plate -->
@@ -187,14 +187,14 @@
 	<!-- Air -->
 	<module_component thickness="EndcapHCal_air_space_thickness"    y_offset="0" material="Air" sensitive="false" vis="endcapHcal_air_vis" />
 	<!-- Master plate -->
-	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_master_vis" />
+	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_steel_master_vis" />
 	<!-- Spacer plate -->
 	<module_component thickness="EndcapHCal_spacer_plate_thickness" y_offset="0"  material="Fe" sensitive="false" vis="endcapHcal_steel_vis" />
       </sequence_b>
       <end_plate name="end_plate" thickness="EndcapHCal_end_plate_thickness" material="Fe" sensitive="false" vis="endcapHcal_end_plate_vis" />
       <face_plate name="face_plate" thickness="EndcapHCal_face_plate_thickness" material="Fe" sensitive="false" vis="endcapHcal_face_plate_vis" />
       <plate_space name="plate_space" thickness="EndcapHCal_plate_space" material="Air" sensitive="false" vis="endcapHcal_air_vis" />
-      <steel_support name="steel_support" thickness="EndcapHCal_steel_support_thickness" material="Steel235" sensitive="false" vis="endcapHcal_support_vis" />
+      <steel_support name="steel_support" thickness="EndcapHCal_steel_support_thickness" material="Steel235" sensitive="false" vis="endcapHcal_steel_support_vis" />
     </detector>
   </detectors>
   
