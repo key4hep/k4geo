@@ -19,6 +19,10 @@ ALLEGRO_o1_v03:
 - Birks constant value is set for Polystyrene scintillator used by HCal. This fixed the abnormal response to hadrons that was observed when migrated from k4SimGeant4 to DDSim.
 - For the muon tagger, switched from eta-phi to theta-phi segmentation. Outer R set to 5m as in initial conceptual design (to be replaced in the future by more realistic detector).
 - February 2026: The vertex detector and silicon wrapper are now taken from IDEA_o1_v04.
+- August 2026: The HCal segmentation logic was updated to guarantee at the same time more flexibility for v04 and the same functionality as before in v03. No impact on the actual resulting segmentation here.
+
+ALLEGRO_o1_v04
+- Update on the HCal geometry, to fix some minor positioning bugs and make the detector structure more realistic. All other subdetectors are currently taken from ALLEGRO_o1_v03.
 
 ALLEGRO_o2_v01:
 - The drift chamber is replaced with a straw tube tracker.
