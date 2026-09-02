@@ -3,22 +3,22 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-  <info name="ALLEGRO_o2_v01 Master"
-    title="ALLEGRO_o2_v01 Master"
-    author="Kevin Nelson"
+  <info name="ALLEGRO_o1_v04 Master"
+    title="ALLEGRO_o1_v04 Master"
+    author="Giovanni Marchiori"
     url="no"
     status="development"
     version="1.0">
     <comment>
-      Master compact file describing the latest developments of the FCCee ALLEGRO detector concept. With respect to option 1 this file includes a straw tube tracker in place of the drift chamber. Additionally, the straw tracker and silicon wrapper are extended to cover the larger z extent compared to IDEA.
+      Master compact file describing the latest developments of the FCCee ALLEGRO detector concept. With respect to v03 it features better HCAL geometry
     </comment>
   </info>
 
   <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml" />
 
   <includes>
-    <gdmlFile  ref="../ALLEGRO_o1_v03/elements.xml"/>
-    <gdmlFile  ref="./materials.xml"/>
+    <gdmlFile  ref="elements.xml"/>
+    <gdmlFile  ref="materials.xml"/>
   </includes>
 
   <define>
@@ -43,12 +43,12 @@
 
   <include ref="../ALLEGRO_o1_v03/LumiCal.xml"/>
   <include ref="../../../IDEA/compact/IDEA_o1_v04/VertexComplete_o1_v04.xml"/>
-  <include ref="StrawTubeTracker_o1_v01.xml"/>
+  <include ref="../ALLEGRO_o1_v03/DriftChamber_o1_v02.xml"/>          <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/DriftChamber_o1_v02.xml -->
   <include ref="../../../IDEA/compact/IDEA_o1_v04/SiliconWrapper_o1_v02.xml"/>
   <include ref="../ALLEGRO_o1_v03/ECalBarrel_thetamodulemerged.xml"/> <!-- Caution: removing the ECAL barrel also removes the magnetic field! The solenoid is hosted in the ECAL barrel cryostat and therefore the B-field is defined there -->
-  <include ref="../ALLEGRO_o1_v04/HCalBarrel_TileCal_v04.xml"/>
+  <include ref="HCalBarrel_TileCal_v04.xml"/>
   <include ref="../ALLEGRO_o1_v03/ECalEndcaps_Turbine_o1_v03.xml"/>
-  <include ref="../ALLEGRO_o1_v04/HCalEndcaps_ThreeParts_TileCal_v04.xml"/>
+  <include ref="HCalEndcaps_ThreeParts_TileCal_v04.xml"/>
   <include ref="../ALLEGRO_o1_v03/MuonTaggerPhiTheta.xml"/>
 
   <!-- Include plugins attaching additional info to the geometry and needed to generate edm4hep::TrackerHitPlane, see e.g. CLD detector-concept case https://github.com/key4hep/k4geo/blob/main/FCCee/CLD/compact/CLD_o2_v08/CLD_o2_v08.xml#L333-L390 -->

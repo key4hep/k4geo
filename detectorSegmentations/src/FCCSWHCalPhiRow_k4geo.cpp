@@ -22,6 +22,7 @@ namespace DDSegmentation {
     registerParameter("offset_phi", "Angular offset in phi", m_offsetPhi, 0., SegmentationParameter::AngleUnit, true);
     registerParameter("grid_size_row", "Number of rows combined in a cell", m_gridSizeRow, std::vector<int>());
     registerParameter("dz_row", "dz of row", m_dz_row, 0.);
+    registerParameter("dz_reduced_row", "dz of reduced row", m_dz_reduced_row, 0.);
     registerParameter("detLayout", "The detector layout (0 = Barrel; 1 = Endcap)", m_detLayout, -1);
     registerParameter("offset_z", "Offset in z-axis of the layer center", m_offsetZ, std::vector<double>());
     registerParameter("width_z", "Width in z of the layer", m_widthZ, std::vector<double>());
@@ -34,6 +35,14 @@ namespace DDSegmentation {
                       0.);
     registerParameter("odd_vol_offset", "Offset in z of the center of the sensitive volume within a row for odd layers",
                       m_oddVolOffset, 0.);
+    registerParameter("even_vol_offset_reduced",
+                      "Offset in z of the center of the sensitive volume within the reduced (first) row for even "
+                      "layers in the barrel",
+                      m_evenVolOffset_reduced, 0.);
+    registerParameter("odd_vol_offset_reduced",
+                      "Offset in z of the center of the sensitive volume within the reduced (first)  row for odd "
+                      "layers in the barrel",
+                      m_oddVolOffset_reduced, 0.);
 
     registerIdentifier("identifier_phi", "Cell ID identifier for phi", m_phiID, "phi");
     registerIdentifier("identifier_row", "Cell ID identifier for row", m_rowID, "row");
@@ -68,6 +77,10 @@ namespace DDSegmentation {
     // calculate z-coordinate of the cell center
     // Should be relative to the center of the first volume of the row.
     double zpos = li.zOffset;
+
+    // If the first row in the barrel has a reduced size then pick up the corresponding zOffset
+    if (m_detLayout == 0 && m_dz_reduced_row > 0 && idx == 1)
+      zpos = li.zOffset_reduced_row;
 
     // If this is the Endcap and m_groupedRows is provided from the xml file, then rows are grouped to the
     // pseudo-layers. Need to adjust the cell position:
@@ -151,6 +164,12 @@ namespace DDSegmentation {
             zOffset += m_dz_row * m_gridSizeRow.at(out.size()) * 0.5;
           }
 
+          // If in the barrel the first row in all layers has a reduced size, then we need to set the correct offset
+          // to middle of the first cell for this layer.
+          double volOffset_reduced_row = (layerInSection % 2) ? m_oddVolOffset_reduced : m_evenVolOffset_reduced;
+          double zOffset_reduced_row = -volOffset_reduced_row;
+          zOffset_reduced_row += (m_dz_reduced_row + m_dz_row * (m_gridSizeRow.at(out.size()) - 1)) * 0.5;
+
           moduleDepth[i_section] += m_dRlayer.at(i_dR);
           out.push_back(LayerInfo{.type = i_section,
                                   .radius = moduleDepth.at(i_section) - m_dRlayer.at(i_dR) * 0.5,
@@ -158,6 +177,7 @@ namespace DDSegmentation {
                                   .zmin = zmin,
                                   .zmax = zmax,
                                   .zOffset = zOffset,
+                                  .zOffset_reduced_row = zOffset_reduced_row,
                                   .groupedRows = std::span<const int>(std::to_address(groupedRows_start),
                                                                       std::to_address(groupedRows_end))});
           ++layerInSection;
@@ -194,7 +214,9 @@ namespace DDSegmentation {
 
     // find rows/sequences that fit within the given layer range along z
     int irow = 0;
-    while ((minLayerZ + (irow + 1) * m_dz_row) < (maxLayerZ + 0.0001)) {
+    while ((minLayerZ + (irow + 1) * ((irow == 0 && m_dz_reduced_row > 0) ? m_dz_reduced_row : m_dz_row)) <
+           (maxLayerZ + 0.0001)) {
+
       // define the cell index
       int idx = floor(irow / m_gridSizeRow.at(layer)) + 1;
 
