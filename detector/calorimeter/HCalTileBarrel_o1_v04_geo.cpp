@@ -161,9 +161,6 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   DetElement support(caloDetElem, "HCalSteelSupport", 0);
   support.setPlacement(placedSupport);
 
-  //  double sensitiveBarrelDz = dzDetector - dZEndPlate;
-
-  // loop over R ("layers")
   double layerR = 0.;
   for (unsigned int idxLayer = 0; idxLayer < layerDepths.size(); ++idxLayer) {
     std::string layerName = "HCalLayer" + std::to_string(idxLayer);
@@ -211,32 +208,6 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
       tileZOffset += xComp.thickness();
     }
 
-    // // special case for rightmost sequence, which must not feature the final master plate
-    // double dzSequence_R = dzSequence - masterPlateThk;
-
-    // dd4hep::Tube tileSequenceShape_R(rminLayer, rmaxLayer, 0.5*dzSequence_R);
-    // Volume tileSequenceVolume_R("HCalTileSequenceVol_R", tileSequenceShape_R, lcdd.air());
-
-    // tileZOffset = -0.5 * dzSequence_R;
-    // // first Z loop (tiles that make up a sequence) - for the special case
-    // for (xml_coll_t xCompColl(sequences[sequenceIdx], _Unicode(module_component)); xCompColl;
-    //      ++xCompColl, ++idxSubMod) {
-    //   xml_comp_t xComp = xCompColl;
-    //   dd4hep::Tube tileShape(rminLayer, rmaxLayer, 0.5 * xComp.thickness());
-
-    //   Volume tileVol("HCalTileVol_" + xComp.nameStr(), tileShape, lcdd.material(xComp.materialStr()));
-    //   tileVol.setVisAttributes(lcdd, xComp.visStr());
-
-    //   if ((xComp.nameStr() == "master") && (tileZOffset + xComp.thickness() > 0.5*dzSequence_R)) break; // i.e. cut
-    //   sequence filling at the final master plate
-
-    //   dd4hep::Position tileOffset(0, 0, tileZOffset + 0.5 * xComp.thickness());
-    //   tileSequenceVolume_R.placeVolume(tileVol, tileOffset);
-
-    //   if (xComp.isSensitive()) {tileVol.setSensitiveDetector(sensDet);}
-    //   tileZOffset += xComp.thickness();
-    // }
-
     // special case for leftmost sequence, which must not feature the final master plate
     double dzSequence_L = dzSequence - masterPlateThk;
 
@@ -269,17 +240,10 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     std::vector<dd4hep::PlacedVolume> sq_vector;
 
     for (uint numSeq = 0; numSeq < numSequencesZ; numSeq++) {
-      // double dzSequence_eff = (numSeq < numSequencesZ-1) ? dzSequence : dzSequence_R;
-      // double zOffset = -dzDetectorSens + numSeq * dzSequence + dzSequence_eff/2;
       double zOffset = (numSeq > 0) ? -dzDetectorSens + dzSequence_L + (numSeq - 0.5) * dzSequence
                                     : -dzDetectorSens + dzSequence_L / 2;
       dd4hep::Position tileSequencePosition(0, 0, zOffset);
       dd4hep::PlacedVolume placedTileSequenceVolume;
-      // if (numSeq < numSequencesZ-1) {
-      //   placedTileSequenceVolume = layerVolume.placeVolume(tileSequenceVolume, tileSequencePosition);
-      // }else{
-      //   placedTileSequenceVolume = layerVolume.placeVolume(tileSequenceVolume_R, tileSequencePosition);
-      // }
       if (numSeq > 0) {
         placedTileSequenceVolume = layerVolume.placeVolume(tileSequenceVolume, tileSequencePosition);
       } else {
@@ -390,7 +354,6 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
 
     caloLayer.distance = layerInnerRadii.at(idxLayer);   // radius of the current layer
     caloLayer.sensitive_thickness = difference_bet_r1r2; // radial dimension of the current layer
-    // caloLayer.sensitive_thickness	= thickness_sen;
     caloLayer.absorberThickness = absorberThickness;
 
     caloLayer.inner_thickness = difference_bet_r1r2 / 2.0;
