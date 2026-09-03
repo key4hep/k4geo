@@ -2,13 +2,13 @@
 # for more details and the explanation of the rules
 
 # Global owners (will get notified if no other rule applies)
-*       @andresailer @jmcarcell @tmadlener @BrieucF
+*       @andresailer @jmcarcell @tmadlener @BrieucF @jbeirer
 
 # Owners for ILD geometries
 /ILD/   @tmadlener @danieljeans
 
 # Owners for FCC geometries
-/FCCee  @BrieucF @SanghyunKo @kjvbrt
+/FCCee  @BrieucF @SanghyunKo @kjvbrt @jbeirer
 /FCCee/CLD @andresailer @jmcarcell @Zehvogel
 /FCCee/ALLEGRO @BrieucF @giovannimarchiori @scott-snyder 
 # Owners for CLIC geometries
