@@ -2,10 +2,10 @@
 # for more details and the explanation of the rules
 
 # Global owners (will get notified if no other rule applies)
-*       @andresailer @jmcarcell @tmadlener @gaede @BrieucF
+*       @andresailer @jmcarcell @tmadlener @BrieucF
 
 # Owners for ILD geometries
-/ILD/   @tmadlener @gaede @danieljeans
+/ILD/   @tmadlener @danieljeans
 
 # Owners for FCC geometries
 /FCCee  @BrieucF @SanghyunKo @kjvbrt
@@ -15,4 +15,4 @@
 /CLIC   @andresailer
 
 # Owners for muon collider geometries
-/MuColl @madbaron @bartosik-hep @tmadlener
+/MuColl @madbaron @tmadlener
