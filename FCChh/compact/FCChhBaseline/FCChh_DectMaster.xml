@@ -25,7 +25,7 @@
     <constant name="world_z" value="world_size"/>
   </define>
   <include ref="./FCChh_DectDimensions.xml" />
-  <include ref="./FCChh_Visualisation.xml" />
+  <include ref="./Common/display.xml" />
 
   <!-- Including the sub-detectors / volume definitions -->
   <!-- To be used in case you are not using the tkLayout tracker (which contains the beamtube)
@@ -48,5 +48,5 @@
     <include ref="./FCChh_ECalAir.xml" />
     <include ref="./Common/HcalAir.xml" />
     <include ref="./FCChh_MuonAir.xml" />
--->
+  -->
 </lccdd>
