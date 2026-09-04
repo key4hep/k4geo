@@ -9,7 +9,7 @@
     <detectors>
         <comment>Beampipe Instrumentation</comment>
 
-        <detector name="CompSol" type="DD4hep_Mask_o1_v02" insideTrackingVolume="true" vis="CompSolVis">
+        <detector name="CompSol" type="DD4hep_Mask_o1_v01" insideTrackingVolume="true" vis="CompSolVis">
             <parameter crossingangle="CrossingAngle" />
             <envelope vis="CoilVis">
                 <shape type="Assembly"/>
@@ -17,7 +17,7 @@
             <section type="Center" start="CompSol_min_z" end="QD0_min_z" rMin1="103*mm"  rMin2="180*mm"  rMax1="123*mm" rMax2="200*mm"    material="SolenoidMixture"  name="CompSol" />
         </detector>
 
-        <detector name="ScreenSol" type="DD4hep_Mask_o1_v02" insideTrackingVolume="true" vis="ScreenSolVis">
+        <detector name="ScreenSol" type="DD4hep_Mask_o1_v01" insideTrackingVolume="true" vis="ScreenSolVis">
             <parameter crossingangle="CrossingAngle" />
             <envelope vis="CoilVis">
                 <shape type="Assembly"/>

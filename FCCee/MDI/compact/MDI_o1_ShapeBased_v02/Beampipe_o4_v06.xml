@@ -63,7 +63,7 @@
 <!-- 2026.08.30 : Synch Radiation mask -->
 
 <comment>Synch Radiation mask inside the beam-pipe, at z = 2.3 m </comment>
-<detector name="SynchRadMask" type="DD4hep_Mask_o1_v02" insideTrackingVolume="true" vis="TantalumVis" >
+<detector name="SynchRadMask" type="DD4hep_Mask_o1_v01" insideTrackingVolume="true" vis="TantalumVis" >
     <parameter crossingangle="CrossingAngle" />
     
     <!-- RIGHT MASK (side="1") -->
@@ -94,7 +94,7 @@
 </detector>
 
 <comment>Full Cone Tungsten Shield</comment>
-<detector name="BeamPipeShield" type="DD4hep_Mask_o1_v02" insideTrackingVolume="true" vis="TantalumVis" >
+<detector name="BeamPipeShield" type="DD4hep_Mask_o1_v01" insideTrackingVolume="true" vis="TantalumVis" >
         <parameter crossingangle="CrossingAngle" />
 
         <comment>Beampipe Shield (APS: WHAT????? +18 cm (??plus??) as solenoid is now closer to IP) </comment>
@@ -111,7 +111,7 @@
 
 <comment>Asymmetric Tungsten Shield no Rotation</comment>
         
-<detector name="BeamPipeShield_noRot" type="DD4hep_Mask_o1_v02" insideTrackingVolume="true" vis="TantalumVis"  >
+<detector name="BeamPipeShield_noRot" type="DD4hep_Mask_o1_v01" insideTrackingVolume="true" vis="TantalumVis"  >
         <parameter crossingangle="CrossingAngle" rotationX="true"/>
 
         <section type="Center"
