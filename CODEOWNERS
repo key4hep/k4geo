@@ -2,18 +2,18 @@
 # for more details and the explanation of the rules
 
 # Global owners (will get notified if no other rule applies)
-*       @andresailer @jmcarcell @tmadlener @gaede @BrieucF
+*       @andresailer @jmcarcell @tmadlener @BrieucF @jbeirer
 
 # Owners for ILD geometries
-/ILD/   @tmadlener @gaede @danieljeans
+/ILD/   @tmadlener
 
 # Owners for FCC geometries
-/FCCee  @BrieucF @SanghyunKo @kjvbrt
+/FCCee  @BrieucF @SanghyunKo @kjvbrt @jbeirer
+/FCCee/ILD_FCCee/ @BrieucF @SanghyunKo @kjvbrt @jbeirer @tmadlener
 /FCCee/CLD @andresailer @jmcarcell @Zehvogel
 /FCCee/ALLEGRO @BrieucF @giovannimarchiori @scott-snyder 
-/FCCee/IDEA @lopezzot
 # Owners for CLIC geometries
 /CLIC   @andresailer
 
 # Owners for muon collider geometries
-/MuColl @madbaron @bartosik-hep @tmadlener
+/MuColl @madbaron @tmadlener
