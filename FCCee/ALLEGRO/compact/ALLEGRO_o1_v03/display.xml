@@ -71,7 +71,7 @@
     <vis name="endcapHcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
     <vis name="endcapHcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" />
 
-    <!-- LumiCal (originally defined  in LumiCal.xml) -->
+    <!-- LumiCal (originally defined in LumiCal.xml) -->
     <vis name="SeeThrough" alpha="0.0" r="0" g="0" b="0" showDaughters="true" visible="false"/>
     <vis name="BCLayerVis1" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="BCLayerVis2" alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
@@ -81,9 +81,16 @@
     <!-- Muon Tagger (originally retrieved from MuonTaggerPhiTheta.xml) -->
     <vis name="muon_vis" r="1.0" g="0.1" b="0.1" showDaughters="true" visible="true" />
 
+    <!-- Beam Pipe (originally defined in MDI_o1_v00/Beampipe_o4_v05.xml) -->
+    <vis name="BlueVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
+
+    <!-- Beam Instrumentation (originally defined in MDI_o1_v00/BeamInstrumentation_o1_v01.xml) -->
+    <vis name="CoilVis" alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
+
     <!-- 
         
-    This version reuses some files from IDEA_o1_v03, IDEA_o1_v04 and MDI_o1_v01 as-is:
+    This version reuses some files from IDEA_o1_v03 and IDEA_o1_v04.
 
     The vis entries below are duplicated from that version display.xml file to keep this one self-contained
 
@@ -150,12 +157,6 @@
     <vis name="SiWrWaterVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
     <vis name="SiWrSupportVis" alpha="0.8" r="0.25" g="0.25" b="0.2" showDaughters="true" visible="true"/>
     <vis name="SiWrStaveVis" alpha="0.8" r="1.0" g="0.5" b="0.0" showDaughters="false" visible="true"/>
-
-    <!-- Beampipe (reused as-is from MDI_o1_v00/Beampipe_o4_v05.xml) -->
-    <vis name="BlueVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
-
-    <!-- Beam Instrumentation (reused as-is from MDI_o1_v00/BeamInstrumentation_o1_v01.xml) -->
-    <vis name="CoilVis" alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
 
   </display>
 
