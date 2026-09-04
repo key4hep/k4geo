@@ -7,9 +7,25 @@
 
   <display>
 
-    <!-- Inner tracker (retrieved from InnerTrackerILD_o1_v02_00.xml) -->
+    <!-- Inner tracker (originally retrieved from InnerTrackerILD_o1_v02_00.xml) -->
     <vis name="InnerTrackerModuleVis" alpha="0.5" r="0.0" g="1.0" b="0.6" showDaughters="false" visible="true"/>
     <vis name="InnerTrackerForwardVis" alpha="1.0" r="0.8" g="0.1" b="0.1" showDaughters="false" visible="true"/>
+
+    <!-- Beam Instrumentation (referenced by MDI_o1_CADBased_v01/BeamInstrumentation_o1_v01.xml) -->
+    <vis name="CompSolVis" alpha="1.0" r="0.5" g="0.5" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="ScreenSolVis" alpha="1.0" r="1" g="1" b="0" showDaughters="true" visible="true"/>
+    <vis name="CoilVis" alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
+
+    <!-- FFQuads (referenced by MDI_o1_CADBased_v01/FFQuads_v01.xml) -->
+    <vis name="KICKVis" alpha="1.0" r="1.0" g="0.498" b="0.0" showDaughters="true" visible="true"/>
+
+    <!-- CAD imported beam pipe (referenced by MDI_o1_CADBased_v01/Beampipe_CADimport_o1_v03.xml) -->
+    <vis name="AlBeMet_vis" alpha="0.8" r="0.70" g="0.70" b="0.70" showDaughters="true" visible="true"/>
+    <vis name="CopperCooling_vis" alpha="1.0" r="0.72" g="0.45" b="0.20" showDaughters="true" visible="true"/>
+    <vis name="Gold_vis" alpha="1.0" r="0.93" g="0.62" b="0.02" showDaughters="true" visible="true"/>
+    <vis name="Paraffin_vis" alpha="0.5" r="0.99" g="0.90" b="0.59" showDaughters="true" visible="true"/>
+    <vis name="Water_vis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="Tungsten_vis" alpha="1.0" r="1" g="0.5" b="0.5" showDaughters="true" visible="true"/>
 
   </display>
 
