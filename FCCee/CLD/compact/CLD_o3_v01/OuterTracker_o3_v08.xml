@@ -36,14 +36,6 @@
     </detectors>
 
 
-    <!--  Definition of the used visualization attributes    -->
-    <display>
-        <vis name="OuterTrackerLayerVis"   alpha="1.0" r="1.0" g="1.0" b="0.6" showDaughters="true" visible="true"/>
-        <vis name="OuterTrackerModuleVis"  alpha="0.1" r="0.0" g="1.0" b="0.6" showDaughters="false" visible="true"/>
-        <vis name="OuterTrackerForwardVis" alpha="1.0" r="0.8" g="0.1" b="0.1" showDaughters="false" visible="true"/>
-        <vis name="OuterTrackerInterlinkVis" alpha="1.0" r="0.078" g="0.12" b="0.59" showDaughters="true" visible="true"/>
-    </display>
-
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
         <readout name="OuterTrackerBarrelCollection">
