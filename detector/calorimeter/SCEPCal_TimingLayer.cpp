@@ -122,7 +122,7 @@ static int buildTimingBarrel(dd4hep::Detector& theDetector, dd4hep::SensitiveDet
 
   dd4hep::Polyhedra timingPhiAssemblyShape(1, -p.D_PHI_GLOBAL / 2, p.D_PHI_GLOBAL, p.zTimingPolyhedra,
                                            p.rminTimingPolyhedra, p.rmaxTimingPolyhedra);
-  dd4hep::Volume timingPhiAssemblyVolume("timingPhiAssembly", timingPhiAssemblyShape, theDetector.material("Vacuum"));
+  dd4hep::Volume timingPhiAssemblyVolume("timingPhiAssembly", timingPhiAssemblyShape, theDetector.air());
   timingPhiAssemblyVolume.setVisAttributes(theDetector, p.tlbarrelAssemblyPhiVis);
 
   for (int iTheta = 0; iTheta < p.N_THETA_TLBARREL; iTheta++) {
@@ -157,8 +157,7 @@ static int buildTimingBarrel(dd4hep::Detector& theDetector, dd4hep::SensitiveDet
     Position dispE(rE * sin_thC, 0, rE * cos_thC);
 
     dd4hep::EightPointSolid timingThetaAssemblyShape(p.XTAL_DEPTH_T / 2, verticesE);
-    dd4hep::Volume timingThetaAssemblyVolume("timingThetaAssembly", timingThetaAssemblyShape,
-                                             theDetector.material("Vacuum"));
+    dd4hep::Volume timingThetaAssemblyVolume("timingThetaAssembly", timingThetaAssemblyShape, theDetector.air());
     timingThetaAssemblyVolume.setVisAttributes(theDetector, p.tlbarrelAssemblyThetaVis);
     timingPhiAssemblyVolume.placeVolume(timingThetaAssemblyVolume, Transform3D(rotE, dispE));
 
@@ -221,11 +220,10 @@ static int buildTimingEndcap(dd4hep::Detector& theDetector, dd4hep::SensitiveDet
   dd4hep::Polyhedra tlendcapPhiAssemblyShape_1(1, -p.D_PHI_GLOBAL / 2, p.D_PHI_GLOBAL, p.zTlEndcapPolyhedra_1,
                                                p.rminTlEndcapPolyhedra_1, p.rmaxTlEndcapPolyhedra_1);
 
-  dd4hep::Volume tlendcapPhiAssemblyVolume("tlendcapPhiVol", tlendcapPhiAssemblyShape, theDetector.material("Vacuum"));
+  dd4hep::Volume tlendcapPhiAssemblyVolume("tlendcapPhiVol", tlendcapPhiAssemblyShape, theDetector.air());
   tlendcapPhiAssemblyVolume.setVisAttributes(theDetector, p.tlendcapAssemblyPhiVis);
 
-  dd4hep::Volume tlendcapPhiAssemblyVolume_1("tlendcapPhiVol_1", tlendcapPhiAssemblyShape_1,
-                                             theDetector.material("Vacuum"));
+  dd4hep::Volume tlendcapPhiAssemblyVolume_1("tlendcapPhiVol_1", tlendcapPhiAssemblyShape_1, theDetector.air());
   tlendcapPhiAssemblyVolume_1.setVisAttributes(theDetector, p.tlendcapAssemblyPhiVis);
 
   for (int iTheta = p.TLENDCAP_THETA_START; iTheta < p.N_THETA_TLENDCAP; iTheta++) {
@@ -270,13 +268,12 @@ static int buildTimingEndcap(dd4hep::Detector& theDetector, dd4hep::SensitiveDet
     dd4hep::EightPointSolid tlendcapThetaAssemblyShape(p.XTAL_DEPTH_T / 2, verticesE);
     dd4hep::EightPointSolid tlendcapThetaAssemblyShape_1(p.XTAL_DEPTH_T / 2, verticesE_1);
 
-    dd4hep::Volume tlendcapThetaAssemblyVolume("tlendcapThetaAssembly", tlendcapThetaAssemblyShape,
-                                               theDetector.material("Vacuum"));
+    dd4hep::Volume tlendcapThetaAssemblyVolume("tlendcapThetaAssembly", tlendcapThetaAssemblyShape, theDetector.air());
     tlendcapThetaAssemblyVolume.setVisAttributes(theDetector, p.tlendcapAssemblyThetaVis);
     tlendcapPhiAssemblyVolume.placeVolume(tlendcapThetaAssemblyVolume, Transform3D(rotE, dispE));
 
     dd4hep::Volume tlendcapThetaAssemblyVolume_1("tlendcapThetaAssembly_1", tlendcapThetaAssemblyShape_1,
-                                                 theDetector.material("Vacuum"));
+                                                 theDetector.air());
     tlendcapThetaAssemblyVolume_1.setVisAttributes(theDetector, p.tlendcapAssemblyThetaVis);
     tlendcapPhiAssemblyVolume_1.placeVolume(tlendcapThetaAssemblyVolume_1, Transform3D(rotE_1, dispE_1));
 
@@ -521,16 +518,14 @@ static dd4hep::Ref_t create_detector_SCEPCal_TimingLayer(dd4hep::Detector& theDe
 
   dd4hep::Polyhedra timingGlobalAssemblyShape(PHI_SEGMENTS, D_PHI_GLOBAL / 2, 2 * M_PI, zTimingPolyhedra,
                                               rminTimingPolyhedra, rmaxTimingPolyhedra);
-  dd4hep::Volume timingGlobalAssemblyVol("timingGlobalAssemblyVol", timingGlobalAssemblyShape,
-                                         theDetector.material("Vacuum"));
+  dd4hep::Volume timingGlobalAssemblyVol("timingGlobalAssemblyVol", timingGlobalAssemblyShape, theDetector.air());
   timingGlobalAssemblyVol.setVisAttributes(theDetector, tlbarrelAssemblyGlobalVisXML.visStr());
   dd4hep::PlacedVolume tlbarrelAssemblyPlacedVol = experimentalHall.placeVolume(timingGlobalAssemblyVol);
   tlbarrelAssemblyPlacedVol.addPhysVolID("system", TLBARREL_SYSTEM_NO);
 
   dd4hep::Polyhedra tlendcapGlobalAssemblyShape(PHI_SEGMENTS, D_PHI_GLOBAL / 2, 2 * M_PI, zTlEndcapPolyhedra,
                                                 rminTlEndcapPolyhedra, rmaxTlEndcapPolyhedra);
-  dd4hep::Volume tlendcapGlobalAssemblyVol("tlendcapGlobalAssemblyVol", tlendcapGlobalAssemblyShape,
-                                           theDetector.material("Vacuum"));
+  dd4hep::Volume tlendcapGlobalAssemblyVol("tlendcapGlobalAssemblyVol", tlendcapGlobalAssemblyShape, theDetector.air());
   tlendcapGlobalAssemblyVol.setVisAttributes(theDetector, tlendcapAssemblyGlobalVisXML.visStr());
   dd4hep::PlacedVolume tlendcapAssemblyPlacedVol = experimentalHall.placeVolume(tlendcapGlobalAssemblyVol);
   tlendcapAssemblyPlacedVol.addPhysVolID("system", TLENDCAP_SYSTEM_NO);
@@ -538,7 +533,7 @@ static dd4hep::Ref_t create_detector_SCEPCal_TimingLayer(dd4hep::Detector& theDe
   dd4hep::Polyhedra tlendcapGlobalAssemblyShape_1(PHI_SEGMENTS, D_PHI_GLOBAL / 2, 2 * M_PI, zTlEndcapPolyhedra_1,
                                                   rminTlEndcapPolyhedra_1, rmaxTlEndcapPolyhedra_1);
   dd4hep::Volume tlendcapGlobalAssemblyVol_1("tlendcapGlobalAssemblyVol_1", tlendcapGlobalAssemblyShape_1,
-                                             theDetector.material("Vacuum"));
+                                             theDetector.air());
   tlendcapGlobalAssemblyVol_1.setVisAttributes(theDetector, tlendcapAssemblyGlobalVisXML.visStr());
   dd4hep::PlacedVolume tlendcapAssemblyPlacedVol_1 = experimentalHall.placeVolume(tlendcapGlobalAssemblyVol_1);
   tlendcapAssemblyPlacedVol_1.addPhysVolID("system", TLENDCAP_SYSTEM_NO);

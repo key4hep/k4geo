@@ -181,7 +181,7 @@ static int buildBarrel(dd4hep::Detector& theDetector, dd4hep::SensitiveDetector&
 
   dd4hep::Polyhedra barrelPhiAssemblyShape(1, -p.D_PHI_GLOBAL / 2, p.D_PHI_GLOBAL, p.zBarrelPolyhedra,
                                            p.rminBarrelPolyhedra, p.rmaxBarrelPolyhedra);
-  dd4hep::Volume barrelPhiAssemblyVolume("barrelPhiAssembly", barrelPhiAssemblyShape, theDetector.material("Vacuum"));
+  dd4hep::Volume barrelPhiAssemblyVolume("barrelPhiAssembly", barrelPhiAssemblyShape, theDetector.air());
   barrelPhiAssemblyVolume.setVisAttributes(theDetector, p.barrelAssemblyPhiVis);
 
   for (int iTheta = 0; iTheta < p.N_THETA_BARREL; iTheta++) {
@@ -224,8 +224,7 @@ static int buildBarrel(dd4hep::Detector& theDetector, dd4hep::SensitiveDetector&
     Position dispE(rE * sin_thC - p.PROJ_OFFSET_R, 0, rE * cos_thC);
 
     dd4hep::EightPointSolid barrelThetaAssemblyShape((p.XTAL_LEN_F + p.XTAL_LEN_R) / 2, verticesE);
-    dd4hep::Volume barrelThetaAssemblyVolume("barrelThetaAssembly", barrelThetaAssemblyShape,
-                                             theDetector.material("Vacuum"));
+    dd4hep::Volume barrelThetaAssemblyVolume("barrelThetaAssembly", barrelThetaAssemblyShape, theDetector.air());
     barrelThetaAssemblyVolume.setVisAttributes(theDetector, p.barrelAssemblyThetaVis);
     barrelPhiAssemblyVolume.placeVolume(barrelThetaAssemblyVolume, Transform3D(rotE, dispE));
 
@@ -370,9 +369,9 @@ static int buildEndcap(dd4hep::Detector& theDetector, dd4hep::SensitiveDetector&
   dd4hep::Polyhedra endcapPhiAssemblyShape_1(1, -p.D_PHI_GLOBAL / 2, p.D_PHI_GLOBAL, p.zEndcapPolyhedra_1,
                                              p.rminEndcapPolyhedra_1, p.rmaxEndcapPolyhedra_1);
 
-  dd4hep::Volume endcapPhiAssemblyVolume("endcapPhiVol", endcapPhiAssemblyShape, theDetector.material("Vacuum"));
+  dd4hep::Volume endcapPhiAssemblyVolume("endcapPhiVol", endcapPhiAssemblyShape, theDetector.air());
   endcapPhiAssemblyVolume.setVisAttributes(theDetector, p.endcapAssemblyPhiVis);
-  dd4hep::Volume endcapPhiAssemblyVolume_1("endcapPhiVol_1", endcapPhiAssemblyShape_1, theDetector.material("Vacuum"));
+  dd4hep::Volume endcapPhiAssemblyVolume_1("endcapPhiVol_1", endcapPhiAssemblyShape_1, theDetector.air());
   endcapPhiAssemblyVolume_1.setVisAttributes(theDetector, p.endcapAssemblyPhiVis);
 
   for (int iTheta = p.ENDCAP_THETA_START; iTheta < p.N_THETA_ENDCAP; iTheta++) {
@@ -424,13 +423,11 @@ static int buildEndcap(dd4hep::Detector& theDetector, dd4hep::SensitiveDetector&
     dd4hep::EightPointSolid endcapThetaAssemblyShape((p.XTAL_LEN_F + p.XTAL_LEN_R) / 2, verticesE);
     dd4hep::EightPointSolid endcapThetaAssemblyShape_1((p.XTAL_LEN_F + p.XTAL_LEN_R) / 2, verticesE_1);
 
-    dd4hep::Volume endcapThetaAssemblyVolume("endcapThetaAssembly", endcapThetaAssemblyShape,
-                                             theDetector.material("Vacuum"));
+    dd4hep::Volume endcapThetaAssemblyVolume("endcapThetaAssembly", endcapThetaAssemblyShape, theDetector.air());
     endcapThetaAssemblyVolume.setVisAttributes(theDetector, p.endcapAssemblyThetaVis);
     endcapPhiAssemblyVolume.placeVolume(endcapThetaAssemblyVolume, Transform3D(rotE, dispE));
 
-    dd4hep::Volume endcapThetaAssemblyVolume_1("endcapThetaAssembly_1", endcapThetaAssemblyShape_1,
-                                               theDetector.material("Vacuum"));
+    dd4hep::Volume endcapThetaAssemblyVolume_1("endcapThetaAssembly_1", endcapThetaAssemblyShape_1, theDetector.air());
     endcapThetaAssemblyVolume_1.setVisAttributes(theDetector, p.endcapAssemblyThetaVis);
     endcapPhiAssemblyVolume_1.placeVolume(endcapThetaAssemblyVolume_1, Transform3D(rotE_1, dispE_1));
 
@@ -824,24 +821,21 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
 
   dd4hep::Polyhedra barrelGlobalAssemblyShape(PHI_SEGMENTS, D_PHI_GLOBAL / 2, 2 * M_PI, zBarrelPolyhedra,
                                               rminBarrelPolyhedra, rmaxBarrelPolyhedra);
-  dd4hep::Volume barrelGlobalAssemblyVol("barrelGlobalAssemblyVol", barrelGlobalAssemblyShape,
-                                         theDetector.material("Vacuum"));
+  dd4hep::Volume barrelGlobalAssemblyVol("barrelGlobalAssemblyVol", barrelGlobalAssemblyShape, theDetector.air());
   barrelGlobalAssemblyVol.setVisAttributes(theDetector, barrelAssemblyGlobalVisXML.visStr());
   dd4hep::PlacedVolume barrelAssemblyPlacedVol = experimentalHall.placeVolume(barrelGlobalAssemblyVol);
   barrelAssemblyPlacedVol.addPhysVolID("system", BARREL_SYSTEM_NO);
 
   dd4hep::Polyhedra endcapGlobalAssemblyShape(PHI_SEGMENTS, D_PHI_GLOBAL / 2, 2 * M_PI, zEndcapPolyhedra,
                                               rminEndcapPolyhedra, rmaxEndcapPolyhedra);
-  dd4hep::Volume endcapGlobalAssemblyVol("endcapGlobalAssemblyVol", endcapGlobalAssemblyShape,
-                                         theDetector.material("Vacuum"));
+  dd4hep::Volume endcapGlobalAssemblyVol("endcapGlobalAssemblyVol", endcapGlobalAssemblyShape, theDetector.air());
   endcapGlobalAssemblyVol.setVisAttributes(theDetector, endcapAssemblyGlobalVisXML.visStr());
   dd4hep::PlacedVolume endcapAssemblyPlacedVol = experimentalHall.placeVolume(endcapGlobalAssemblyVol);
   endcapAssemblyPlacedVol.addPhysVolID("system", ENDCAP_SYSTEM_NO);
 
   dd4hep::Polyhedra endcapGlobalAssemblyShape_1(PHI_SEGMENTS, D_PHI_GLOBAL / 2, 2 * M_PI, zEndcapPolyhedra_1,
                                                 rminEndcapPolyhedra_1, rmaxEndcapPolyhedra_1);
-  dd4hep::Volume endcapGlobalAssemblyVol_1("endcapGlobalAssemblyVol_1", endcapGlobalAssemblyShape_1,
-                                           theDetector.material("Vacuum"));
+  dd4hep::Volume endcapGlobalAssemblyVol_1("endcapGlobalAssemblyVol_1", endcapGlobalAssemblyShape_1, theDetector.air());
   endcapGlobalAssemblyVol_1.setVisAttributes(theDetector, endcapAssemblyGlobalVisXML.visStr());
   dd4hep::PlacedVolume endcapAssemblyPlacedVol_1 = experimentalHall.placeVolume(endcapGlobalAssemblyVol_1);
   endcapAssemblyPlacedVol_1.addPhysVolID("system", ENDCAP_SYSTEM_NO);
