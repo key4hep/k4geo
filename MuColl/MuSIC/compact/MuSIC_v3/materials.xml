@@ -202,6 +202,7 @@
 
     <material name="BoronOxide">
         <D type="density" value="2.46" unit="g/cm3"/>
+        <composite n="2" ref="B"/>
         <composite n="3" ref="O"/>
     </material>
 
@@ -239,7 +240,7 @@
     </material>
 
     <!-- relevant for CRILIN -->
-    <material name="LeadFluoride">
+    <material name="LeadDiflouride">
         <D type="density" value="7.77" unit="g/cm3"/>
         <composite n="1" ref="PB"/>
         <composite n="2" ref="F"/>
