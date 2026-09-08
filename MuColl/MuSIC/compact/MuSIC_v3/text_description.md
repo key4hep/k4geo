@@ -144,7 +144,7 @@ Polyhedron: 12 sides (Rmin is the inscribed-circle radius).
 
 |ID    | Rmin [mm] | Rmax [mm] | Zmax [mm] | Layers | Sensor (per layer)             | Other material (per layer)               |
 |------|-----------|-----------|-----------|--------|--------------------------------|------------------------------------------|
-|ECAL  | 1690      | 1960      | 2210      | 6      | 40 mm PbF2 (LeadFluoride)      | 1 mm Si + 3 mm siPCBMix + 1 mm Air       |
+|ECAL  | 1690      | 1960      | 2210      | 6      | 40 mm PbF2 (LeadDifluoride)      | 1 mm Si + 3 mm siPCBMix + 1 mm Air       |
 |HCAL  | 2902      | 4756      | 2509      | 70     | 3 mm Polystyrene               | 20 mm Steel235 + 0.1 mm Cu + 0.7 mm PCB + 0.5 mm Steel235 + 2.7 mm Air |
 
 ECAL is a homogeneous PbF2 (CRILIN) calorimeter: the 40 mm crystal is the
@@ -161,7 +161,7 @@ Polyhedron: 12 sides.
 
 |ID    | Rmin [mm]           | Rmax [mm] | Zmin [mm] | Zmax [mm] | Layers | Sensor (per layer)          | Other material (per layer)               |
 |------|---------------------|-----------|-----------|-----------|--------|-----------------------------|------------------------------------------|
-|ECAL  | 310                 | 1960      | 2307      | 2577      | 6      | 40 mm PbF2 (LeadFluoride)   | 1 mm Si + 3 mm siPCBMix + 1 mm Air       |
+|ECAL  | 310                 | 1960      | 2307      | 2577      | 6      | 40 mm PbF2 (LeadDifluoride)   | 1 mm Si + 3 mm siPCBMix + 1 mm Air       |
 |HCAL  | 320 → 499 (5 steps) | 4756      | 2579      | 4434      | 70     | 3 mm Polystyrene            | 20 mm Steel235 + 0.1 mm Cu + 0.7 mm PCB + 0.5 mm Steel235 + 2.7 mm Air |
 
 HCAL endcap has a conical inner cutout to clear the nozzle: the inner radius

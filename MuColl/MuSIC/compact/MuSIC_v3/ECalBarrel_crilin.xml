@@ -30,7 +30,7 @@
             <dimensions numsides="ECalBarrel_symmetry" rmin="ECalBarrel_inner_radius" z="ECalBarrel_half_length*2" />
             <staves vis="ECalStaveVis" />
 	    <layer repeat="6" vis="ECalLayerVis">   
-                <slice material = "LeadFluoride" thickness = "40*mm" sensitive="yes" limits="cal_limits" vis="ECalSensitiveVis"/>
+                <slice material = "LeadDifluoride" thickness = "40*mm" sensitive="yes" limits="cal_limits" vis="ECalSensitiveVis"/>
                 <slice material = "Silicon"        thickness = "1*mm" vis="ECalAbsorberVis"/>
                 <slice material = "siPCBMix"       thickness = "3*mm" vis="ECalAbsorberVis"/>
                 <slice material = "Air"            thickness = "1*mm" vis="InvisibleNoDaughters"/>

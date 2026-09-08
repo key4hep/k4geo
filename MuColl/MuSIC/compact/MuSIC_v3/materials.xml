@@ -240,7 +240,7 @@
     </material>
 
     <!-- relevant for CRILIN -->
-    <material name="LeadDiflouride">
+    <material name="LeadDifluoride">
         <D type="density" value="7.77" unit="g/cm3"/>
         <composite n="1" ref="PB"/>
         <composite n="2" ref="F"/>
