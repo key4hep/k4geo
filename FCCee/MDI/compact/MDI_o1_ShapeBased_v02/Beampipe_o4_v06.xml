@@ -77,7 +77,9 @@
              rMin2="SeparatedBeamPipe_rmax - SynchRadMaskSize1" 
              rMax2="SynchRadMaskSize1 / 2" 
              material="Tungsten"      
-             name="SRmask_Right" />
+             name="SRmask_Right" 
+             epsilon="mask_epsilon" />
+
 
     <!-- LEFT MASK (side="-1") -->
     <section type="UpstreamTrapezoid" 
@@ -90,7 +92,8 @@
              rMin2="SeparatedBeamPipe_rmax - SynchRadMaskSize2" 
              rMax2="SynchRadMaskSize2 / 2" 
              material="Tungsten"      
-             name="SRmask_Left" />
+             name="SRmask_Left"
+             epsilon="mask_epsilon" />
 </detector>
 
 <comment>Full Cone Tungsten Shield</comment>

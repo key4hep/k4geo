@@ -107,7 +107,7 @@
         <constant name="SynchRadMaskBaseLength" value="30.*mm" /> <!-- z longitude of the mask alone beamline -->
         <constant name="SynchRadMaskTopLength" value="10.*mm" />
         <constant name="SynchRadMaskExtraThick" value="5.*mm" />   <!-- Additional tolerance for correct boolean subtraction -->
-        <constant name="mask_epsilon" value="0.001*mm" />
+        <constant name="mask_epsilon" value="0.01*mm" />
 
 	<!-- compensating and screening solenoids -->
 	  <constant name="CompSol_min_z" value="1230*mm"/>
