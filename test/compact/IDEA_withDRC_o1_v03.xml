@@ -34,7 +34,7 @@
   <include ref="../../FCCee/IDEA/compact/IDEA_o1_v03/DectDimensions_IDEA_o1_v03.xml"/>
 
   <!-- Import visualization (color) definitions -->
-  <include ref="../../FCCee/IDEA/compact/IDEA_o1_v03/colors.xml"/>
+  <include ref="../../FCCee/IDEA/compact/IDEA_o1_v03/display.xml"/>
 
   <!-- Import accelerator components -->
   <!-- shape based model of the beam pipe -->

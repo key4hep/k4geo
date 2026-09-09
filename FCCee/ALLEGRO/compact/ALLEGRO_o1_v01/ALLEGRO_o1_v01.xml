@@ -29,7 +29,7 @@
   </define>
 
   <include ref="./FCCee_DectDimensions.xml" />
-  <include ref="./colors.xml" />
+  <include ref="./display.xml" />
 
   <include ref="Beampipe.xml"/>
   <include ref="BeamInstrumentation.xml"/>
