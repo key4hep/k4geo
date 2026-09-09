@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+
+  <!-- Consolidated visualization (color) definitions -->
+
+  <display>
+
+    <!-- Global palette (originally retrieved from CLD_o2_v05.xml) -->
+    <vis name="VXDVis" alpha="0.1" r="0.1" g="0.5" b="0.5" showDaughters="true" visible="false"/>
+    <vis name="ITVis" alpha="1.0" r="0.54" g="0.43" b="0.04" showDaughters="true" visible="true"/>
+    <vis name="OTVis" alpha="1.0" r="0.8" g="0.8" b="0.4" showDaughters="true" visible="false"/>
+    <vis name="ECALVis" alpha="1.0" r="0.0" g="0.48" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="HCALVis" alpha="1.0" r="0.74" g="0.81" b="0.55" showDaughters="true" visible="true"/>
+    <vis name="SOLVis" alpha="1.0" r="0.4" g="0.4" b="0.4" showDaughters="true" visible="true"/>
+    <vis name="YOKEVis" alpha="1.0" r="0.0" g="0.56" b="0.28" showDaughters="true" visible="true"/>
+    <vis name="LCALInstrVis" alpha="1.0" r="0.35" g="0.0" b="0.47" showDaughters="true" visible="true"/>
+    <vis name="LCALVis" alpha="1.0" r="0.25" g="0.88" b="0.81" showDaughters="true" visible="true"/>
+    <vis name="LCALCoolVis" alpha="1.0" r="0.2" g="0.6" b="0" showDaughters="true" visible="true"/>
+    <vis name="CompSolVis" alpha="1.0" r="0.5" g="0.5" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="ScreenSolVis" alpha="1.0" r="1" g="1" b="0" showDaughters="true" visible="true"/>
+    <vis name="TantalumVis" alpha="1.0" r="1" g="0.5" b="0.5" showDaughters="true" visible="true"/>
+    <vis name="SupportVis" alpha="1" r="0.2" g="0.2" b="0.2" showDaughters="true" visible="true"/>
+    <vis name="InvisibleNoDaughters" showDaughters="false" visible="false"/> 
+
+    <!-- Beampipe (originally retrieved from Beampipe_o4_v05.xml) -->
+    <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
+    <vis name="GoldCoatingVis" alpha="0.0" r="0.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="TubeVis" alpha="1.0" r="1.0" g="0.7" b="0.5" showDaughters="true" visible="true"/>
+    <vis name="VacVis" alpha="1.0" r="1.0" g="1.0" b="1.0" showDaughters="true" visible="false"/>
+
+    <!-- Vertex (originally retrieved from Vertex_o4_v07_smallBP.xml) -->
+    <vis name="SiVertexModuleVis" alpha="1.0" r="1" g="1" b="0.6" showDaughters="true" visible="false"/>
+    <vis name="SiVertexSensitiveVis" alpha="1.0" r="1" g="0.2" b="0.2" showDaughters="true" visible="true"/>
+    <vis name="SiVertexPassiveVis" alpha="1.0" r="0.274" g="0.274" b="0.274" showDaughters="true" visible="true"/>
+    <vis name="SiVertexCableVis" alpha="1.0" r="0.85" g="0.53" b="0.4" showDaughters="true" visible="true"/>
+    <vis name="SiVertexAir" alpha="1.0" r="0" g="0" b="0" showDaughters="false" visible="false"/>
+    <vis name="SiVertexLayerVis" alpha="1.0" r="1" g="0.75" b="0" showDaughters="false" visible="true"/>
+
+    <!-- Inner tracker (originally retrieved from InnerTracker_o2_v07.xml) -->
+    <vis name="InnerTrackerModuleVis" alpha="0.5" r="0.0" g="1.0" b="0.6" showDaughters="false" visible="true"/>
+    <vis name="InnerTrackerForwardVis" alpha="1.0" r="0.8" g="0.1" b="0.1" showDaughters="false" visible="true"/>
+    <vis name="RedVis" alpha="1.0" r="1" g="0" b="0" showDaughters="true" visible="true"/>
+    <vis name="BlueVis" alpha="1.0" r="0" g="0" b="1" showDaughters="true" visible="true"/>
+    <vis name="InterlinkVis" alpha="1.0" r="0.078" g="0.12" b="0.59" showDaughters="true" visible="true"/>
+
+    <!-- Outer tracker (originally retrieved from OuterTracker_o2_v07.xml) -->
+    <vis name="OuterTrackerLayerVis" alpha="1.0" r="1.0" g="1.0" b="0.6" showDaughters="true" visible="true"/>
+    <vis name="OuterTrackerModuleVis" alpha="0.1" r="0.0" g="1.0" b="0.6" showDaughters="false" visible="true"/>
+    <vis name="OuterTrackerForwardVis" alpha="1.0" r="0.8" g="0.1" b="0.1" showDaughters="false" visible="true"/>
+    <vis name="OuterTrackerInterlinkVis" alpha="1.0" r="0.078" g="0.12" b="0.59" showDaughters="true" visible="true"/>
+
+    <!-- ECal barrel / endcap (originally retrieved from ECalBarrel_o2_v01_03.xml) -->
+    <vis name="ECalStaveVis" alpha="1.0" r="0.0" g="0.8" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="ECalLayerVis" alpha="1.0" r="0.8" g="0.8" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="ECalSensitiveVis" alpha="1.0" r="0.7" g="0.3" b="0.0" showDaughters="false" visible="true"/>
+    <vis name="ECalAbsorberVis" alpha="1.0" r="0.4" g="0.4" b="0.0" showDaughters="false" visible="true"/>
+    <vis name="ECalEndcapVis" alpha="1.0" r="0.77" g="0.74" b="0.86" showDaughters="true" visible="true"/>
+    <vis name="HiddenEnvelope" alpha="0.0" r="1.0" g="1.0" b="1.0" showDaughters="true" visible="false"/>
+    <vis name="CompositeVis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
+
+    <!-- HCal barrel / endcap (originally retrieved from HCalBarrel_o1_v01_01.xml) -->
+    <vis name="HCalBarrelVis" alpha="1" r="0.0" g="0.3" b="0.8" showDaughters="true" visible="true"/>
+    <vis name="HCalStavesVis" alpha="1" r="0.0" g="0.0" b="0.1" showDaughters="true" visible="false"/>
+    <vis name="HCalLayerVis" alpha="1" r="1" g="0" b="0.5" showDaughters="false" visible="true"/>
+    <vis name="HCalSensorVis" alpha="1" r="1.0" g="0.0" b="0.2" showDaughters="true" visible="true"/>
+    <vis name="HCalAbsorberVis" alpha="1" r="0.4" g="0.4" b="0.6" showDaughters="true" visible="true"/>
+    <vis name="HCalEndcapVis" alpha="1" r="1" g="1" b="0.1" showDaughters="false" visible="true"/>
+    <vis name="HCalEndcapLayerVis" alpha="1" r="1" g="0" b="0.5" showDaughters="false" visible="true"/>
+    <vis name="HCalCopperVis" alpha="1.0" r="0.72" g="0.45" b="0.2" showDaughters="true" visible="true"/>
+    <vis name="HCalPCBVis" alpha="1.0" r="0.0" g="0.4" b="0.0" showDaughters="true" visible="true"/>
+
+    <!-- Solenoid (originally retrieved from Solenoid_o1_v01_02.xml) -->
+    <vis name="SolenoidBarrelLayerVis" alpha="1" r="0" g="0.3" b="0.3" showDaughters="false" visible="true"/>
+    <vis name="SolenoidCoilEndsVis" alpha="1" r="0" g="0.9" b="0.9" showDaughters="false" visible="true"/>
+    <vis name="SolenoidVacuum" alpha="0" r="1" g="1" b="1" showDaughters="false" visible="true"/>
+
+    <!-- Yoke barrel (originally retrieved from YokeBarrel_o1_v01_02.xml) -->
+    <vis name="YokeBarrelVis" alpha="1" r="1" g="0.4" b="0.62" showDaughters="true" visible="true"/>
+    <vis name="YokeStavesVis" alpha="1" r="0" g="0.7" b="0.3" showDaughters="true" visible="true"/>
+    <vis name="YokeLayerVis" alpha="1" r="0" g="1" b="0.3" showDaughters="true" visible="true"/>
+    <vis name="YokeSensorVis" alpha="1" r="0.54" g="0.4" b="0.41" visible="true"/>
+    <vis name="YokeAbsorberVis" alpha="1" r="0.28" g="0.4" b="0.62" visible="true"/>
+
+    <!-- Yoke endcap (originally retrieved from YokeEndcap_o1_v01_02.xml) -->
+    <vis name="YokeEndcapVis" alpha="1" r="1" g="0.4" b="0.62" showDaughters="true" visible="true"/>
+    <vis name="YokeEndcapLayerVis" alpha="1" r="0" g="1" b="0.3" showDaughters="true" visible="true"/>
+
+    <!-- Beam instrumentation (referenced in BeamInstrumentation_o3_v02_fitShield.xml) -->
+    <vis name="CoilVis" alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
+
+    <!-- LumiCal (referenced in LumiCal_o3_v02_03.xml) -->
+    <vis name="SeeThrough" alpha="0.0" r="0" g="0" b="0" showDaughters="true" visible="false"/>
+    <vis name="BCLayerVis1" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="BCLayerVis2" alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="BCLayerVis3" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="LCALShieldVis" alpha="1.0" r="0.6" g="0.3" b="0.0" showDaughters="true" visible="true"/>
+
+  </display>
+
+</lccdd>

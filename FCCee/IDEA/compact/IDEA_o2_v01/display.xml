@@ -77,16 +77,16 @@
     <vis name="tlendcapAssemblyThetaVis" alpha="0.1" r="0." g="0." b="1." showDaughters="true" visible="false"/>
     <vis name="scepcalAssemblyGlobalVis" alpha="0.5" r="0.1" g="0.2" b="0.1" showDaughters="true" visible="false"/>
 
+    <!-- Beam pipe (originally defined in MDI_o1_v00/Beampipe_o4_v05.xml) -->
+    <vis name="BlueVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
+
+    <!-- Beam Instrumentation (originally defined in MDI_o1_v00/BeamInstrumentation_o1_v01.xml) -->
+    <vis name="CoilVis" alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
+
     <!--
     
-    This version reuses some subparts from ../IDEA_o1_v03/ and ../IDEA_o1_v04/ as-is:
-    - LumiCal_o1_v01.xml
-    - DriftChamber_o1_v02.xml
-    - Solenoid_o1_v01.xml
-    - EndPlateAbsorber_o1_v01.xml
-    - MuonSystem_o1_v01.xml
-    - VertexComplete_o1_v04.xml
-    - SiliconWrapper_o1_v02.xml
+    This version reuses some subparts from IDEA_o1_v03 and IDEA_o1_v04.
 
     The vis entries below are duplicated from those versions display.xml to keep this file self-contained.
 
@@ -168,10 +168,6 @@
     <vis name="SiWrWaterVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
     <vis name="SiWrSupportVis" alpha="0.8" r="0.25" g="0.25" b="0.2" showDaughters="true" visible="true"/>
     <vis name="SiWrStaveVis" alpha="0.8" r="1.0" g="0.5" b="0.0" showDaughters="false" visible="true"/>
-
-    <!-- Beam pipe / beam instrumentation (reused as-is from ../../../MDI/compact/MDI_o1_v00/) -->
-    <vis name="BlueVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
-    <vis name="CoilVis" alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
 
   </display>
 

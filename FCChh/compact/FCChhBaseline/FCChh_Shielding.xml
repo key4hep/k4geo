@@ -14,9 +14,6 @@
       - updated to Ilaria's FLUKA implementation FCC week 2017
     </comment>
   </info>
-  <display>
-    <vis name="ShieldingVis" r="0.7" g="0.7" b="0.7" alpha="0.8" showDaughters="false" visible="true"/>
-  </display>
   <detectors>
     <!-- End-caps -->
     <detector name="ShieldingLowerConePos" type="SimpleCone_o1_v01" vis="ShieldingVis">
