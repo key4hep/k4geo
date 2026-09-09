@@ -227,6 +227,8 @@ endif()
 
 if(INSTALL_VERTEX_STL_FILES)
 
+    file(MAKE_DIRECTORY share/k4geo/FCCee)
+
     set(STL_FILES
           "VertexCoolingCones_o1_v03.stl"
           "VertexSupport_CarbonFiber_o1_v03.stl"
@@ -234,7 +236,7 @@ if(INSTALL_VERTEX_STL_FILES)
         )
     # Set main FCC url
     set(FCC_URL "https://fccsw.web.cern.ch/fccsw/filesForSimDigiReco")
-    set(STL_PATH "IDEA/IDEA_o1_v03/STL_FILES/")
+    set(STL_PATH "IDEA/IDEA_o1_v03/STL_FILES")
 
     # Set the output directory where the file will be placed
     set(OUTPUT_DIR "${PROJECT_SOURCE_DIR}/FCCee/IDEA/compact/IDEA_o1_v03/")
@@ -258,9 +260,10 @@ if(INSTALL_VERTEX_STL_FILES)
               message(FATAL_ERROR "Failed to download file: ${error_message}")
           endif()
         endif()
+
+        install(
+            FILES "${OUTPUT_DIR}/${STL_FILE}"
+            DESTINATION share/k4geo/FCCee/IDEA/compact/IDEA_o1_v03/stl_files
+        )
     endforeach()
-
-    file(MAKE_DIRECTORY share/k4geo/FCCee)
-    INSTALL(DIRECTORY ${OUTPUT_DIR} DESTINATION share/k4geo/FCCee/IDEA/compact/IDEA_o1_v03/stl_files )
-
 endif()
