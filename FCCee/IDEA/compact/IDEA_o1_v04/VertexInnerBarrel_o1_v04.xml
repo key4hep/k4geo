@@ -65,7 +65,7 @@
 
     <define>
         <comment> Variables used for other imported xmls </comment>
-        <constant name="VTXIB_tube_r"                       value="VTXIB_r_max"/> 
+        <constant name="VTXIB_tube_r"                       value="VTXIB_r_max-VTXIB_tube_thickness"/> 
         <constant name="VTXIB_Kapton_beampipe_halfLength"   value="VTXIB_halfLength1"/>
         <constant name="VTXIB_tube_half_length"             value="VTXIB_half_length"/>
         <constant name="nInnerVertexLayers" value="3"/>
