@@ -249,8 +249,8 @@
   </limits>
   <regions>
     <region name="BeampipeRegion"/>
-    <region name="VTXBRegion"/>
-    <region name="VTXDRegion"/>
+    <region name="VertexBarrelRegion"/>
+    <region name="VertexEndcapRegion"/>
 
     <region name="SiWrBRegion"/>
     <region name="SiWrDRegion"/>

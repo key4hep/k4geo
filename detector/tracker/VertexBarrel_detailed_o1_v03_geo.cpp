@@ -545,7 +545,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         for (int i = 0; i < int(component.thicknesses.size()); i++) {
           if (component.isCurved[i]) {
             double r_component_curved = 0.0; // component.r + component.rs[i]+ component.thicknesses[i]/2.;
-            r_offset_component = component.offset + component.offsets[i];
+            r_offset_component = component.offset + component.offsets[i] +
+                                 (m.motherVolThickness > 0.0 && m.motherVolWidth > 0.0 ? 0. : layer_offset);
             x_pos = r_component_curved * cos(phi) - r_offset_component * sin(phi);
             y_pos = r_component_curved * sin(phi) + r_offset_component * cos(phi);
             z_pos = component.z_offset + component.z_offsets[i] + motherVolOffset;
@@ -581,7 +582,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
               double r_component_curved =
                   0.0; // endOfStave.r + endOfStave.rs[i] + endOfStave.thicknesses[i]/2; // Correct for the fact that a
                        // tube element's origin is offset compared to the origin of a box
-              r_offset_component = endOfStave.offset + endOfStave.offsets[i];
+              r_offset_component = endOfStave.offset + endOfStave.offsets[i] +
+                                   (m.motherVolThickness > 0.0 && m.motherVolWidth > 0.0 ? 0. : layer_offset);
               x_pos = r_component_curved * cos(phi) - r_offset_component * sin(phi);
               y_pos = r_component_curved * sin(phi) + r_offset_component * cos(phi);
               z_pos = m.stave_length / 2. + endOfStave.lengths[i] / 2. + endOfStave.dzs[i] + endOfStave.z_offset +
