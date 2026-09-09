@@ -40,7 +40,7 @@
 
     </detector>
 
-    <detector name="HOMAbsorbers_PunchThrough" type="DD4hep_Mask_o1_v02" insideTrackingVolume="true" vis="ITVis" >
+    <detector name="HOMAbsorbers_PunchThrough" type="DD4hep_Mask_o1_v01" insideTrackingVolume="true" vis="ITVis" >
       <parameter crossingangle="CrossingAngle" />
       
       <section type="PunchedCenter"        
