@@ -13,11 +13,6 @@
 
     <comment>Vertex inner barrel </comment>
 
-    <define>
-        <comment> To change to ultra-light inner vertex design, simply set nInnerVertexLayers to 4. Everything else is taken care of </comment>
-        <constant name="nInnerVertexLayers" value="3"/>
-    </define>
-
     <detectors>
         <comment> The envelope consists of a tube generally surrounding the vertex barrel and endcap disks, subtracted by a
             cone describing the upper acceptance of the LumiCal </comment>
