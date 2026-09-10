@@ -19,8 +19,8 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
              dd4hep::DetElement& aHCal, xml_det_t aXmlElement, int sign) {
 
   dd4hep::SensitiveDetector sensDet = aSensDet;
-  Dimension sensDetType = aXmlElement.child(_Unicode(sensitive));
-  sensDet.setType(sensDetType.typeStr());
+  // sensitive detector type: generic calorimeter (BirksLawCalorimeterSD is obsolete)
+  sensDet.setType("calorimeter");
 
   Dimension dimensions(aXmlElement.child(_Unicode(dimensions)));
   xml_comp_t xEndPlate = aXmlElement.child(_Unicode(end_plate));

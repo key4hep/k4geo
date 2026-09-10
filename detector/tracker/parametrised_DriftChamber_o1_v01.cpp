@@ -20,8 +20,7 @@ static dd4hep::Ref_t createParamSimplifiedDriftChamber(dd4hep::Detector& theDete
   dd4hep::Volume mother = theDetector.pickMotherVolume(sdet);
 
   dd4hep::SensitiveDetector sens = aSensDet;
-  dd4hep::xml::Dimension sdType = x_det.child(_U(sensitive));
-  sens.setType(sdType.typeStr());
+  sens.setType("tracker");
 
   xml_comp_t detectorDim(x_det.child(_U(dimensions)));
   xml_comp_t layerDim(x_det.child(_U(layer)));
