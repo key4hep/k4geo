@@ -85,7 +85,7 @@
 
             <module name="InnerTrackerBarrelModule_01" vis="InnerTrackerModuleBarrelVis">
                 <module_envelope width="30.1*mm" length="30.1*mm"/>
-                <include ref="InnerTrackerBarrelModuleDown.xml"/>
+                <include ref="../MuSIC_v2/InnerTrackerBarrelModuleDown.xml"/>
             </module>
 
             <layer module="InnerTrackerBarrelModule_01" id="0" type="1" >
@@ -113,181 +113,181 @@
 
             <module name="InnerTrackerEndcapModule_2x2_Out" vis="InnerTrackerEndcapVis">
                 <trd x="30.2*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_3x2_Out" vis="InnerTrackerEndcapVis">
                 <trd x="45.3*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_3x4_Out" vis="InnerTrackerEndcapVis">
                 <trd x="45.3*mm" y="60.4*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_4x2_Out" vis="InnerTrackerEndcapVis">
                 <trd x="60.4*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_4x3_Out" vis="InnerTrackerEndcapVis">
                 <trd x="60.4*mm" y="45.3*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_4x4_Out" vis="InnerTrackerEndcapVis">
                 <trd x="60.4*mm" y="60.4*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x2_Out" vis="InnerTrackerEndcapVis">
                 <trd x="75.5*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x3_Out" vis="InnerTrackerEndcapVis">
                 <trd x="75.5*mm" y="45.3*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x4_Out" vis="InnerTrackerEndcapVis">
                 <trd x="75.5*mm" y="60.4*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x6_Out" vis="InnerTrackerEndcapVis">
                 <trd x="75.5*mm" y="90.6*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x7_Out" vis="InnerTrackerEndcapVis">
                 <trd x="75.5*mm" y="105.7*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x8_Out" vis="InnerTrackerEndcapVis">
                 <trd x="75.5*mm" y="120.8*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_7x5_Out" vis="InnerTrackerEndcapVis">
                 <trd x="105.7*mm" y="75.5*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_7x7_Out" vis="InnerTrackerEndcapVis">
                 <trd x="105.7*mm" y="105.7*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_7x8_Out" vis="InnerTrackerEndcapVis">
                 <trd x="105.7*mm" y="120.8*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_7x9_Out" vis="InnerTrackerEndcapVis">
                 <trd x="105.7*mm" y="135.9*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_8x5_Out" vis="InnerTrackerEndcapVis">
                 <trd x="120.8*mm" y="75.5*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_8x7_Out" vis="InnerTrackerEndcapVis">
                 <trd x="120.8*mm" y="105.7*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_9x8_Out" vis="InnerTrackerEndcapVis">
                 <trd x="135.9*mm" y="120.8*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_9x9_Out" vis="InnerTrackerEndcapVis">
                 <trd x="135.9*mm" y="135.9*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_11x2_Out" vis="InnerTrackerEndcapVis">
                 <trd x="166.1*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_11x3_Out" vis="InnerTrackerEndcapVis">
                 <trd x="166.1*mm" y="45.3*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleOut.xml"/>
             </module>
 
 
             <module name="InnerTrackerEndcapModule_2x2_In" vis="InnerTrackerEndcapVis">
                 <trd x="30.2*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_3x2_In" vis="InnerTrackerEndcapVis">
                 <trd x="45.3*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_3x4_In" vis="InnerTrackerEndcapVis">
                 <trd x="45.3*mm" y="60.4*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_4x2_In" vis="InnerTrackerEndcapVis">
                 <trd x="60.4*mm" y="45.3*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_4x3_In" vis="InnerTrackerEndcapVis">
                 <trd x="60.4*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_4x4_In" vis="InnerTrackerEndcapVis">
                 <trd x="60.4*mm" y="60.4*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x2_In" vis="InnerTrackerEndcapVis">
                 <trd x="75.5*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x3_In" vis="InnerTrackerEndcapVis">
                 <trd x="75.5*mm" y="45.3*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x4_In" vis="InnerTrackerEndcapVis">
                 <trd x="75.5*mm" y="60.4*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x6_In" vis="InnerTrackerEndcapVis">
                 <trd x="75.5*mm" y="90.6*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x7_In" vis="InnerTrackerEndcapVis">
                 <trd x="75.5*mm" y="105.7*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x8_In" vis="InnerTrackerEndcapVis">
                 <trd x="75.5*mm" y="120.8*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_7x5_In" vis="InnerTrackerEndcapVis">
                 <trd x="105.7*mm" y="75.5*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_7x7_In" vis="InnerTrackerEndcapVis">
                 <trd x="105.7*mm" y="105.7*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_7x8_In" vis="InnerTrackerEndcapVis">
                 <trd x="105.7*mm" y="120.8*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_7x9_In" vis="InnerTrackerEndcapVis">
                 <trd x="105.7*mm" y="135.9*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_8x5_In" vis="InnerTrackerEndcapVis">
                 <trd x="120.8*mm" y="75.5*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_8x7_In" vis="InnerTrackerEndcapVis">
                 <trd x="120.8*mm" y="105.7*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_9x8_In" vis="InnerTrackerEndcapVis">
                 <trd x="135.9*mm" y="120.8*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_9x9_In" vis="InnerTrackerEndcapVis">
                 <trd x="135.9*mm" y="135.9*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_11x2_In" vis="InnerTrackerEndcapVis">
                 <trd x="166.1*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_11x3_In" vis="InnerTrackerEndcapVis">
                 <trd x="166.1*mm" y="45.3*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../MuSIC_v2/TrackerDiskModuleIn.xml"/>
             </module>
 
 

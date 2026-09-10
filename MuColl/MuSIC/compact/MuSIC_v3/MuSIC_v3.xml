@@ -9,7 +9,7 @@
     </info>
 
     <includes>
-        <gdmlFile  ref="elements.xml"/>
+        <gdmlFile  ref="../MuSIC_v2/elements.xml"/>
         <gdmlFile  ref="materials.xml"/>
     </includes>
 
@@ -45,7 +45,6 @@
         <constant name="DetID_FT"               value="7"/>
 
         <constant name="Nozzle_zmin"            value="6*cm"/>
-        <constant name="Nozzle_zmax"            value="600*cm"/>
 
 
 
@@ -176,8 +175,9 @@
 
     <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
 
-    <include ref="Beampipe_o1_v01_02.xml"/>
+    <!-- Nozzle first: it defines the profile constants used by the beampipe and the ForwardTracker -->
     <include ref="Nozzle_10deg_v2.xml"/>
+    <include ref="Beampipe_o1_v01_02.xml"/>
     <include ref="ForwardTracker.xml"/>
 
     <include ref="Vertex_o2_v06_01.xml"/>

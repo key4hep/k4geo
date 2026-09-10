@@ -1,23 +1,24 @@
 <lccdd>
 
     <define>
-        <!-- Disk z positions (centre of the 5 cm gap cut in the nozzle).
+        <!-- Disk z positions: the centres of the gaps cut in the nozzle (Nozzle_10deg_v2.xml).
              Each disk is split into two layers (ring A and ring B) to satisfy the
              VertexEndcap_o1_v07 constraint of one ring per layer.
              Layer IDs: 0/1 = disk 0 A/B,  2/3 = disk 1 A/B,  4/5 = disk 2 A/B. -->
-        <constant name="ForwardTracker_z0"            value="5450*mm"/>
-        <constant name="ForwardTracker_z1"            value="5650*mm"/>
-        <constant name="ForwardTracker_z2"            value="5850*mm"/>
+        <constant name="ForwardTracker_z0"            value="NozzleCut_z0"/>
+        <constant name="ForwardTracker_z1"            value="NozzleCut_z1"/>
+        <constant name="ForwardTracker_z2"            value="NozzleCut_z2"/>
 
-        <!-- Inner radius = 25 mm (clears the W bore); outer radius = cladding outer edge -->
+        <!-- Inner radius = 25 mm (clears the steel insert around the W bore);
+             outer radius = nozzle outer surface at the disk position -->
         <constant name="ForwardTracker_rmin_0"        value="25*mm"/>
-        <constant name="ForwardTracker_rmax_0"        value="512.197*mm"/>
+        <constant name="ForwardTracker_rmax_0"        value="Nozzle_rmax_kink + Nozzle_shell_slope*(ForwardTracker_z0 - Nozzle_kink_z)"/>
 
         <constant name="ForwardTracker_rmin_1"        value="25*mm"/>
-        <constant name="ForwardTracker_rmax_1"        value="527.318*mm"/>
+        <constant name="ForwardTracker_rmax_1"        value="Nozzle_rmax_kink + Nozzle_shell_slope*(ForwardTracker_z1 - Nozzle_kink_z)"/>
 
         <constant name="ForwardTracker_rmin_2"        value="25*mm"/>
-        <constant name="ForwardTracker_rmax_2"        value="542.439*mm"/>
+        <constant name="ForwardTracker_rmax_2"        value="Nozzle_rmax_kink + Nozzle_shell_slope*(ForwardTracker_z2 - Nozzle_kink_z)"/>
 
         <!-- 8 modules per ring x 2 rings per disk = 16 modules per disk.
              Module width sized for ForwardTrackerNSlots=16 so each module covers one
