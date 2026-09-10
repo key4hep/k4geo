@@ -8,17 +8,20 @@ mass in some MuColl-derived models).
 
 
 ### Beampipe
-Two coaxial volumes around the interaction point:
+Three coaxial volumes around the interaction point:
 
 |Volume         | z range [cm]      | Rmin [cm]  | Rmax [cm]  | Material  |
 |---------------|-------------------|------------|------------|-----------|
-|Inner bore     | −600 to +600      | 0          | 0.3 → 1.78 (tapered) | Vacuum    |
-|Be wall        | −13.23 to +13.23  | 1.0 → 2.281| 2.2 → 2.281| Beryllium |
+|Inner bore     | −595 to +595      | 0          | 0.3 → 1.78 (tapered) | beam      |
+|Cavity         | −12.81 to +12.81  | 1.0 → 2.2 (on the nozzle cone) | 2.2 | beam |
+|Be wall        | −13.37 to +13.37  | 2.2 → 2.3  | 2.3        | Beryllium |
 
-The inner-bore taper follows the nozzle profile: rmax = 1 cm at the IP, narrows
-to 0.3 cm at |z| = 100 cm, then widens back to 1.78 cm at |z| = 600 cm. Beyond
-|z| > 13.23 cm there is no separate Be tube — the tungsten nozzle bore acts as
-the beampipe wall.
+The inner-bore taper is built from the same constants as the nozzle bore (see
+Nozzle_10deg_v2.xml): rmax = 1 cm at the IP, narrows to 0.3 cm at |z| = 100 cm,
+then widens back to 1.78 cm at |z| = 595 cm. The cavity and the 1 mm Be wall are
+closed by the 10° nozzle cone, which reaches the wall's inner radius at
+|z| = 12.81 cm and its outer radius at |z| = 13.37 cm; beyond that there is no
+separate Be tube — the tungsten nozzle bore acts as the beampipe wall.
 
 
 ### Nozzle (10° MAP-style)
@@ -31,7 +34,7 @@ boundary are computed by exact linear interpolation along the nozzle cone.
 | Component       | z range [cm]                          | Material       |
 |-----------------|---------------------------------------|----------------|
 | Tungsten core   | ±6 to ±595 (4 segments per side)      | Tungsten_light |
-| BCH2 layer      | ±100 to ±595 (4 segments per side)    | BCH2_composite |
+| BCH2 layer      | ±100 to ±595 (4 segments per side)    | BCH2           |
 | Tungsten clad   | ±100 to ±595 (4 segments per side)    | Tungsten_light |
 
 Tungsten core inner radius starts at 1 cm (z = ±6 cm) and tapers down to 0.3 cm
@@ -44,7 +47,7 @@ of the corresponding Forward Tracker disks.
 
 
 ### Forward Tracker (silicon disks in nozzle gaps)
-Three double-layer silicon disk stations placed in the 1 cm nozzle gaps on each
+Three double-layer silicon disk stations placed in the 5 cm nozzle gaps on each
 side. Each station consists of two staggered rings (A and B) registered as
 separate detector layers so that every layer contains exactly one ring
 (VertexEndcap_o1_v07 constraint). Each ring carries 8 trapezoidal modules; the

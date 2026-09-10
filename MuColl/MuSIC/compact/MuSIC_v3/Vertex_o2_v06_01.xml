@@ -3,7 +3,15 @@
     <comment>Tracking detectors</comment>
     <detectors>
         <detector name="Vertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
-            <shape type="Tube" rmin="Vertex_inner_radius+env_safety" rmax="Vertex_outer_radius" dz="Vertex_half_length" material="Air"/>
+            <!-- Cylinder around the barrel; beyond Vertex_cone_zjoin the inner surface follows
+                 the nozzle cone (Nozzle_10deg_v2.xml) at env_safety so the envelope never
+                 enters the tungsten. -->
+            <shape type="Polycone" material="Air">
+                <zplane z="-Vertex_half_length" rmin="Vertex_cone_rmin_zmax"         rmax="Vertex_outer_radius"/>
+                <zplane z="-Vertex_cone_zjoin"  rmin="Vertex_inner_radius+env_safety" rmax="Vertex_outer_radius"/>
+                <zplane z="Vertex_cone_zjoin"   rmin="Vertex_inner_radius+env_safety" rmax="Vertex_outer_radius"/>
+                <zplane z="Vertex_half_length"  rmin="Vertex_cone_rmin_zmax"         rmax="Vertex_outer_radius"/>
+            </shape>
             <comment>Vertex Detector Assembly</comment>
             <composite name="VertexBarrel"/>
             <composite name="VertexEndcap"/>
@@ -67,6 +75,11 @@
 
         <constant name="VertexEndcap_Sensitive_Thickness"   value="50e-3*mm"/>
         <constant name="VertexEndcap_Support_Thickness"     value="280e-3*mm"/>
+
+        <!-- Envelope: z where the nozzle cone reaches the barrel envelope radius, and the
+             envelope inner radius at Vertex_half_length (nozzle cone + env_safety) -->
+        <constant name="Vertex_cone_zjoin"    value="Nozzle_zmin + (Vertex_inner_radius + env_safety - Nozzle_rmax_zmin)/Nozzle_outer_slope"/>
+        <constant name="Vertex_cone_rmin_zmax" value="Nozzle_rmax_zmin + Nozzle_outer_slope*(Vertex_half_length - Nozzle_zmin) + env_safety"/>
     </define>
 
 
