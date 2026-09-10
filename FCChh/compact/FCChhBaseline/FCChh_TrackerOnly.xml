@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+  <includes>
+    <gdmlFile  ref="Common/elements.xml"/>
+    <gdmlFile  ref="Common/materials.xml"/>
+  </includes>  
+
+  <info name="FCCDectMaster"
+    title="master file with includes and world dimension"
+    author="C. Helsens"
+    url="no"
+    status="development"
+    version="1.0">
+    <comment>master file with includes and world dimension</comment>
+  </info>
+  <define>
+    <constant name="world_size" value="25*m"/>
+    <constant name="world_x" value="world_size"/>
+    <constant name="world_y" value="world_size"/>
+    <constant name="world_z" value="world_size"/>
+  </define>
+  <include ref="./FCChh_DectDimensions-v02.xml" />
+  <include ref="./FCChh_Visualisation.xml" />  
+  <include ref="./FCChh_MaterialBinning.xml"/>
+
+  <!-- Including the sub-detectors / volume definitions -->
+
+  <!-- ***** Version3 ***** -->
+  <include ref="./TrackerTkLayout-v02/Tracker.xml" />
+
+</lccdd>
