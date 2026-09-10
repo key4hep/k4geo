@@ -1,0 +1,57 @@
+<lccdd>
+    <define>
+        <constant name="R_inner"                value="2.2*cm"/>   <!-- inner radius of the Be wall -->
+        <constant name="Beampipe_wall_thickness" value="1*mm"/>
+
+        <!-- z at which the nozzle cone (Nozzle_10deg_v2.xml) reaches the inner / outer
+             radius of the wall: the cavity closes at the first, the wall is fully
+             absorbed by the nozzle at the second. -->
+        <constant name="Beampipe_wall_zjoint"   value="Nozzle_zmin + (R_inner - Nozzle_rmax_zmin)/Nozzle_outer_slope"/>
+        <constant name="Beampipe_wall_zend"     value="Nozzle_zmin + (R_inner + Beampipe_wall_thickness - Nozzle_rmax_zmin)/Nozzle_outer_slope"/>
+    </define>
+
+    <display>
+        <vis name="BeampipeInnerVis" alpha="1.0" r="0.8" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+        <vis name="BeampipeOuterVis" alpha="0.6" r="0.8" g="0.1" b="1.0" showDaughters="true" visible="true"/>
+        <vis name="BeampipeWallVis"  alpha="1.0" r="0.4" g="0.4" b="0.4" showDaughters="true" visible="true"/>
+    </display>
+
+
+    <detectors>
+        <comment>Beampipe</comment>
+
+        <detector name="BeampipeInner" type="DD4hep_PolyconeSupport" vis="BeampipeInnerVis" region="BeampipeRegion">
+            <comment>Inner part of the beampipe: vacuum bore</comment>
+            <material name="beam"/>
+            <!-- rmax is the nozzle bore, built from the same constants as the nozzle
+                 (Nozzle_10deg_v2.xml) so the two surfaces coincide by construction. -->
+            <zplane z="-Nozzle_end_z"    rmin="0" rmax="Nozzle_rmin_end" />
+            <zplane z="-Nozzle_kink_z"   rmin="0" rmax="Nozzle_rmin_kink" />
+            <zplane z="-Nozzle_tip_zmax" rmin="0" rmax="Nozzle_rmin_tip" />
+            <zplane z="-Nozzle_zmin"     rmin="0" rmax="Nozzle_rmax_zmin" />
+            <zplane z="Nozzle_zmin"      rmin="0" rmax="Nozzle_rmax_zmin" />
+            <zplane z="Nozzle_tip_zmax"  rmin="0" rmax="Nozzle_rmin_tip" />
+            <zplane z="Nozzle_kink_z"    rmin="0" rmax="Nozzle_rmin_kink" />
+            <zplane z="Nozzle_end_z"     rmin="0" rmax="Nozzle_rmin_end" />
+        </detector>
+
+        <detector name="BeampipeOuter" type="DD4hep_PolyconeSupport" vis="BeampipeOuterVis" region="BeampipeRegion">
+            <comment>Vacuum cavity between the bore and the Be wall, closed by the nozzle cone</comment>
+            <material name="beam"/>
+            <zplane z="-Beampipe_wall_zjoint" rmin="R_inner"          rmax="R_inner" />
+            <zplane z="-Nozzle_zmin"          rmin="Nozzle_rmax_zmin" rmax="R_inner" />
+            <zplane z="Nozzle_zmin"           rmin="Nozzle_rmax_zmin" rmax="R_inner" />
+            <zplane z="Beampipe_wall_zjoint"  rmin="R_inner"          rmax="R_inner" />
+        </detector>
+
+        <detector name="BeampipeWall" type="DD4hep_PolyconeSupport" vis="BeampipeWallVis" region="BeampipeRegion">
+            <comment>Beryllium wall, closing conically onto the nozzle</comment>
+            <material name="Beryllium"/>
+            <zplane z="-Beampipe_wall_zend"   rmin="R_inner + Beampipe_wall_thickness" rmax="R_inner + Beampipe_wall_thickness" />
+            <zplane z="-Beampipe_wall_zjoint" rmin="R_inner"                           rmax="R_inner + Beampipe_wall_thickness" />
+            <zplane z="Beampipe_wall_zjoint"  rmin="R_inner"                           rmax="R_inner + Beampipe_wall_thickness" />
+            <zplane z="Beampipe_wall_zend"    rmin="R_inner + Beampipe_wall_thickness" rmax="R_inner + Beampipe_wall_thickness" />
+        </detector>
+
+    </detectors>
+</lccdd>
