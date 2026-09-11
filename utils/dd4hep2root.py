@@ -43,7 +43,7 @@ def convert(compact_files, out_path):
         if colorNumber not in cachedColors:
             color = ROOT.gROOT.GetColor(colorNumber)
 
-            # if not color: return colorNumber
+            if not color: return colorNumber
 
             r, g, b = color.GetRed(), color.GetGreen(), color.GetBlue()
 
