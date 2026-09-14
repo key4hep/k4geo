@@ -1,11 +1,11 @@
 <lccdd>
     <info name="MuSIC_v3"
-          title="MuSIC geometry v2 with 5 layers in VXD barrel"
-          author="Davide Zuliani"
+          title="MuSIC geometry v3 with forward-tracker disks inside the nozzles"
+          author="Massimo Casarsa"
           url="https://mcdwiki.docs.cern.ch/"
           status="development"
           version="$Id$">
-        <comment>MuSIC v2 geometry with 5 layers in VXD barrel</comment>
+        <comment>MuSIC geometry v3 with forward-tracker disks inside the nozzles</comment>
     </info>
 
     <includes>
