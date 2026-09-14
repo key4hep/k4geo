@@ -13,14 +13,6 @@
       <constant name="beampipegoldtolerance" value="BeamPipeGoldTolerance"/>
     </define>
 
-    <!--  Definition of the used visualization attributes    -->
-    <display>
-        <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
-        <vis name="GoldCoatingVis" alpha="0.0" r="0.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
-        <vis name="TubeVis"  alpha="1.0" r="1.0" g="0.7"  b="0.5"   showDaughters="true"  visible="true"/>
-        <vis name="VacVis"   alpha="1.0" r="1.0" g="1.0"  b="1.0"   showDaughters="true"  visible="false"/>
-    </display>
-
     <detectors>
 
       <!-- ;radius calculator lisp
