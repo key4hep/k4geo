@@ -44,7 +44,6 @@ namespace DDSegmentation {
      */
     virtual void neighbours(const CellID& cellID, std::set<CellID>& neighbours) const override;
 
-
     /**  Find neighbours of the cell.
      *   Definition of neighbours is explained on slide 9:
      * https://indico.cern.ch/event/1475808/contributions/6219554/attachments/2966253/5218774/FCC_FullSim_HCal_slides.pdf
@@ -52,12 +51,12 @@ namespace DDSegmentation {
      *   @param[in] aDiagonal if true, will include neighbours from diagonal positions in the next and previous layers.
      *   return vector of neighbour cellIDs.
      */
-    //std::vector<uint64_t> neighbours(const CellID cID, bool aDiagonal) const;
+    // std::vector<uint64_t> neighbours(const CellID cID, bool aDiagonal) const;
 
     /**  Find neighbours of the cell.
      *   Implement the signature from the Segmentation base class.
      */
-    //virtual void neighbours(const CellID& cellID, std::set<CellID>& neighbours) const override;
+    // virtual void neighbours(const CellID& cellID, std::set<CellID>& neighbours) const override;
 
   protected:
     /// Get rho from cellID
@@ -81,7 +80,7 @@ namespace DDSegmentation {
     bool m_clearExtraFields;
 
     /// the coordinate offset in rho / R
-    double m_offsetR;   // In cylinder case: offset depends on R not rho.
+    double m_offsetR; // In cylinder case: offset depends on R not rho.
     double m_offsetrho;
 
     /// the field name used for rho
@@ -95,9 +94,6 @@ namespace DDSegmentation {
     int m_phiIndex = -1;
     /// the field index used for rho
     int m_rhoIndex = -1;
-
-
-
   };
 } // namespace DDSegmentation
 } // namespace dd4hep

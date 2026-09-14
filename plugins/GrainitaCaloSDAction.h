@@ -20,9 +20,9 @@ namespace sim {
     std::string rawCollectionName = "GrainitaCalorimeterHitsRaw";
     int neighborCellSize = 5;
     double fiberAttenuationLength = 1000.; // mm
-    double outerRadius = 2645.; // mm
+    double outerRadius = 2645.;            // mm
 
-     // Light response function parameters
+    // Light response function parameters
     bool useLightResponseFunction = true;
     // Light response function:
     //    y = slope*x + intersect (x<x0)
@@ -33,15 +33,12 @@ namespace sim {
     double intersect = 0.206;
     double norm = 1. / std::exp(-1. * x0 / AttLength);
 
-
-    
     double lightResponse(double distance) const {
       if (distance < x0) {
         return slope * distance + intersect;
       }
       return norm * std::exp(-distance / AttLength);
     }
-
   };
 
   using GrainitaCaloSDAction = Geant4SensitiveAction<GrainitaCaloSDData>;
