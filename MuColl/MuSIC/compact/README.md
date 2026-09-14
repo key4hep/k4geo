@@ -1,6 +1,6 @@
 ## Geometries of the MUon System for Interesting Collisions
 
-The following MuSIC detector models are available in k4geo ( current production models **MuSIC_v2** )
+The following MuSIC detector models are available in k4geo ( current production model is **MuSIC_v3** )
 
 | Model         |  Description                       | Hcal   |  Ecal   | Muon | Status     |
 | ------------- | -----------------------------------|--------|---------|------|------------|
