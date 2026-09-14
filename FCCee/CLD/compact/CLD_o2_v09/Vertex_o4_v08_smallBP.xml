@@ -177,7 +177,7 @@
             </module>
 
             <layer id="0"  vis="SiVertexLayerVis">
-                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin1) / 2" zstart="VertexEndcap_z1-VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0*cm" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule1"/>
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin1) / 2" zstart="VertexEndcap_z1 - VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0*cm" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule1"/>
             </layer>
             <layer id="1"  vis="SiVertexLayerVis">
                 <ring r="(VertexEndcap_rmax + VertexEndcap_rmin1) / 2" zstart="VertexEndcap_z1+VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0*cm" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule2"/>
