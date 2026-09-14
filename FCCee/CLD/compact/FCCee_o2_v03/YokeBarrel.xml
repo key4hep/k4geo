@@ -39,7 +39,7 @@
             
             <type_flags type=" DetType_CALORIMETER + DetType_MUON + DetType_BARREL"/>
 
-            <sensitive type="SimpleCalorimeterSD"/>
+            <sensitive type="calorimeter"/>
             
             <envelope vis="YOKEVis">
                 <shape type="PolyhedraRegular" numsides="YokeBarrel_symmetry"  rmin="YokeBarrel_inner_radius-10*env_safety" rmax="YokeBarrel_outer_radius+10*env_safety" dz="2*YokeBarrel_half_length"  material = "Air" />
