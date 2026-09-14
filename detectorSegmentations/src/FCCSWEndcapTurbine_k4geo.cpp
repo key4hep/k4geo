@@ -1,5 +1,6 @@
 #include "detectorSegmentations/FCCSWEndcapTurbine_k4geo.h"
 #include "DD4hep/Detector.h"
+#include <numbers>
 
 namespace dd4hep {
 namespace DDSegmentation {
