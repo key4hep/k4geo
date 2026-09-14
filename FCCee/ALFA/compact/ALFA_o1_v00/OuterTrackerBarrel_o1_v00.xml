@@ -57,7 +57,7 @@
     <comment> Sensor parameters </comment>
     <define>
         <constant name="OTBar_sens_rphi"    value="25.0*mm"/>
-        <constant name="OTBar_sens_rphi_periphery"    value="0.12*mm"/>
+        <constant name="OTBar_sens_rphi_periphery"    value="1.2*mm"/>
         <constant name="OTBar_sens_rphi_sensitive"    value="OTBar_sens_rphi - OTBar_sens_rphi_periphery"/>
         <constant name="OTBar_sens_rphi_spacing" value="0.05*mm"/>
         <constant name="OTBar_sens_z"       value="32.0*mm"/>
@@ -393,7 +393,7 @@
             <layer nLadders="OTBar_nStaves4" 
                    r="OTBar_r4" 
                    dr="OTBar_dr" 
-                   id="3" 
+                   id="2" 
                    nmodules="OTBar_nModules4" 
                    name="OTBarStave_single" 
                    step="OTBar_mod_z_spacing" 
@@ -402,7 +402,7 @@
             <layer nLadders="OTBar_nStaves5" 
                    r="OTBar_r5" 
                    dr="OTBar_dr" 
-                   id="4" 
+                   id="3" 
                    nmodules="OTBar_nModules5" 
                    name="OTBarStave_single" 
                    step="OTBar_mod_z_spacing" 
