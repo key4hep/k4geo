@@ -100,8 +100,8 @@ namespace DDSegmentation {
       // WARNING: may introduce bug. Better to well-define bin edges.
       if (rhoID < 0)
         rhoID = 0;
-      if (rhoID > m_rhoBins.size() - 2)
-        rhoID = m_rhoBins.size() - 2;
+      if (rhoID > static_cast<int>(m_rhoBins.size()) - 2)
+        rhoID = static_cast<int>(m_rhoBins.size()) - 2;
       decoder()->set(cID, m_rhoIndex, rhoID);
     }
 

@@ -222,7 +222,7 @@ namespace sim {
     }
 
     // Note: keep cell id for future development: modular segmentation.
-    auto transverseDistance = [&](CellID id, const G4ThreeVector& cellPos) {
+    auto transverseDistance = [&]([[maybe_unused]] CellID id, const G4ThreeVector& cellPos) {
       G4ThreeVector axis = cellPos.unit();
       // if (modularSeg) {
       //   auto fiberDir = modularSeg->fiberDirection(id);
