@@ -18,6 +18,7 @@
 #
 from DDSim.DD4hepSimulation import DD4hepSimulation
 from g4units import mm, m, cm, GeV, MeV
+
 SIM = DD4hepSimulation()
 
 
@@ -122,7 +123,7 @@ SIM.vertexSigma = [0.0, 0.0, 0.0, 0.0]
 SIM.action.calo = "GrainitaCaloSDAction"
 
 ## List of patterns matching sensitive detectors of type Calorimeter.
-SIM.action.calorimeterSDTypes = ['calorimeter']
+SIM.action.calorimeterSDTypes = ["calorimeter"]
 
 ##  set the default event action
 SIM.action.event = []
@@ -134,12 +135,12 @@ SIM.action.event = []
 ##       SIM.action.mapActions['tpc'] = "TPCSDAction"
 ##
 SIM.action.mapActions = {
-    'Grainita_ECAL_Barrel_v02': (
+    "Grainita_ECAL_Barrel_v02": (
         "GrainitaCaloSDAction",
         {
             "ReadoutName": "GrainitaEcalBarrelRO",
             "CollectionName": "GrainitaCalorimeterHits",
-            "useLightResponseFunction":True,
+            "useLightResponseFunction": True,
             "responseFuncSlope": 0.93,
             "responseFuncIntersect": 0.206,
             "responseFuncX0": 0.856,
@@ -147,7 +148,7 @@ SIM.action.mapActions = {
             "neighborCellSize": 5,
             "fiberAttenuationLength": 1e7,
             "outerRadius": 2645,
-        }
+        },
     )
 }
 
@@ -164,10 +165,13 @@ SIM.action.step = []
 SIM.action.track = []
 
 ##  set the default tracker action
-SIM.action.tracker = ('Geant4TrackerWeightedAction', {'HitPositionCombination': 2, 'CollectSingleDeposits': False})
+SIM.action.tracker = (
+    "Geant4TrackerWeightedAction",
+    {"HitPositionCombination": 2, "CollectSingleDeposits": False},
+)
 
 ## List of patterns matching sensitive detectors of type Tracker.
-SIM.action.trackerSDTypes = ['tracker']
+SIM.action.trackerSDTypes = ["tracker"]
 
 
 ################################################################################
@@ -214,7 +218,11 @@ SIM.field.stepper = "ClassicalRK4"
 ##SIM.filter.calo = "edep0"
 
 ##  list of filter objects: map between name and parameter dictionary
-SIM.filter.filters = {'geantino': {'name': 'GeantinoRejectFilter/GeantinoRejector', 'parameter': {}}, 'edep1kev': {'name': 'EnergyDepositMinimumCut', 'parameter': {'Cut': 0.001}}, 'edep0': {'name': 'EnergyDepositMinimumCut/Cut0', 'parameter': {'Cut': 0.0}}}
+SIM.filter.filters = {
+    "geantino": {"name": "GeantinoRejectFilter/GeantinoRejector", "parameter": {}},
+    "edep1kev": {"name": "EnergyDepositMinimumCut", "parameter": {"Cut": 0.001}},
+    "edep0": {"name": "EnergyDepositMinimumCut/Cut0", "parameter": {"Cut": 0.0}},
+}
 
 ##  a map between patterns and filter objects, using patterns to attach filters to sensitive detector
 SIM.filter.mapDetFilter = {}
@@ -306,7 +314,7 @@ SIM.gun.distribution = None
 ## Total energy (including mass) for the particle gun.
 ##
 ## If not None, it will overwrite the setting of momentumMin and momentumMax
-SIM.gun.energy = 100.0*GeV
+SIM.gun.energy = 100.0 * GeV
 
 ## Maximal pseudorapidity for random distibution (overrides thetaMin)
 SIM.gun.etaMax = None
@@ -506,7 +514,7 @@ SIM.part.keepAllParticles = False
 SIM.part.minDistToParentVertex = 2.2e-14
 
 ## MinimalKineticEnergy to store particles created in the tracking region
-SIM.part.minimalKineticEnergy = 1.*GeV
+SIM.part.minimalKineticEnergy = 1.0 * GeV
 
 ##  Printout at End of Tracking
 SIM.part.printEndTracking = False
@@ -515,7 +523,7 @@ SIM.part.printEndTracking = False
 SIM.part.printStartTracking = False
 
 ## List of processes to save, on command line give as whitespace separated string in quotation marks
-SIM.part.saveProcesses = ['Decay']
+SIM.part.saveProcesses = ["Decay"]
 
 ## Optionally enable an extended Particle Handler
 SIM.part.userParticleHandler = ""
@@ -587,7 +595,43 @@ SIM.physics.rangecut = 0.7
 ##
 ##     Quarks, gluons and W's Z's etc should not be treated by Geant4
 ##
-SIM.physics.rejectPDGs = {3201, 1, 3203, 2, 4101, 3, 4103, 4, 5, 6, 21, 23, 24, 5401, 25, 2203, 5403, 3101, 3103, 4403, 2101, 5301, 2103, 5303, 4301, 1103, 4303, 5201, 5203, 3303, 4201, 4203, 5101, 5103, 5503}
+SIM.physics.rejectPDGs = {
+    3201,
+    1,
+    3203,
+    2,
+    4101,
+    3,
+    4103,
+    4,
+    5,
+    6,
+    21,
+    23,
+    24,
+    5401,
+    25,
+    2203,
+    5403,
+    3101,
+    3103,
+    4403,
+    2101,
+    5301,
+    2103,
+    5303,
+    4301,
+    1103,
+    4303,
+    5201,
+    5203,
+    3303,
+    4201,
+    4203,
+    5101,
+    5103,
+    5503,
+}
 
 ## Set of PDG IDs for particles that should not be passed to Geant4 if their properTime is 0.
 ##
