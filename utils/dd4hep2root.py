@@ -39,22 +39,27 @@ def convert(compact_files, out_path):
 
     def mapColor(colorNumber):
         # If color number matches a predefined one then don't approximate
-        if colorNumber < 924: return colorNumber
+        if colorNumber < 924:
+            return colorNumber
 
         if colorNumber not in cachedColors:
             color = ROOT.gROOT.GetColor(colorNumber)
 
             # Guard clause in case GetColor() doesn't return a valid color
-            if not color: return colorNumber
+            if not color:
+                return colorNumber
 
             r, g, b = color.GetRed(), color.GetGreen(), color.GetBlue()
 
-            # Score every predefined ROOT color by square distance 
-            mostSimilar = min(predefinedColors, key=lambda num: 
-                (predefinedColors[num][0] - r)**2 +
-                (predefinedColors[num][1] - g)**2 + 
-                (predefinedColors[num][2] - b)**2
-            ) 
+            # Score every predefined ROOT color by square distance
+            mostSimilar = min(
+                predefinedColors,
+                key=lambda num: (
+                    (predefinedColors[num][0] - r) ** 2
+                    + (predefinedColors[num][1] - g) ** 2
+                    + (predefinedColors[num][2] - b) ** 2
+                ),
+            )
 
             cachedColors[colorNumber] = mostSimilar
 
@@ -62,7 +67,7 @@ def convert(compact_files, out_path):
 
     # Store predefined ROOT colors
     for c in ROOT.gROOT.GetListOfColors():
-        if (c and c.GetNumber() < 924):
+        if c and c.GetNumber() < 924:
             predefinedColors[c.GetNumber()] = (c.GetRed(), c.GetGreen(), c.GetBlue())
 
     # Map volumes to the closest predefined ROOT colors
@@ -73,6 +78,7 @@ def convert(compact_files, out_path):
     ROOT.gGeoManager.SetVisLevel(9)
     ROOT.gGeoManager.SetVisOption(0)
     ROOT.gGeoManager.Export(out_path)
+
 
 if __name__ == "__main__":
     main()
