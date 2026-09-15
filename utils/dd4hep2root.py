@@ -38,24 +38,25 @@ def convert(compact_files, out_path):
     predefinedColors = {}
 
     def mapColor(colorNumber):
+        # If color number matches a predefined one then don't approximate
         if colorNumber < 924: return colorNumber
 
         if colorNumber not in cachedColors:
             color = ROOT.gROOT.GetColor(colorNumber)
 
+            # Guard clause in case GetColor() doesn't return a valid color
             if not color: return colorNumber
 
             r, g, b = color.GetRed(), color.GetGreen(), color.GetBlue()
 
             # Score every predefined ROOT color by square distance 
-            rankedColors = min(predefinedColors, key=lambda num: 
+            mostSimilar = min(predefinedColors, key=lambda num: 
                 (predefinedColors[num][0] - r)**2 +
                 (predefinedColors[num][1] - g)**2 + 
                 (predefinedColors[num][2] - b)**2
             ) 
 
-            # Cache the most similar
-            cachedColors[colorNumber] = rankedColors
+            cachedColors[colorNumber] = mostSimilar
 
         return cachedColors[colorNumber]
 
