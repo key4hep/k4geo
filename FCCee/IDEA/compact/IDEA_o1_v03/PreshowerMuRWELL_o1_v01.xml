@@ -4,7 +4,7 @@
   <!--
   detailed version of IDEA pre-shower system for FCC-ee.
   Nitika Nitika- nitika.nitika@cern.ch, Mahmoud Ali- mahmoud.ali@cern.ch
-  It depends on the factory: muonSystemMuRWELL_o1_v01
+  It depends on the factory: muonSystem_o1_v01
   -->
 
   <define>
@@ -39,7 +39,7 @@
 
   <detectors>
     <!-- mRWELL envelope -->
-    <detector name="Preshower" type="muonSystemMuRWELL_o1_v01" id="DetID_Preshower" readout="PreshowerSystemCollection">
+    <detector name="Preshower" type="muonSystem_o1_v01" id="DetID_Preshower" readout="PreshowerSystemCollection">
       <dimensions x="psMRWELLTotalThickness/2.0" y="psMRWELLYLength" z="psMRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
       <sensitive type="tracker"/>
 
