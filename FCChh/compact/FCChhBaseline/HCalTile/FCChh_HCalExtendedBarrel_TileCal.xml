@@ -27,20 +27,6 @@
     <constant name="ExtBarHCal_plate_space" value="0.5*mm" />
   </define>
 
-  <display>
-    <vis name="extHcal_steel_vis" r="0.5" g="0.5" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
-    <vis name="extHcal_steel_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
-    <vis name="extHcal_steel_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
-    <vis name="extHcal_face_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
-    <vis name="extHcal_end_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
-    <vis name="extHcal_polystyrene_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
-    <vis name="extHcal_envelope" r="0.6" g="0.8" b="0.6" alpha="1" showDaughers="true" visible="true" />
-    <vis name="extHcal_barrel_seq1_vis" r="0.1" g="0.8" b="0.6" alpha="1" showDaughers="true" visible="true" />
-    <vis name="extHcal_barrel_seq2_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughers="true" visible="true" />
-    <vis name="extHcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughers="true" visible="true" />
-    <vis name="extHcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughers="true" visible="true" />
-  </display>
-
   <readouts>
     <!-- Default readout of DetailedWedge geometry -->
     <readout name="HCalExtBarrelDetailedWedgeReadout">
@@ -67,21 +53,21 @@
       <sensitive type="calorimeter"/>
       <dimensions rmin1="ExtBarHCal1_rmin" rmin2="ExtBarHCal2_rmin" rmax1="ExtBarHCal1_rmax" rmax2="ExtBarHCal2_rmax" width="ExtBarHCal1_dz" dz="ExtBarHCal2_dz" offset="ExtBarHCal1_zOffset" z_offset="ExtBarHCal2_zOffset"/>
       <layers>
-	<layer id="0" name="type_1" material="Air" vis="exthcal_barrel_layer_vis">
+	<layer id="0" name="type_1" material="Air" vis="extHcal_barrel_layer_vis">
           <dimensions
              dr="100*mm"
 	     nmodules="1"
 	     nModules="2"
              />
 	</layer>
-	<layer id="1" name="type_2" material="Air" vis="exthcal_barrel_layer_vis">
+	<layer id="1" name="type_2" material="Air" vis="extHcal_barrel_layer_vis">
 	  <dimensions
              dr="150*mm"
              nmodules="0"
              nModules="2"
              />
 	</layer>
-	<layer id="2" name="type_3" material="Air" vis="exthcal_barrel_layer_vis">
+	<layer id="2" name="type_3" material="Air" vis="extHcal_barrel_layer_vis">
 	  <dimensions
              dr="250*mm"
              nmodules="3"
@@ -90,7 +76,7 @@
 	</layer>
       </layers>
       
-      <sequence_a id="3" name="sequence_1" material="Air" vis="exthcal_barrel_seq1_vis">
+      <sequence_a id="3" name="sequence_1" material="Air" vis="extHcal_barrel_seq1_vis">
 	<dimensions
 	   dz="2*ExtBarHCal_master_plate_thickness + ExtBarHCal_spacer_plate_thickness + ExtBarHCal_scintillator_thickness + 2*ExtBarHCal_air_space_thickness"
 	   phiBins="ExtBarHCal_n_phi_modules"

@@ -1,0 +1,342 @@
+<lccdd>
+    <!--  Definition of global dictionary constants          -->
+    <define>
+        <!-- Nozzle profile. Only the independent numbers are given here; every other
+             radius in this file, the vacuum bore in Beampipe_o1_v01_02.xml and the disk
+             radii in ForwardTracker.xml are derived from them, so the surfaces stay
+             matched by construction.
+               - outer surface: a 10 degree cone from (Nozzle_zmin, Nozzle_rmax_zmin) to the
+                 kink, then a straight line from the kink to (Nozzle_end_z, Nozzle_rmax_end)
+               - bore: straight lines through (Nozzle_zmin, Nozzle_rmax_zmin),
+                 (Nozzle_tip_zmax, Nozzle_rmin_tip), (Nozzle_kink_z, Nozzle_rmin_kink) and
+                 (Nozzle_end_z, Nozzle_rmin_end)
+               - radial layering beyond the kink, inwards from the outer surface: W cladding,
+                 BCH2, W core. At the kink the core is stepped in and stays at constant radius
+                 until it meets the line parallel to the outer surface. -->
+        <constant name="Nozzle_angle"              value="10*degree"/>
+        <constant name="Nozzle_tip_zmax"           value="15*cm"/>
+        <constant name="Nozzle_kink_z"             value="100*cm"/>
+        <constant name="Nozzle_end_z"              value="595*cm"/>
+        <constant name="Nozzle_rmax_zmin"          value="1*cm"/>     <!-- outer radius at Nozzle_zmin (zero-thickness tip) -->
+        <constant name="Nozzle_rmax_end"           value="55*cm"/>    <!-- outer radius at Nozzle_end_z   -->
+        <constant name="Nozzle_rmin_tip"           value="0.6*cm"/>   <!-- bore radius at Nozzle_tip_zmax -->
+        <constant name="Nozzle_rmin_kink"          value="0.3*cm"/>   <!-- bore radius at Nozzle_kink_z   -->
+        <constant name="Nozzle_rmin_end"           value="1.78*cm"/>  <!-- bore radius at Nozzle_end_z    -->
+        <constant name="Nozzle_cladding_thickness" value="4*cm"/>     <!-- radial thickness of the W cladding -->
+        <constant name="Nozzle_BCH_thickness"      value="8*cm"/>     <!-- radial space for the BCH2 layer (incl. env_safety to the core) -->
+        <constant name="Nozzle_BCH_kink_thickness" value="1*mm"/>     <!-- same, at the kink where the core is stepped in -->
+        <constant name="Nozzle_insert_thickness"   value="5*mm"/>     <!-- steel vacuum tube across the gaps -->
+
+        <!-- Gaps cut through all three layers for the ForwardTracker disks:
+             2*NozzleCut_halfgap wide, centred at NozzleCut_z0/1/2. -->
+        <constant name="NozzleCut_halfgap"         value="25*mm"/>
+        <constant name="NozzleCut_z0"              value="545*cm"/>
+        <constant name="NozzleCut_z1"              value="565*cm"/>
+        <constant name="NozzleCut_z2"              value="585*cm"/>
+
+        <!-- Derived quantities -->
+        <constant name="Nozzle_outer_slope"        value="tan(Nozzle_angle)"/>
+        <constant name="Nozzle_bore_slope"         value="(Nozzle_rmin_end - Nozzle_rmin_kink)/(Nozzle_end_z - Nozzle_kink_z)"/>
+        <constant name="Nozzle_rmax_tip"           value="Nozzle_rmax_zmin + Nozzle_outer_slope*(Nozzle_tip_zmax - Nozzle_zmin)"/>
+        <constant name="Nozzle_rmax_kink"          value="Nozzle_rmax_zmin + Nozzle_outer_slope*(Nozzle_kink_z - Nozzle_zmin)"/>
+        <constant name="Nozzle_shell_slope"        value="(Nozzle_rmax_end - Nozzle_rmax_kink)/(Nozzle_end_z - Nozzle_kink_z)"/>
+        <constant name="Nozzle_core_offset"        value="Nozzle_cladding_thickness + Nozzle_BCH_thickness"/>
+        <constant name="Nozzle_core_rmax_kink"     value="Nozzle_rmax_kink - Nozzle_cladding_thickness - Nozzle_BCH_kink_thickness"/>
+        <constant name="Nozzle_core_flat_zmax"     value="Nozzle_kink_z + (Nozzle_BCH_thickness - Nozzle_BCH_kink_thickness)/Nozzle_shell_slope"/>
+        <constant name="Nozzle_rmin_core_flat_zmax" value="Nozzle_rmin_kink + Nozzle_bore_slope*(Nozzle_core_flat_zmax - Nozzle_kink_z)"/>
+        <constant name="Nozzle_rmax_core_flat_zmax" value="Nozzle_rmax_kink + Nozzle_shell_slope*(Nozzle_core_flat_zmax - Nozzle_kink_z)"/>
+
+        <!-- Gap boundaries and the bore / outer radius there -->
+        <constant name="NozzleCut_z0_lo"           value="NozzleCut_z0 - NozzleCut_halfgap"/>
+        <constant name="NozzleCut_z0_hi"           value="NozzleCut_z0 + NozzleCut_halfgap"/>
+        <constant name="NozzleCut_z1_lo"           value="NozzleCut_z1 - NozzleCut_halfgap"/>
+        <constant name="NozzleCut_z1_hi"           value="NozzleCut_z1 + NozzleCut_halfgap"/>
+        <constant name="NozzleCut_z2_lo"           value="NozzleCut_z2 - NozzleCut_halfgap"/>
+        <constant name="NozzleCut_z2_hi"           value="NozzleCut_z2 + NozzleCut_halfgap"/>
+        <constant name="Nozzle_rmin_cut0_lo"       value="Nozzle_rmin_kink + Nozzle_bore_slope*(NozzleCut_z0_lo - Nozzle_kink_z)"/>
+        <constant name="Nozzle_rmin_cut0_hi"       value="Nozzle_rmin_kink + Nozzle_bore_slope*(NozzleCut_z0_hi - Nozzle_kink_z)"/>
+        <constant name="Nozzle_rmin_cut1_lo"       value="Nozzle_rmin_kink + Nozzle_bore_slope*(NozzleCut_z1_lo - Nozzle_kink_z)"/>
+        <constant name="Nozzle_rmin_cut1_hi"       value="Nozzle_rmin_kink + Nozzle_bore_slope*(NozzleCut_z1_hi - Nozzle_kink_z)"/>
+        <constant name="Nozzle_rmin_cut2_lo"       value="Nozzle_rmin_kink + Nozzle_bore_slope*(NozzleCut_z2_lo - Nozzle_kink_z)"/>
+        <constant name="Nozzle_rmin_cut2_hi"       value="Nozzle_rmin_kink + Nozzle_bore_slope*(NozzleCut_z2_hi - Nozzle_kink_z)"/>
+        <constant name="Nozzle_rmax_cut0_lo"       value="Nozzle_rmax_kink + Nozzle_shell_slope*(NozzleCut_z0_lo - Nozzle_kink_z)"/>
+        <constant name="Nozzle_rmax_cut0_hi"       value="Nozzle_rmax_kink + Nozzle_shell_slope*(NozzleCut_z0_hi - Nozzle_kink_z)"/>
+        <constant name="Nozzle_rmax_cut1_lo"       value="Nozzle_rmax_kink + Nozzle_shell_slope*(NozzleCut_z1_lo - Nozzle_kink_z)"/>
+        <constant name="Nozzle_rmax_cut1_hi"       value="Nozzle_rmax_kink + Nozzle_shell_slope*(NozzleCut_z1_hi - Nozzle_kink_z)"/>
+        <constant name="Nozzle_rmax_cut2_lo"       value="Nozzle_rmax_kink + Nozzle_shell_slope*(NozzleCut_z2_lo - Nozzle_kink_z)"/>
+        <constant name="Nozzle_rmax_cut2_hi"       value="Nozzle_rmax_kink + Nozzle_shell_slope*(NozzleCut_z2_hi - Nozzle_kink_z)"/>
+    </define>
+
+    <!--  Definition of the used visualization attributes    -->
+    <display>
+        <vis name="NozzleWVis"     alpha="1.0" r="0.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
+        <vis name="NozzleBCHVis"   alpha="1.0" r="0.3" g="0.3" b="1.0" showDaughters="true" visible="true"/>
+        <vis name="NozzleSteelVis" alpha="1.0" r="0.7" g="0.7" b="0.7" showDaughters="true" visible="true"/>
+    </display>
+
+
+    <detectors>
+        <comment>Nozzle: new version for 10 TeV Muon Collider</comment>
+
+        <!-- ======================================================= -->
+        <!-- Tungsten core (right side), 4 segments separated by      -->
+        <!-- the ForwardTracker gaps                                   -->
+        <!-- ======================================================= -->
+
+        <detector name="NozzleW_right" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
+            <comment>Tungsten core, segment from Nozzle_zmin to the first gap</comment>
+            <material name="Tungsten_light"/>
+            <zplane z="Nozzle_zmin"           rmin="Nozzle_rmax_zmin"           rmax="Nozzle_rmax_zmin" />
+            <zplane z="Nozzle_tip_zmax"       rmin="Nozzle_rmin_tip"            rmax="Nozzle_rmax_tip" />
+            <zplane z="Nozzle_kink_z"         rmin="Nozzle_rmin_kink"           rmax="Nozzle_rmax_kink" />
+            <zplane z="Nozzle_kink_z"         rmin="Nozzle_rmin_kink"           rmax="Nozzle_core_rmax_kink" />
+            <zplane z="Nozzle_core_flat_zmax" rmin="Nozzle_rmin_core_flat_zmax" rmax="Nozzle_core_rmax_kink" />
+            <zplane z="NozzleCut_z0_lo"       rmin="Nozzle_rmin_cut0_lo"        rmax="Nozzle_rmax_cut0_lo - Nozzle_core_offset" />
+        </detector>
+
+        <detector name="NozzleW_right_1" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
+            <comment>Tungsten core, segment between gaps 1 and 2</comment>
+            <material name="Tungsten_light"/>
+            <zplane z="NozzleCut_z0_hi"       rmin="Nozzle_rmin_cut0_hi"        rmax="Nozzle_rmax_cut0_hi - Nozzle_core_offset" />
+            <zplane z="NozzleCut_z1_lo"       rmin="Nozzle_rmin_cut1_lo"        rmax="Nozzle_rmax_cut1_lo - Nozzle_core_offset" />
+        </detector>
+
+        <detector name="NozzleW_right_2" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
+            <comment>Tungsten core, segment between gaps 2 and 3</comment>
+            <material name="Tungsten_light"/>
+            <zplane z="NozzleCut_z1_hi"       rmin="Nozzle_rmin_cut1_hi"        rmax="Nozzle_rmax_cut1_hi - Nozzle_core_offset" />
+            <zplane z="NozzleCut_z2_lo"       rmin="Nozzle_rmin_cut2_lo"        rmax="Nozzle_rmax_cut2_lo - Nozzle_core_offset" />
+        </detector>
+
+        <detector name="NozzleW_right_3" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
+            <comment>Tungsten core, segment from gap 3 to Nozzle_end_z</comment>
+            <material name="Tungsten_light"/>
+            <zplane z="NozzleCut_z2_hi"       rmin="Nozzle_rmin_cut2_hi"        rmax="Nozzle_rmax_cut2_hi - Nozzle_core_offset" />
+            <zplane z="Nozzle_end_z"          rmin="Nozzle_rmin_end"            rmax="Nozzle_rmax_end - Nozzle_core_offset" />
+        </detector>
+
+
+        <!-- ======================================================= -->
+        <!-- Tungsten core (left side)                                -->
+        <!-- ======================================================= -->
+
+        <detector name="NozzleW_left" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
+            <comment>Tungsten core, segment from -Nozzle_zmin to the first gap</comment>
+            <material name="Tungsten_light"/>
+            <zplane z="-Nozzle_zmin"           rmin="Nozzle_rmax_zmin"           rmax="Nozzle_rmax_zmin" />
+            <zplane z="-Nozzle_tip_zmax"       rmin="Nozzle_rmin_tip"            rmax="Nozzle_rmax_tip" />
+            <zplane z="-Nozzle_kink_z"         rmin="Nozzle_rmin_kink"           rmax="Nozzle_rmax_kink" />
+            <zplane z="-Nozzle_kink_z"         rmin="Nozzle_rmin_kink"           rmax="Nozzle_core_rmax_kink" />
+            <zplane z="-Nozzle_core_flat_zmax" rmin="Nozzle_rmin_core_flat_zmax" rmax="Nozzle_core_rmax_kink" />
+            <zplane z="-NozzleCut_z0_lo"       rmin="Nozzle_rmin_cut0_lo"        rmax="Nozzle_rmax_cut0_lo - Nozzle_core_offset" />
+        </detector>
+
+        <detector name="NozzleW_left_1" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
+            <comment>Tungsten core, segment between gaps 1 and 2</comment>
+            <material name="Tungsten_light"/>
+            <zplane z="-NozzleCut_z0_hi"       rmin="Nozzle_rmin_cut0_hi"        rmax="Nozzle_rmax_cut0_hi - Nozzle_core_offset" />
+            <zplane z="-NozzleCut_z1_lo"       rmin="Nozzle_rmin_cut1_lo"        rmax="Nozzle_rmax_cut1_lo - Nozzle_core_offset" />
+        </detector>
+
+        <detector name="NozzleW_left_2" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
+            <comment>Tungsten core, segment between gaps 2 and 3</comment>
+            <material name="Tungsten_light"/>
+            <zplane z="-NozzleCut_z1_hi"       rmin="Nozzle_rmin_cut1_hi"        rmax="Nozzle_rmax_cut1_hi - Nozzle_core_offset" />
+            <zplane z="-NozzleCut_z2_lo"       rmin="Nozzle_rmin_cut2_lo"        rmax="Nozzle_rmax_cut2_lo - Nozzle_core_offset" />
+        </detector>
+
+        <detector name="NozzleW_left_3" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
+            <comment>Tungsten core, segment from gap 3 to -Nozzle_end_z</comment>
+            <material name="Tungsten_light"/>
+            <zplane z="-NozzleCut_z2_hi"       rmin="Nozzle_rmin_cut2_hi"        rmax="Nozzle_rmax_cut2_hi - Nozzle_core_offset" />
+            <zplane z="-Nozzle_end_z"          rmin="Nozzle_rmin_end"            rmax="Nozzle_rmax_end - Nozzle_core_offset" />
+        </detector>
+
+
+        <!-- ======================================================= -->
+        <!-- Borated polyethylene middle layer (right side)           -->
+        <!-- rmin = core rmax + env_safety, rmax = cladding rmin       -->
+        <!-- ======================================================= -->
+
+        <detector name="NozzleBCH_right" type="DD4hep_PolyconeSupport" vis="NozzleBCHVis" region="NozzleRegion">
+            <comment>Borated polyethylene, segment from the kink to the first gap</comment>
+            <material name="BCH2"/>
+            <zplane z="Nozzle_kink_z"         rmin="Nozzle_core_rmax_kink + env_safety"                     rmax="Nozzle_rmax_kink - Nozzle_cladding_thickness" />
+            <zplane z="Nozzle_core_flat_zmax" rmin="Nozzle_core_rmax_kink + env_safety"                     rmax="Nozzle_rmax_core_flat_zmax - Nozzle_cladding_thickness" />
+            <zplane z="NozzleCut_z0_lo"       rmin="Nozzle_rmax_cut0_lo - Nozzle_core_offset + env_safety" rmax="Nozzle_rmax_cut0_lo - Nozzle_cladding_thickness" />
+        </detector>
+
+        <detector name="NozzleBCH_right_1" type="DD4hep_PolyconeSupport" vis="NozzleBCHVis" region="NozzleRegion">
+            <comment>Borated polyethylene, segment between gaps 1 and 2</comment>
+            <material name="BCH2"/>
+            <zplane z="NozzleCut_z0_hi"       rmin="Nozzle_rmax_cut0_hi - Nozzle_core_offset + env_safety" rmax="Nozzle_rmax_cut0_hi - Nozzle_cladding_thickness" />
+            <zplane z="NozzleCut_z1_lo"       rmin="Nozzle_rmax_cut1_lo - Nozzle_core_offset + env_safety" rmax="Nozzle_rmax_cut1_lo - Nozzle_cladding_thickness" />
+        </detector>
+
+        <detector name="NozzleBCH_right_2" type="DD4hep_PolyconeSupport" vis="NozzleBCHVis" region="NozzleRegion">
+            <comment>Borated polyethylene, segment between gaps 2 and 3</comment>
+            <material name="BCH2"/>
+            <zplane z="NozzleCut_z1_hi"       rmin="Nozzle_rmax_cut1_hi - Nozzle_core_offset + env_safety" rmax="Nozzle_rmax_cut1_hi - Nozzle_cladding_thickness" />
+            <zplane z="NozzleCut_z2_lo"       rmin="Nozzle_rmax_cut2_lo - Nozzle_core_offset + env_safety" rmax="Nozzle_rmax_cut2_lo - Nozzle_cladding_thickness" />
+        </detector>
+
+        <detector name="NozzleBCH_right_3" type="DD4hep_PolyconeSupport" vis="NozzleBCHVis" region="NozzleRegion">
+            <comment>Borated polyethylene, segment from gap 3 to Nozzle_end_z</comment>
+            <material name="BCH2"/>
+            <zplane z="NozzleCut_z2_hi"       rmin="Nozzle_rmax_cut2_hi - Nozzle_core_offset + env_safety" rmax="Nozzle_rmax_cut2_hi - Nozzle_cladding_thickness" />
+            <zplane z="Nozzle_end_z"          rmin="Nozzle_rmax_end - Nozzle_core_offset + env_safety"     rmax="Nozzle_rmax_end - Nozzle_cladding_thickness" />
+        </detector>
+
+
+        <!-- ======================================================= -->
+        <!-- Borated polyethylene middle layer (left side)            -->
+        <!-- ======================================================= -->
+
+        <detector name="NozzleBCH_left" type="DD4hep_PolyconeSupport" vis="NozzleBCHVis" region="NozzleRegion">
+            <comment>Borated polyethylene, segment from the kink to the first gap</comment>
+            <material name="BCH2"/>
+            <zplane z="-Nozzle_kink_z"         rmin="Nozzle_core_rmax_kink + env_safety"                     rmax="Nozzle_rmax_kink - Nozzle_cladding_thickness" />
+            <zplane z="-Nozzle_core_flat_zmax" rmin="Nozzle_core_rmax_kink + env_safety"                     rmax="Nozzle_rmax_core_flat_zmax - Nozzle_cladding_thickness" />
+            <zplane z="-NozzleCut_z0_lo"       rmin="Nozzle_rmax_cut0_lo - Nozzle_core_offset + env_safety" rmax="Nozzle_rmax_cut0_lo - Nozzle_cladding_thickness" />
+        </detector>
+
+        <detector name="NozzleBCH_left_1" type="DD4hep_PolyconeSupport" vis="NozzleBCHVis" region="NozzleRegion">
+            <comment>Borated polyethylene, segment between gaps 1 and 2</comment>
+            <material name="BCH2"/>
+            <zplane z="-NozzleCut_z0_hi"       rmin="Nozzle_rmax_cut0_hi - Nozzle_core_offset + env_safety" rmax="Nozzle_rmax_cut0_hi - Nozzle_cladding_thickness" />
+            <zplane z="-NozzleCut_z1_lo"       rmin="Nozzle_rmax_cut1_lo - Nozzle_core_offset + env_safety" rmax="Nozzle_rmax_cut1_lo - Nozzle_cladding_thickness" />
+        </detector>
+
+        <detector name="NozzleBCH_left_2" type="DD4hep_PolyconeSupport" vis="NozzleBCHVis" region="NozzleRegion">
+            <comment>Borated polyethylene, segment between gaps 2 and 3</comment>
+            <material name="BCH2"/>
+            <zplane z="-NozzleCut_z1_hi"       rmin="Nozzle_rmax_cut1_hi - Nozzle_core_offset + env_safety" rmax="Nozzle_rmax_cut1_hi - Nozzle_cladding_thickness" />
+            <zplane z="-NozzleCut_z2_lo"       rmin="Nozzle_rmax_cut2_lo - Nozzle_core_offset + env_safety" rmax="Nozzle_rmax_cut2_lo - Nozzle_cladding_thickness" />
+        </detector>
+
+        <detector name="NozzleBCH_left_3" type="DD4hep_PolyconeSupport" vis="NozzleBCHVis" region="NozzleRegion">
+            <comment>Borated polyethylene, segment from gap 3 to -Nozzle_end_z</comment>
+            <material name="BCH2"/>
+            <zplane z="-NozzleCut_z2_hi"       rmin="Nozzle_rmax_cut2_hi - Nozzle_core_offset + env_safety" rmax="Nozzle_rmax_cut2_hi - Nozzle_cladding_thickness" />
+            <zplane z="-Nozzle_end_z"          rmin="Nozzle_rmax_end - Nozzle_core_offset + env_safety"     rmax="Nozzle_rmax_end - Nozzle_cladding_thickness" />
+        </detector>
+
+
+        <!-- ======================================================= -->
+        <!-- Tungsten cladding (right side)                           -->
+        <!-- ======================================================= -->
+
+        <detector name="NozzleWCludding_right" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
+            <comment>Tungsten cladding, segment from the kink to the first gap</comment>
+            <material name="Tungsten_light"/>
+            <zplane z="Nozzle_kink_z"         rmin="Nozzle_rmax_kink - Nozzle_cladding_thickness"    rmax="Nozzle_rmax_kink" />
+            <zplane z="NozzleCut_z0_lo"       rmin="Nozzle_rmax_cut0_lo - Nozzle_cladding_thickness" rmax="Nozzle_rmax_cut0_lo" />
+        </detector>
+
+        <detector name="NozzleWCludding_right_1" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
+            <comment>Tungsten cladding, segment between gaps 1 and 2</comment>
+            <material name="Tungsten_light"/>
+            <zplane z="NozzleCut_z0_hi"       rmin="Nozzle_rmax_cut0_hi - Nozzle_cladding_thickness" rmax="Nozzle_rmax_cut0_hi" />
+            <zplane z="NozzleCut_z1_lo"       rmin="Nozzle_rmax_cut1_lo - Nozzle_cladding_thickness" rmax="Nozzle_rmax_cut1_lo" />
+        </detector>
+
+        <detector name="NozzleWCludding_right_2" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
+            <comment>Tungsten cladding, segment between gaps 2 and 3</comment>
+            <material name="Tungsten_light"/>
+            <zplane z="NozzleCut_z1_hi"       rmin="Nozzle_rmax_cut1_hi - Nozzle_cladding_thickness" rmax="Nozzle_rmax_cut1_hi" />
+            <zplane z="NozzleCut_z2_lo"       rmin="Nozzle_rmax_cut2_lo - Nozzle_cladding_thickness" rmax="Nozzle_rmax_cut2_lo" />
+        </detector>
+
+        <detector name="NozzleWCludding_right_3" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
+            <comment>Tungsten cladding, segment from gap 3 to Nozzle_end_z</comment>
+            <material name="Tungsten_light"/>
+            <zplane z="NozzleCut_z2_hi"       rmin="Nozzle_rmax_cut2_hi - Nozzle_cladding_thickness" rmax="Nozzle_rmax_cut2_hi" />
+            <zplane z="Nozzle_end_z"          rmin="Nozzle_rmax_end - Nozzle_cladding_thickness"     rmax="Nozzle_rmax_end" />
+        </detector>
+
+
+        <!-- ======================================================= -->
+        <!-- Tungsten cladding (left side)                            -->
+        <!-- ======================================================= -->
+
+        <detector name="NozzleWCludding_left" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
+            <comment>Tungsten cladding, segment from the kink to the first gap</comment>
+            <material name="Tungsten_light"/>
+            <zplane z="-Nozzle_kink_z"         rmin="Nozzle_rmax_kink - Nozzle_cladding_thickness"    rmax="Nozzle_rmax_kink" />
+            <zplane z="-NozzleCut_z0_lo"       rmin="Nozzle_rmax_cut0_lo - Nozzle_cladding_thickness" rmax="Nozzle_rmax_cut0_lo" />
+        </detector>
+
+        <detector name="NozzleWCludding_left_1" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
+            <comment>Tungsten cladding, segment between gaps 1 and 2</comment>
+            <material name="Tungsten_light"/>
+            <zplane z="-NozzleCut_z0_hi"       rmin="Nozzle_rmax_cut0_hi - Nozzle_cladding_thickness" rmax="Nozzle_rmax_cut0_hi" />
+            <zplane z="-NozzleCut_z1_lo"       rmin="Nozzle_rmax_cut1_lo - Nozzle_cladding_thickness" rmax="Nozzle_rmax_cut1_lo" />
+        </detector>
+
+        <detector name="NozzleWCludding_left_2" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
+            <comment>Tungsten cladding, segment between gaps 2 and 3</comment>
+            <material name="Tungsten_light"/>
+            <zplane z="-NozzleCut_z1_hi"       rmin="Nozzle_rmax_cut1_hi - Nozzle_cladding_thickness" rmax="Nozzle_rmax_cut1_hi" />
+            <zplane z="-NozzleCut_z2_lo"       rmin="Nozzle_rmax_cut2_lo - Nozzle_cladding_thickness" rmax="Nozzle_rmax_cut2_lo" />
+        </detector>
+
+        <detector name="NozzleWCludding_left_3" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
+            <comment>Tungsten cladding, segment from gap 3 to -Nozzle_end_z</comment>
+            <material name="Tungsten_light"/>
+            <zplane z="-NozzleCut_z2_hi"       rmin="Nozzle_rmax_cut2_hi - Nozzle_cladding_thickness" rmax="Nozzle_rmax_cut2_hi" />
+            <zplane z="-Nozzle_end_z"          rmin="Nozzle_rmax_end - Nozzle_cladding_thickness"     rmax="Nozzle_rmax_end" />
+        </detector>
+
+
+        <!-- ======================================================= -->
+        <!-- Steel inserts in the three nozzle gaps                   -->
+        <!-- Nozzle_insert_thickness thick tubes seated at the nozzle -->
+        <!-- bore to isolate the vacuum across each ForwardTracker    -->
+        <!-- gap. Inner radius = bore at the gap boundaries, so the   -->
+        <!-- bore profile is continuous across the gap.               -->
+        <!-- ======================================================= -->
+
+        <detector name="NozzleSteelInsert_right_0" type="DD4hep_PolyconeSupport" vis="NozzleSteelVis" region="NozzleRegion">
+            <comment>Steel vacuum tube, gap 1</comment>
+            <material name="Steel235"/>
+            <zplane z="NozzleCut_z0_lo"       rmin="Nozzle_rmin_cut0_lo"        rmax="Nozzle_rmin_cut0_lo + Nozzle_insert_thickness" />
+            <zplane z="NozzleCut_z0_hi"       rmin="Nozzle_rmin_cut0_hi"        rmax="Nozzle_rmin_cut0_hi + Nozzle_insert_thickness" />
+        </detector>
+
+        <detector name="NozzleSteelInsert_right_1" type="DD4hep_PolyconeSupport" vis="NozzleSteelVis" region="NozzleRegion">
+            <comment>Steel vacuum tube, gap 2</comment>
+            <material name="Steel235"/>
+            <zplane z="NozzleCut_z1_lo"       rmin="Nozzle_rmin_cut1_lo"        rmax="Nozzle_rmin_cut1_lo + Nozzle_insert_thickness" />
+            <zplane z="NozzleCut_z1_hi"       rmin="Nozzle_rmin_cut1_hi"        rmax="Nozzle_rmin_cut1_hi + Nozzle_insert_thickness" />
+        </detector>
+
+        <detector name="NozzleSteelInsert_right_2" type="DD4hep_PolyconeSupport" vis="NozzleSteelVis" region="NozzleRegion">
+            <comment>Steel vacuum tube, gap 3</comment>
+            <material name="Steel235"/>
+            <zplane z="NozzleCut_z2_lo"       rmin="Nozzle_rmin_cut2_lo"        rmax="Nozzle_rmin_cut2_lo + Nozzle_insert_thickness" />
+            <zplane z="NozzleCut_z2_hi"       rmin="Nozzle_rmin_cut2_hi"        rmax="Nozzle_rmin_cut2_hi + Nozzle_insert_thickness" />
+        </detector>
+
+        <detector name="NozzleSteelInsert_left_0" type="DD4hep_PolyconeSupport" vis="NozzleSteelVis" region="NozzleRegion">
+            <comment>Steel vacuum tube, gap 1</comment>
+            <material name="Steel235"/>
+            <zplane z="-NozzleCut_z0_hi"      rmin="Nozzle_rmin_cut0_hi"        rmax="Nozzle_rmin_cut0_hi + Nozzle_insert_thickness" />
+            <zplane z="-NozzleCut_z0_lo"      rmin="Nozzle_rmin_cut0_lo"        rmax="Nozzle_rmin_cut0_lo + Nozzle_insert_thickness" />
+        </detector>
+
+        <detector name="NozzleSteelInsert_left_1" type="DD4hep_PolyconeSupport" vis="NozzleSteelVis" region="NozzleRegion">
+            <comment>Steel vacuum tube, gap 2</comment>
+            <material name="Steel235"/>
+            <zplane z="-NozzleCut_z1_hi"      rmin="Nozzle_rmin_cut1_hi"        rmax="Nozzle_rmin_cut1_hi + Nozzle_insert_thickness" />
+            <zplane z="-NozzleCut_z1_lo"      rmin="Nozzle_rmin_cut1_lo"        rmax="Nozzle_rmin_cut1_lo + Nozzle_insert_thickness" />
+        </detector>
+
+        <detector name="NozzleSteelInsert_left_2" type="DD4hep_PolyconeSupport" vis="NozzleSteelVis" region="NozzleRegion">
+            <comment>Steel vacuum tube, gap 3</comment>
+            <material name="Steel235"/>
+            <zplane z="-NozzleCut_z2_hi"      rmin="Nozzle_rmin_cut2_hi"        rmax="Nozzle_rmin_cut2_hi + Nozzle_insert_thickness" />
+            <zplane z="-NozzleCut_z2_lo"      rmin="Nozzle_rmin_cut2_lo"        rmax="Nozzle_rmin_cut2_lo + Nozzle_insert_thickness" />
+        </detector>
+
+    </detectors>
+</lccdd>

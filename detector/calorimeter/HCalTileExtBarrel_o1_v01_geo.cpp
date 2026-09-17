@@ -207,7 +207,7 @@ static void buildEB(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet
 
     // second z loop (place sequences in layer)
     std::vector<dd4hep::PlacedVolume> seqs;
-    double zOffset = -dzDetector1 + 0.5 * dzSequence; // 2*dZEndPlate + space + 0.5 * dzSequence;
+    double zOffset = -dzDetector1 + 0.5 * dzSequence;
 
     for (uint numSeq = 0; numSeq < numSequencesZ1; numSeq++) {
       dd4hep::Position tileSequencePosition(0, 0, zOffset);
@@ -262,7 +262,7 @@ static void buildEB(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet
 
     // second z loop (place sequences in layer)
     std::vector<dd4hep::PlacedVolume> seqs;
-    double zOffset = -dzDetector2 + 0.5 * dzSequence; // 2*dZEndPlate + space + (dzSequence * 0.5);
+    double zOffset = -dzDetector2 + 0.5 * dzSequence;
 
     for (uint numSeq = 0; numSeq < numSequencesZ2; numSeq++) {
       dd4hep::Position tileSequencePosition(0, 0, zOffset);

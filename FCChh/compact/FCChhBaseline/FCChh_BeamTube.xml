@@ -12,10 +12,6 @@
     <comment>A beam pipe for FCC detector</comment>
   </info>
 
-  <display>
-    <vis name="BeamPipeVis" r="0.2" g="0.7" b="0.3" a="1" showDaughters="false" visible="true"/>
-  </display>
-
   <detectors>
     <detector name="CentralBeamTube" type="SimpleCylinder_o1_v01"  vis="BeamPipeVis">
       <comment>Central Be Beampipe</comment>
