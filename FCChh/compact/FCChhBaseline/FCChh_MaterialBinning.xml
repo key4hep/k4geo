@@ -1,0 +1,30 @@
+<!-- made phi symmetric for now -->
+<lccdd>
+    <define>
+        <!-- Material binning section -->
+        <!-- beam pipe section -->
+        <constant name="mat_bp_bPhi" value="1"/>  <!-- change phi bins to 1 everywhere -->
+        <constant name="mat_bp_bZ" value="10"/>
+        <!-- pixel section -->
+        <constant name="mat_pix_barrel_bPhi" value="144"/>  <!-- change phi bins to 1 everywhere -->
+        <constant name="mat_pix_barrel_bZ" value="200"/>
+        <constant name="mat_pix_endcap_bPhi" value="1"/>    <!-- change phi bins to 1 everywhere -->
+        <constant name="mat_pix_endcap_bR" value="150"/>
+        <!-- PST section -->
+        <constant name="mat_pst_bPhi" value="1"/>          <!-- change phi bins to 1 everywhere -->
+        <constant name="mat_pst_bZ" value="100"/>
+        <!-- short strip section -->
+        <constant name="mat_sst_barrel_bPhi" value="144"/>    <!-- change phi bins to 1 everywhere -->
+        <constant name="mat_sst_barrel_bZ" value="150"/>
+        <constant name="mat_sst_endcap_bPhi" value="1"/>    <!-- change phi bins to 1 everywhere -->
+        <constant name="mat_sst_endcap_bR" value="150"/>
+        <!-- long strip section -->
+        <constant name="mat_lst_barrel_bPhi" value="144"/>   <!-- change phi bins to 1 everywhere -->
+        <constant name="mat_lst_barrel_bZ" value="250"/>
+        <constant name="mat_lst_endcap_bPhi" value="1"/>    <!-- change phi bins to 1 everywhere -->
+        <constant name="mat_lst_endcap_bR" value="100"/>
+        <!-- Solenoid section -->
+        <constant name="mat_sol_bPhi" value="1"/>     <!-- change phi bins to 1 everywhere -->
+        <constant name="mat_sol_bZ" value="100"/>
+    </define>
+</lccdd>
