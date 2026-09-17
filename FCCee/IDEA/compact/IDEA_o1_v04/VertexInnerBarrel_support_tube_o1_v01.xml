@@ -1,0 +1,25 @@
+<lccdd>
+    <comment> Carbon fibre support tube holding the complete inner vertex. Implemented by Armin Ilg (UZH). </comment>
+
+    <detectors>
+        <detector name="VertexInnerBarrel_tube" type="VertexBarrel_detailed_o1_v03" vis="VTXIBTubeVis" id="-3" readout="VertexInnerSupportTubeDummyCollection" region="VertexBarrelRegion">
+            <envelope vis="VTXIBTubeVis">
+                <shape type="Assembly"/>
+            </envelope>
+
+            <stave name="VertexInnerBarrel_tube_stave" r="VTXIB_tube_r" length="2.*VTXIB_tube_half_length">  <!-- Choose the correct radius for curved/normal vertex by checking nInnerVertexLayers --> 
+                <components name="inner_vertex_tube" length="VTXIB_tube_half_length">
+                    <component thickness="VTXIB_tube_thickness" width="2.*pi*VTXIB_tube_r" material="CarbonFiberVtx" isCurved="true" vis="VTXIBTubeVis"/>
+                </components>
+            </stave>
+
+            <layer nLadders="1" r="VTXIB_tube_r" id="0" name="VertexInnerBarrel_tube_stave" nmodules="1" motherVolThickness="VTXIB_tube_thickness"/>
+        </detector>
+    </detectors>
+
+    <readouts>
+        <readout name="VertexInnerSupportTubeDummyCollection">
+            <id>${GlobalTrackerReadoutID}</id>
+        </readout>  
+    </readouts>
+</lccdd>
