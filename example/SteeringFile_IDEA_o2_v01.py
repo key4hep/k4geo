@@ -466,6 +466,7 @@ SIM.outputConfig.forceLCIO = False
 ##       SIM.outputConfig.myExtension = '.csv'
 ##
 
+
 def Geant4Output2EDM4hep_DRC_plugin(dd4hepSimulation):
     from DDG4 import EventAction, Kernel
 
