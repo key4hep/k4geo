@@ -468,8 +468,9 @@ SIM.outputConfig.forceLCIO = False
 
 # Only use shared=True in MT mode to avoid double-save in ST mode
 from DDG4 import EventAction, Kernel
+
 shared = dd4hepSimulation.numberOfThreads > 1
-evt_root = EventAction(Kernel(), 'Geant4Output2ROOT/' + dd.outputFile, shared)
+evt_root = EventAction(Kernel(), "Geant4Output2ROOT/" + dd4hepSimulation.outputFile, shared)
 
 SIM.outputConfig.userOutputPlugin = evt_root
 
