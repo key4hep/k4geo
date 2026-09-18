@@ -466,13 +466,23 @@ SIM.outputConfig.forceLCIO = False
 ##       SIM.outputConfig.myExtension = '.csv'
 ##
 
+
 # Only use shared=True in MT mode to avoid double-save in ST mode
-from DDG4 import EventAction, Kernel
+def Geant4Output2ROOT_plugin(dd4hepSimulation):
+    from DDG4 import EventAction, Kernel
 
-shared = dd4hepSimulation.numberOfThreads > 1
-evt_root = EventAction(Kernel(), "Geant4Output2ROOT/" + dd4hepSimulation.outputFile, shared)
+    shared = dd4hepSimulation.numberOfThreads > 1
+    evt_root = EventAction(Kernel(), "Geant4Output2ROOT/" + dd4hepSimulation.outputFile, shared)
+    evt_root.Control = True
+    output = dd4hepSimulation.outputFile
+    evt_root.Output = output
+    evt_root.enableUI()
+    Kernel().eventAction().add(evt_root)
 
-SIM.outputConfig.userOutputPlugin = evt_root
+    return None
+
+
+SIM.outputConfig.userOutputPlugin = Geant4Output2ROOT_plugin
 
 ################################################################################
 ## Configuration for the Particle Handler/ MCTruth treatment
