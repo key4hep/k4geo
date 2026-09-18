@@ -678,7 +678,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
       throw std::runtime_error("Incorrect readout in calorimeter xml description!");
     }
 
-    // get offset and width along Z for each section 
+    // get offset and width along Z for each section
     std::vector<double> offsetZ(seg_phirow->offsetZ());
     std::vector<double> widthZ(seg_phirow->widthZ());
 
@@ -689,7 +689,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
                        "PseudoLayer structure information in Part%d:", i_section + 1);
       // section lower edge in z-axis
       double minSectionZ = offsetZ[i_section] - 0.5 * widthZ[i_section];
-      
+
       rowNumber.clear();
       for (unsigned int i_row = 0; i_row < numSequences[i_section]; i_row++) {
         // get the cell index (start from 1!)
@@ -727,10 +727,10 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
           // If groupedRows is provided from the xml file, then rows are grouped to the
           // pseudo-layers. Need to recalculate the cell z-position:
           if (!groupedRows.empty()) {
-             int nrows = 0;
-             for (size_t i = 0; i < static_cast<size_t>(std::abs(idx)); i++)
-                nrows += groupedRows[i];
-             zpos = minSectionZ + nrows * dzSequence - 0.5 * dzCell;
+            int nrows = 0;
+            for (size_t i = 0; i < static_cast<size_t>(std::abs(idx)); i++)
+              nrows += groupedRows[i];
+            zpos = minSectionZ + nrows * dzSequence - 0.5 * dzCell;
           }
           double radius = sqrt(xpos * xpos + ypos * ypos);
 
