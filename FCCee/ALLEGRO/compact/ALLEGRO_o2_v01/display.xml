@@ -31,9 +31,16 @@
     <!-- Straw Tube Tracker (originally retrieved from StrawTubeTracker_o1_v01.xml) -->
     <vis name="STTVis" alpha="0.1" r="0.1" g=".5" b=".5" showDaughters="true" visible="false"/>
 
+    <!-- Beam Pipe (originally defined in MDI_o1_v00/Beampipe_o4_v05.xml) -->
+    <vis name="BlueVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
+
+    <!-- Beam Instrumentation (originally defined in MDI_o1_v00/BeamInstrumentation_o1_v01.xml) -->
+    <vis name="CoilVis" alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
+
     <!--
     
-    This version reuses some files from IDEA_o1_v04, ALLEGRO_o1_v03 and MDI_o1_v00 as-is.
+    This version reuses some files from IDEA_o1_v04 and ALLEGRO_o1_v03.
       
     The vis entries below are duplicated from that version display.xml file to keep this one self-contained
     
@@ -117,12 +124,6 @@
     <vis name="BCLayerVis2" alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="BCLayerVis3" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
     <vis name="LCALShieldVis" alpha="1.0" r="0.6" g="0.3" b="0.0" showDaughters="true" visible="true"/>
-
-    <!-- Beampipe (reused as-is from MDI_o1_v00/Beampipe_o4_v05.xml) -->
-    <vis name="BlueVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
-
-    <!-- Beam Instrumentation (reused as-is from MDI_o1_v00/BeamInstrumentation_o1_v01.xml) -->
-    <vis name="CoilVis" alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
 
   </display>
 

@@ -77,13 +77,16 @@
     <!-- Parallel world volume outline (originally defined in IDEA_o1_v04.xml) -->
     <vis name="VisibleBlue" alpha="0.1" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
 
+    <!-- Beam Pipe (originally defined in MDI_o1_v00/Beampipe_o4_v05.xml) -->
+    <vis name="BlueVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
+
+    <!-- Beam Instrumentation (originally defined in MDI_o1_v00/BeamInstrumentation_o1_v01.xml) -->
+    <vis name="CoilVis" alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
+
     <!-- 
     
-    This version reuses some subparts from ../IDEA_o1_v03/ as-is:
-    - LumiCal_o1_v01.xml
-    - DriftChamber_o1_v02.xml
-    - Solenoid_o1_v01.xml
-    - EndPlateAbsorber_o1_v01.xml
+    This version reuses some subparts from IDEA_o1_v03.
       
     The vis entries below are duplicated from that version display.xml file to keep this file self-contained
     
