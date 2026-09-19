@@ -611,11 +611,18 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
       throw std::runtime_error("Incorrect readout in calorimeter xml description!");
     }
 
+    // get offset and width along Z for each section
+    std::vector<double> offsetZ(seg_phirow->offsetZ());
+    std::vector<double> widthZ(seg_phirow->widthZ());
+
     int pseudoLayer = 0;
     std::vector<int> rowNumber;
     for (unsigned int i_section = 0; i_section < numSequences.size(); i_section++) {
       dd4hep::printout(dd4hep::INFO, "HCalThreePartsEndcap_o1_v02",
                        "PseudoLayer structure information in Part%d:", i_section + 1);
+      // section lower edge in z-axis
+      double minSectionZ = offsetZ[i_section] - 0.5 * widthZ[i_section];
+
       rowNumber.clear();
       for (unsigned int i_row = 0; i_row < numSequences[i_section]; i_row++) {
         // get the cell index (start from 1!)
@@ -648,7 +655,23 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
           dd4hep::DDSegmentation::Vector3D positionVector = seg_phirow->position(cID);
           double xpos = positionVector.x();
           double ypos = positionVector.y();
-          double zpos = positionVector.z();
+          // calculate z-coordinate of the cell center
+          double zpos = minSectionZ + (idx - 1) * dzCell + 0.5 * dzCell;
+          // If groupedRows is provided from the xml file, then rows are grouped to the
+          // pseudo-layers. Need to recalculate the cell z-position:
+          if (!groupedRows.empty()) {
+            unsigned int first = i_section * groupedRows.size() / numSequences.size();
+            unsigned int last = (i_section == numSequences.size()) ? numSequences.size()
+                                                                   : first + groupedRows.size() / numSequences.size();
+            // sum up the number of rows up to the cell with idx.
+            int nrows = 0;
+            for (unsigned int i = first; i < last; i++) {
+              if (i > (idx - 1 + first))
+                break;
+              nrows += groupedRows[i];
+            }
+            zpos = minSectionZ + nrows * dzSequence - 0.5 * dzCell;
+          }
           double radius = sqrt(xpos * xpos + ypos * ypos);
 
           dd4hep::rec::Vector3D ivr1 = dd4hep::rec::Vector3D(
@@ -688,8 +711,8 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
           dd4hep::printout(dd4hep::INFO, "HCalThreePartsEndcap_o1_v02", "    number of interaction length is: %.2f",
                            nInteractionLengths);
 
-          caloLayer.distance = zpos;              // z-position of the pseudoLayer
-          caloLayer.sensitive_thickness = dzCell; // dimension along the z-axis
+          caloLayer.distance = zpos - 0.5 * dzCell; // z-position of the pseudoLayer
+          caloLayer.sensitive_thickness = dzCell;   // dimension along the z-axis
           // caloLayer.sensitive_thickness = thickness_sen;
           caloLayer.absorberThickness = absorberThickness;
 
