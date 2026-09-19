@@ -727,9 +727,16 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
           // If groupedRows is provided from the xml file, then rows are grouped to the
           // pseudo-layers. Need to recalculate the cell z-position:
           if (!groupedRows.empty()) {
+            unsigned int first = i_section * groupedRows.size() / numSequences.size();
+            unsigned int last = (i_section == numSequences.size()) ? numSequences.size()
+                                                                   : first + groupedRows.size() / numSequences.size();
+            // sum up the number of rows up to the cell with idx.
             int nrows = 0;
-            for (size_t i = 0; i < static_cast<size_t>(std::abs(idx)); i++)
+            for (unsigned int i = first; i < last; i++) {
+              if (i > (idx - 1 + first))
+                break;
               nrows += groupedRows[i];
+            }
             zpos = minSectionZ + nrows * dzSequence - 0.5 * dzCell;
           }
           double radius = sqrt(xpos * xpos + ypos * ypos);
@@ -771,8 +778,8 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
           dd4hep::printout(dd4hep::INFO, "HCalThreePartsEndcap_o1_v04", "    number of interaction length is: %.2f",
                            nInteractionLengths);
 
-          caloLayer.distance = zpos;              // z-position of the pseudoLayer
-          caloLayer.sensitive_thickness = dzCell; // dimension along the z-axis
+          caloLayer.distance = zpos - 0.5 * dzCell; // z-position of the pseudoLayer
+          caloLayer.sensitive_thickness = dzCell;   // dimension along the z-axis
           // caloLayer.sensitive_thickness = thickness_sen;
           caloLayer.absorberThickness = absorberThickness;
 
