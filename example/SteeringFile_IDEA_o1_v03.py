@@ -448,18 +448,17 @@ SIM.outputConfig.forceLCIO = False
 ##
 
 
-def Geant4Output2EDM4hep_DRC_plugin(dd4hepSimulation):
-    from DDG4 import EventAction, Kernel
+def Geant4Output2EDM4hep_DRC_plugin(dd4hepSimulation, geant4):
+    from DDG4 import EventAction
 
-    shared = dd4hepSimulation.numberOfThreads > 1
     evt_root = EventAction(
-        Kernel(), "Geant4Output2EDM4hep_DRC/" + dd4hepSimulation.outputFile, shared
+        geant4.kernel(), "Geant4Output2EDM4hep_DRC/" + dd4hepSimulation.outputFile, True
     )
     evt_root.Control = True
     output = dd4hepSimulation.outputFile
     evt_root.Output = output
     evt_root.enableUI()
-    Kernel().eventAction().add(evt_root)
+    geant4.kernel().eventAction().add(evt_root)
     return None
 
 
