@@ -47,6 +47,7 @@
     <vis name="VTXSupportRingVis"    alpha="1.0" r="1.0" g="0.0"      b="0.4"       showDaughters="true"  visible="true"/>
     <vis name="VTXIBTubeVis"  	     alpha="0.8" r="0.25"   	g="0.25"    b="0.2"   showDaughters="true"  visible="true"/>
     <vis name="VTXCarbonFoamVis"     alpha="0.5" r="0.2" 	g="0.2"     b="0.2"   showDaughters="true"  visible="true"/>
+    <vis name="VTXHybridVis" alpha="1.0" r="0.35" g="0.83" b="0.33" showDaughters="true" visible="true"/>
 
     <!-- Inner tracker (originally retrieved from InnerTracker_o2_v08.xml) -->
     <vis name="InnerTrackerModuleVis" alpha="0.5" r="0.0" g="1.0" b="0.6" showDaughters="false" visible="true"/>

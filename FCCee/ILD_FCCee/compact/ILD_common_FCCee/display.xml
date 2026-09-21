@@ -42,6 +42,7 @@
     <vis name="SiVertexAir"          alpha="1.0" r="0" g="0"    b="0"       showDaughters="false"  visible="false"/>
     <vis name="VTXIBTubeVis"  	     alpha="0.8" r="0.25"   	g="0.25"    b="0.2"   showDaughters="true"  visible="true"/>
     <vis name="VTXCarbonFoamVis"     alpha="0.5" r="0.2" 	g="0.2"     b="0.2"   showDaughters="true"  visible="true"/>
+    <vis name="VTXHybridVis" alpha="1.0" r="0.35" g="0.83" b="0.33" showDaughters="true" visible="true"/>
   </display>
 
 </lccdd>
