@@ -34,14 +34,10 @@ def convert(compact_files, out_path):
     for cfile in compact_files:
         description.fromXML(cfile)
 
-    cachedColors = dict((color.GetNumber(), color) for color in ROOT.gROOT.GetListOfColors() if color)
-    predefinedColors = cachedColors
+    predefinedColors = dict((color.GetNumber(), color) for color in ROOT.gROOT.GetListOfColors() if color)
+    cachedColors = dict((num, num) for num in predefinedColors)
 
     def mapColor(colorNumber):
-        # If color number matches a predefined one then don't approximate
-        if colorNumber < 924:
-            return colorNumber
-
         if colorNumber not in cachedColors:
             color = ROOT.gROOT.GetColor(colorNumber)
 
@@ -55,9 +51,9 @@ def convert(compact_files, out_path):
             mostSimilar = min(
                 predefinedColors,
                 key=lambda num: (
-                    (predefinedColors[num][0] - r) ** 2
-                    + (predefinedColors[num][1] - g) ** 2
-                    + (predefinedColors[num][2] - b) ** 2
+                    (predefinedColors[num].GetRed() - r) ** 2
+                    + (predefinedColors[num].GetGreen() - g) ** 2
+                    + (predefinedColors[num].GetBlue() - b) ** 2
                 ),
             )
 
