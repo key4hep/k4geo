@@ -65,11 +65,6 @@ def convert(compact_files, out_path):
 
         return cachedColors[colorNumber]
 
-    # Store predefined ROOT colors
-    for c in ROOT.gROOT.GetListOfColors():
-        if c and c.GetNumber() < 924:
-            predefinedColors[c.GetNumber()] = (c.GetRed(), c.GetGreen(), c.GetBlue())
-
     # Map volumes to the closest predefined ROOT colors
     for volume in ROOT.gGeoManager.GetListOfVolumes():
         volume.SetLineColor(mapColor(volume.GetLineColor()))
