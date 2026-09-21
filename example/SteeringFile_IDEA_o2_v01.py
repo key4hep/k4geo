@@ -468,16 +468,16 @@ SIM.outputConfig.forceLCIO = False
 
 
 # Only use shared=True in MT mode to avoid double-save in ST mode
-def Geant4Output2ROOT_plugin(dd4hepSimulation):
+def Geant4Output2ROOT_plugin(dd4hepSimulation, geant4):
     from DDG4 import EventAction, Kernel
 
     shared = dd4hepSimulation.numberOfThreads > 1
-    evt_root = EventAction(Kernel(), "Geant4Output2ROOT/" + dd4hepSimulation.outputFile, shared)
+    evt_root = EventAction(geant4.kernel(), "Geant4Output2ROOT/" + dd4hepSimulation.outputFile, True)
     evt_root.Control = True
     output = dd4hepSimulation.outputFile
     evt_root.Output = output
     evt_root.enableUI()
-    Kernel().eventAction().add(evt_root)
+    geant4.kernel().eventAction().add(evt_root)
 
     return None
 
