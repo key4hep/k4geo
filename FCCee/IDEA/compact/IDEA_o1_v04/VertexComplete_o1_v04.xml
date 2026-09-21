@@ -54,7 +54,7 @@
     <!-- <define> <constant name="nInnerVertexLayers" value="4"/> </define> -->
 
     <comment> Option 3: FCC-SEED inner vertex detector using curved, overlapping MAPS </comment>
-    <!-- <include ref="../../../ILD_FCCee/compact/ILD_common_FCCee/Vertex_FCC-SEED_barrel_o1_v01.xml"/>
+    <!-- <include ref="../../../CLD/compact/CLD_o5_v01/Vertex_FCC-SEED_barrel_o1_v01.xml"/>
     <define> <constant name="nInnerVertexLayers" value="5"/> </define> -->
 
     <comment> Vertex inner barrel support structure and cooling cones imported via DDCAD. Disabled because of overlaps within and with Vertex detector </comment>

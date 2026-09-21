@@ -310,30 +310,14 @@
         <region name="OuterTrackerEndcapRegion"  />
     </regions>
 
-
-    <display>
-      <vis name="VXDVis"        alpha="0.1" r="0.1" 	g=".5"      b=".5"    showDaughters="true"  visible="false"/>
-      <vis name="ITVis"       	alpha="1.0" r="0.54"  	g="0.43"    b="0.04"  showDaughters="true"  visible="true"/>
-      <vis name="OTVis"       	alpha="1.0" r="0.8"   	g="0.8"     b="0.4"   showDaughters="true"  visible="false"/>
-      <vis name="ECALVis"     	alpha="1.0" r="0.0"   	g="0.48"    b="0.0"   showDaughters="true"  visible="true"/>
-      <vis name="HCALVis"     	alpha="1.0" r="0.74" 	g="0.81"    b="0.55"  showDaughters="true"  visible="true"/>
-      <vis name="SOLVis"      	alpha="1.0" r="0.4"   	g="0.4"     b="0.4"   showDaughters="true"  visible="true"/>
-      <vis name="YOKEVis"     	alpha="1.0" r="0.0"   	g="0.56"    b="0.28"  showDaughters="true"  visible="true"/>
-      <vis name="LCALInstrVis"  alpha="1.0" r="0.35"  	g="0.0"     b="0.47"  showDaughters="true"  visible="true"/>
-      <vis name="LCALVis"    	alpha="1.0" r="0.25"  	g="0.88"    b="0.81"  showDaughters="true"  visible="true"/>
-      <vis name="LCALCoolVis"   alpha="1.0" r="0.2"   	g="0.6"     b="0"     showDaughters="true"  visible="true"/>
-      <vis name="CompSolVis"    alpha="1.0" r="0.5"   	g="0.5"     b="0.0"   showDaughters="true"  visible="true"/>
-      <vis name="ScreenSolVis"  alpha="1.0" r="1"   	g="1"       b="0"     showDaughters="true"  visible="true"/>
-      <vis name="TantalumVis"   alpha="1.0" r="1"   	g="0.5"     b="0.5"   showDaughters="true"  visible="true"/>
-      <vis name="SupportVis"  	alpha="1"   r="0.2"   	g="0.2"     b="0.2"   showDaughters="true" visible="true"/>
-    </display>
-
     <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
+
+    <include ref="display.xml"/>
 
     <!-- Import accelerator components -->
     <!-- shape based model of the beam pipe -->
-    <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
-    <include ref="../../../MDI/compact/MDI_o1_v00/BeamInstrumentation_o1_v01.xml" />
+    <include ref="Beampipe_o4_v05.xml" />
+    <include ref="BeamInstrumentation_o3_v02_fitShield.xml" />
 
     <!-- engineered CAD model of the beam pipe -->
     <!-- In order to use the CAD beampipe, build k4geo with the following CMake option:
@@ -344,7 +328,7 @@
     <include ref="LumiCal_o3_v02_05.xml"/>
 
     <comment> FCC-SEED barrel and adapted CLD endcaps </comment>
-    <include ref="../../../ILD_FCCee/compact/ILD_common_FCCee/Vertex_FCC-SEED_o1_v01.xml"/>
+    <include ref="Vertex_FCC-SEED_o1_v01.xml"/>
 
     <include ref="InnerTracker_o2_v08.xml"/>
     <include ref="OuterTracker_o2_v08.xml"/>

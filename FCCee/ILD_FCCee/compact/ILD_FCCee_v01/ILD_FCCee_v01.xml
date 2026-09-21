@@ -77,7 +77,7 @@
   <include ref="../../../CLD/compact/CLD_o2_v09/Vertex_o4_v08_smallBP.xml"/>
   
   <!-- or using FCC-SEED barrel + CLD endcaps -->
-  <!-- <include ref="../ILD_common_FCCee/Vertex_FCC-SEED_o1_v01.xml"/> -->
+  <!-- <include ref="../../../CLD/compact/CLD_o5_v01/Vertex_FCC-SEED_o1_v01.xml"/> -->
 
   <!-- this is the modified version of the CLD inner tracker -->
   <include ref="InnerTrackerILD_o1_v02_00.xml"/>

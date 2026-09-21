@@ -43,25 +43,8 @@
         </detector>
     </detectors>
 
-    <display>
-        <vis name="SiVertexModuleVis"    alpha="1.0" r="1" g="1"    b="0.6"     showDaughters="true"  visible="false"/>
-        <vis name="SiVertexSensitiveVis" alpha="1.0" r="1" g="0.2"  b="0.2"     showDaughters="true"  visible="true"/>
-        <vis name="SiVertexPassiveVis"   alpha="1.0" r="0.274" g="0.274"  b="0.274"       showDaughters="true"  visible="true"/>
-        <vis name="SiVertexCableVis"     alpha="1.0" r="0.85" g="0.53"    b="0.4"       showDaughters="true"  visible="true"/>
-        <vis name="FlexVis"              alpha="1.0" r="0.0" g="1"        b="0.4"       showDaughters="true"  visible="true"/>
-        <vis name="OptoElVis"            alpha="1.0" r="1" g="0.6"    b="0.0"     showDaughters="true"  visible="true"/>
-        <vis name="KaptonVis"            alpha="1.0" r="1.0" g="191/255"    b="0.0"       showDaughters="true"  visible="true"/>
-        <vis name="CarbonVis"            alpha="1.0" r="0.0" g="0.0"     b="0.4"       showDaughters="true"  visible="true"/>
-        <vis name="VTXSensitiveVis"      alpha="1.0" r="1.0"     g="1.0"     b="0.0"   showDaughters="true"  visible="true"/>
-        <vis name="VTXPeripheryVis"      alpha="1.0" r="200/255" g="254/255" b="0.0"   showDaughters="true"  visible="true"/>    
-        <vis name="VTXSupportRingVis"    alpha="1.0" r="1.0" g="0.0"      b="0.4"       showDaughters="true"  visible="true"/>
-        <vis name="SiVertexAir"          alpha="1.0" r="0" g="0"    b="0"       showDaughters="false"  visible="false"/>
-        <vis name="VTXIBTubeVis"  	     alpha="0.8" r="0.25"   	g="0.25"    b="0.2"   showDaughters="true"  visible="true"/>
-        <vis name="VTXCarbonFoamVis"     alpha="0.5" r="0.2" 	g="0.2"     b="0.2"   showDaughters="true"  visible="true"/>
-    </display>
-
     <comment> Vertex barrel </comment>
-    <include ref="../../../ILD_FCCee/compact/ILD_common_FCCee/Vertex_FCC-SEED_barrel_o1_v01.xml"/>
+    <include ref="../../../CLD/compact/CLD_o5_v01/Vertex_FCC-SEED_barrel_o1_v01.xml"/>
 
     <readouts> <comment>  Definition of the readout segmentation/definition for the barrel. The one for the disks is included in the disk xml </comment>
         <readout name="VertexBarrelCollection"> 
@@ -79,5 +62,5 @@
     <include ref="../../../IDEA/compact/IDEA_o1_v04/VertexInnerBarrel_support_tube_o1_v01.xml"/>
 
     <comment> Vertex endcap, based on CLD disks </comment>
-    <include ref="../../../ILD_FCCee/compact/ILD_common_FCCee/Vertex_FCC-SEED_endcap_o1_v01.xml"/>
+    <include ref="../../../CLD/compact/CLD_o5_v01/Vertex_FCC-SEED_endcap_o1_v01.xml"/>
 </lccdd>
