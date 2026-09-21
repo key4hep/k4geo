@@ -34,8 +34,8 @@ def convert(compact_files, out_path):
     for cfile in compact_files:
         description.fromXML(cfile)
 
-    cachedColors = {}
-    predefinedColors = {}
+    cachedColors = dict((color.GetNumber(), color) for color in ROOT.gROOT.GetListOfColors() if color)
+    predefinedColors = cachedColors
 
     def mapColor(colorNumber):
         # If color number matches a predefined one then don't approximate
