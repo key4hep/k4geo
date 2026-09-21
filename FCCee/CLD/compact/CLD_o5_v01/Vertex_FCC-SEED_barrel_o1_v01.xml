@@ -190,7 +190,7 @@
                 <components name="Support_longeron_between_sensors" r="Support_longeron_betweenSensors_offset_r1" length="VTXIB_SEED_half_length1-Support_ring_length"> <!-- In the first layer make the support a bit thinner and split it into multiple segments, and make it 5% less wide to avoid overlaps --> 
                     <component sensitive="False" isCurved="true" vis="CarbonVis" material="CarbonFoam" thickness="0.75*Support_longeron_betweenSensors_thickness" width="Support_longeron_betweenSensors_width/3.*0.95" r="0.25*Support_longeron_betweenSensors_thickness" phi_offset="Support_longeron_betweenSensors_phi1_1"/>
                     <component sensitive="False" isCurved="true" vis="CarbonVis" material="CarbonFoam" thickness="0.45*Support_longeron_betweenSensors_thickness" width="Support_longeron_betweenSensors_width/3.*0.95" r="0.55*Support_longeron_betweenSensors_thickness" phi_offset="Support_longeron_betweenSensors_phi1_2"/>
-                    <component sensitive="False" isCurved="true" vis="CarbonVis" material="CarbonFoam" thickness="0.1*Support_longeron_betweenSensors_thickness" width="Support_longeron_betweenSensors_width/3.*0.95" r="0.9*Support_longeron_betweenSensors_thickness" phi_offset="Support_longeron_betweenSensors_phi1_3"/>
+                    <!-- <component sensitive="False" isCurved="true" vis="CarbonVis" material="CarbonFoam" thickness="0.02*Support_longeron_betweenSensors_thickness" width="Support_longeron_betweenSensors_width/3.*0.95" r="0.9*Support_longeron_betweenSensors_thickness" phi_offset="Support_longeron_betweenSensors_phi1_3"/> -->
                 </components>
 
                 <components name="Support_longeron_between_layers" r="Support_longeron_betweenLayers_offset_r1" length="VTXIB_SEED_half_length1-Support_ring_length">
@@ -342,7 +342,7 @@
             <envelope>
                 <shape type="Assembly"/>
             </envelope>
-            <layer id="1" inner_r="VTXIB_SEED_r2" inner_z="VTXIB_SEED_nModules5*VTXIB_SEED_sensor_z/2.+5.0*mm+7*mm" outer_r="VTX_r_max-5*env_safety" vis="SiVertexCableVis">
+            <layer id="1" inner_r="VTXIB_SEED_r2" inner_z="VTXIB_SEED_nModules5*VTXIB_SEED_sensor_z/2.+5.0*mm+8*mm" outer_r="VTX_r_max-5*env_safety" vis="SiVertexCableVis">
                 <slice material="Copper" thickness="0.02*mm" />
             </layer>
         </detector>
