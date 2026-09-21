@@ -34,7 +34,9 @@ def convert(compact_files, out_path):
     for cfile in compact_files:
         description.fromXML(cfile)
 
-    predefinedColors = dict((color.GetNumber(), color) for color in ROOT.gROOT.GetListOfColors() if color)
+    predefinedColors = dict(
+        (color.GetNumber(), color) for color in ROOT.gROOT.GetListOfColors() if color
+    )
     cachedColors = dict((num, num) for num in predefinedColors)
 
     def mapColor(colorNumber):
