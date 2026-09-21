@@ -17,7 +17,7 @@
 
         <comment> Representation of curved sensitive elements by number of trapezoids with flat surface. The more, the more round the sensors are. Multiplies the number of surfaces by this number, careful!
             Use '4' to be able to use conformal tracking. Use '1' to have perfect cylindrical surfaces. </comment>
-        <constant name="VTXIB_curved_nsegments" value="16"/> 
+        <constant name="VTXIB_curved_nsegments" value="20"/> <!-- Make sure that one segment contains an integer number of pixels! VTXIB_SEED_sensor_phi_sensitive/VTXIB_pitch_phi/VTXIB_curved_nsegments = N -->
         <constant name="VTXIB_curved_tolerance_r" value="0.100*mm"/> <!-- Needed for curved inner vertex as otherwise overlaps would be detected. -->
 
         <comment> FCC-SEED global crucial layer properties innermost positions </comment>
