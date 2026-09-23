@@ -1,0 +1,31 @@
+<lccdd>
+    <comment> Vertex inner barrel support structure and cooling cones imported via DDCAD. Disabled because of overlaps within and with Vertex detector </comment>
+    <detectors>
+        <detector id="DetID_NOTUSED" name="VTXIB_Support_PEEK" type="DD4hep_TestShape_Creator">
+            <check>
+                <shape type="CAD_MultiVolume" ref="../../../IDEA/compact/IDEA_o1_v03/VertexSupport_PEEK_o1_v03.stl" material="PEEK" unit="mm">
+                    <volume id="0"  name="Body1" material="PEEK" vis="VTXPEEKVis"/>
+                </shape>
+                <rotation x="180.0*deg" y="0" z="0"/>
+            </check>
+        </detector> 
+
+        <detector id="DetID_NOTUSED" name="VTXIB_Support_CarbonFiber" type="DD4hep_TestShape_Creator">
+            <check>
+                <shape type="CAD_MultiVolume" ref="../../../IDEA/compact/IDEA_o1_v03/VertexSupport_CarbonFiber_o1_v03.stl" material="CarbonFiberVtx" unit="mm">
+                    <volume id="1"  name="Body1" material="CarbonFiberVtx" vis="VTXSupportVis"/>
+                </shape>
+                <rotation x="180.0*deg" y="0" z="0"/>
+            </check>
+        </detector> 
+
+        <detector id="DetID_NOTUSED" name="VTXIB_CoolingCones" type="DD4hep_TestShape_Creator">
+            <check>
+                <shape type="CAD_MultiVolume" ref="../../../IDEA/compact/IDEA_o1_v03/VertexCoolingCones_o1_v03.stl" material="CarbonFiberVtx" unit="mm">
+                    <volume id="2"  name="Body1" material="CarbonFiberVtx" vis="VTXSupportVis"/>
+                </shape>
+                <rotation x="0" y="0" z="0"/>
+            </check>
+        </detector> 
+    </detectors>
+</lccdd>
