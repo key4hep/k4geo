@@ -31,11 +31,10 @@ def convert(compact_files, out_path):
 
     ROOT.gSystem.Load("libDDCore")
 
-    # Store predefined ROOT colors before loading the file
+    # Store predefined ROOT colors before loading the files
     predefinedColors = dict(
         (color.GetNumber(), color) for color in ROOT.gROOT.GetListOfColors() if color
     )
-
     cachedColors = dict((num, num) for num in predefinedColors)
 
     description = ROOT.dd4hep.Detector.getInstance()
