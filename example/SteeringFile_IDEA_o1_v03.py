@@ -452,13 +452,13 @@ def Geant4Output2EDM4hep_DRC_plugin(dd4hepSimulation):
     from DDG4 import EventAction, Kernel
 
     evt_root = EventAction(
-        Kernel(), "Geant4Output2EDM4hep_DRC/" + dd4hepSimulation.outputFile, True
+        Kernel().worker(), "Geant4Output2EDM4hep_DRC/" + dd4hepSimulation.outputFile, True
     )
     evt_root.Control = True
     output = dd4hepSimulation.outputFile
     evt_root.Output = output
     evt_root.enableUI()
-    Kernel().eventAction().add(evt_root)
+    Kernel().worker().eventAction().add(evt_root)
     return None
 
 
