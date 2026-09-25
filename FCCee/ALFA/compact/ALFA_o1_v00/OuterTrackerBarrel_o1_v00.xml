@@ -170,7 +170,7 @@
 
     <readouts>
         <readout name="OTBarCollection">
-            <id>system:8,layer:3,side:2,type:2,module:16,sensor:16</id>
+            <id>${GlobalTrackerReadoutID}</id>
         </readout>
     </readouts>
 
@@ -189,8 +189,9 @@
 
               
             <stave name="OTBarStave_single" length="2.*OTBar_half_length" 
-                   dr="OTBar_module_distance_sides" 
-                   vis="OTBarStaveVis">
+              dr="OTBar_module_distance_sides" 
+              vis="OTBarStaveVis"
+              layer_id="unique">
 
             <comment> Bot String </comment>
 
@@ -221,6 +222,7 @@
                 <sensor name="OTBarSensor" r="OTBar_Flex_thickness + OTBar_HDI_thickness + OTBar_sens_Copper_thickness" thickness="OTBar_Sensitive_thickness" material="Silicon" nx="2." nGroupingModules="OTBar_nGroupingModules">
                     <include ref="OuterTracker_module.xml"/>
                 </sensor>
+                <comment> Note: Bot sensors should appear first, in order to have layer_id monotonically increasing w/ radius </comment>
                 <comment> Looks ok, update: module dimensions, module number (following stave geometry updates above), module periphery,  ? </comment>
                 <comment> Are sensor planes direction agnostic? </comment>
 

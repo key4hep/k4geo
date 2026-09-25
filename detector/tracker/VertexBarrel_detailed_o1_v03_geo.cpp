@@ -154,6 +154,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     double stave_r;
     double stave_length;
     string stave_vis;
+    string stave_layer_encoding;
   };
   list<stave_information> stave_information_list;
 
@@ -172,6 +173,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     m.motherVolWidth = getAttrOrDefault(x_stave, _Unicode(motherVolWidth), double(0.0));
 
     m.stave_vis = x_stave.visStr(x_det.visStr());
+
+    m.stave_layer_encoding = getAttrOrDefault<string>(x_stave, _Unicode(layer_id), "");
 
     // Components
     xml_coll_t c_components(x_stave, _U(components));
@@ -498,12 +501,17 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
           "Defining multiple layers with the same layer ID: layer_id: " + _toString(layer_id) +
               ", this is okay. Just make sure you have enough bits in GlobalTrackerReadoutID for layers and modules.");
     }
-    pv.addPhysVolID("layer", layer_id).addPhysVolID("side", 0);
-    layer_ids.push_back(layer_id);
+    if (m.stave_layer_encoding.empty()) {
+        pv.addPhysVolID("layer", layer_id).addPhysVolID("side", 0);
+        layer_ids.push_back(layer_id);
+    } else if (m.stave_layer_encoding != "unique") {
+        throw invalid_argument("Unknown layer_id encoding: " + m.stave_layer_encoding); 
+    }
+
     layerDE = DetElement(sdet,
-                         _toString(layer_id, "layer_%d") +
-                             _toString(int(count(layer_ids.begin(), layer_ids.end(), layer_id)), "_%d"),
-                         layer_id);
+            _toString(layer_id, "layer_%d") +
+            _toString(int(count(layer_ids.begin(), layer_ids.end(), layer_id)), "_%d"),
+            layer_id);
     layerDE.setPlacement(pv);
 
     int nLadders = x_layer.attr<int>(_Unicode(nLadders));
@@ -625,6 +633,10 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
           m.sensorsVec.size() > 1; // Flag used to introducing sensor "type" if there are multiple sensors in .xml
       for (size_t iSensorType = 0; iSensorType < m.sensorsVec.size(); ++iSensorType) {
         auto& sensor = m.sensorsVec[iSensorType];
+        auto logical_layer_id = 2 * m.sensorsVec.size() * layer_id + 2 * iSensorType + (iStave % 2);
+
+                                                                     
+
         for (int iModule = 0; iModule < nmodules; iModule++) {
           x_pos = sensor.r + (iModule % 2 == 0 ? 0.0 : m.stave_dr);
           y_pos = sensor.offset;
@@ -646,11 +658,13 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                                                          // same module id for every nGroupingModules modules and
                                                          // distinguish them by the sensor id instead
 
-          // pv.addPhysVolID("module", iModule_VolID);
-          pv.addPhysVolID("module", iModule_VolID + nmodules * iSensorType + (nmodules * m.sensorsVec.size()) * iStave);
-          // DetElement moduleDE(layerDE, module_name, iModuleTot);
-          DetElement moduleDE(layerDE, module_name,
-                              iModule_VolID + nmodules * iSensorType + (nmodules * m.sensorsVec.size()) * iStave);
+        if (m.stave_layer_encoding == "unique") {
+            pv.addPhysVolID("layer", logical_layer_id).addPhysVolID("side", 0);
+            layer_ids.push_back(layer_id);
+        }
+
+          pv.addPhysVolID("module", iModule_VolID);
+          DetElement moduleDE(layerDE, module_name, iModuleTot);
           moduleDE.setPlacement(pv);
 
           // Place all sensor parts

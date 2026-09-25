@@ -34,6 +34,13 @@
     <constant name="tracker_region_rmax"      value="1.8*m"/>
   </define>
 
+  <comment> Tracker bitfield </comment>
+  <define>
+    <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:5,module:13,sensor:7"/>
+    <comment> Silicon barrel tracker has 5 (VTX) + 6*4 (OT) layers => min 5 bits. Silicon OT final layer has 112 * 2 * 21 modules / n ("layers" / physical double layer) => min 13 bits. Assume vertex barrel 60 pixel matrices per module (IDEA) => min 6 bits. </comment>
+  </define>
+
+
 
   <comment> Shape-based beam pipe </comment>
   <include ref="MDI_params.xml" />
