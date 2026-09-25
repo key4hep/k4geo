@@ -30,14 +30,16 @@ def convert(compact_files, out_path):
     import ROOT
 
     ROOT.gSystem.Load("libDDCore")
-    description = ROOT.dd4hep.Detector.getInstance()
-    for cfile in compact_files:
-        description.fromXML(cfile)
 
+    # Store predefined ROOT colors before loading the files
     predefinedColors = dict(
         (color.GetNumber(), color) for color in ROOT.gROOT.GetListOfColors() if color
     )
     cachedColors = dict((num, num) for num in predefinedColors)
+
+    description = ROOT.dd4hep.Detector.getInstance()
+    for cfile in compact_files:
+        description.fromXML(cfile)
 
     def mapColor(colorNumber):
         if colorNumber not in cachedColors:
