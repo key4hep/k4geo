@@ -25,7 +25,7 @@
             
             <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP"/>
 
-            <sensitive type="SimpleCalorimeterSD"/>
+            <sensitive type="calorimeter"/>
 
             <envelope vis="ECALVis">
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
@@ -63,5 +63,4 @@
 	  </plugin>
     </plugins>
 </lccdd>
-
 
