@@ -16,6 +16,8 @@
     </comment>
   </info>
 
+  <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml" />
+  
   <includes>
     <gdmlFile  ref="elements.xml"/>
     <gdmlFile  ref="materials.xml"/>

@@ -1,0 +1,191 @@
+<lccdd>
+    <comment> IDEA outer vertex detector based on IDEA engineering design (INFN Pisa) using ATLASPix3. Implemented by Armin Ilg (UZH). </comment>
+
+    <define> <comment> ATLASPix3 sensor properties (same as vertex disks) </comment>
+        <constant name="VTXO_sens_z_sensitive" value="19.8*mm"/> <comment>Chip length in z: Sensitive</comment>
+        <constant name="VTXO_sens_z_periphery" value="0.4*mm"/> <comment>Chip length in z: Periphery</comment>
+        <constant name="VTXO_sens_z" value="VTXO_sens_z_sensitive+VTXO_sens_z_periphery"/> <comment>Chip length in z: Total</comment>
+        <constant name="VTXO_sens_rphi_sensitive" value="18.6*mm"/> <comment>Chip length in r-phi: Sensitive</comment>
+        <constant name="VTXO_sens_rphi_periphery" value="2.4*mm"/> <comment>Chip length in r-phi: Periphery</comment>
+        <constant name="VTXO_sens_rphi" value="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery"/> <comment>Chip length in r-phi: Total</comment>
+        <constant name="VTXO_sens_rphi_sens_spacing" value="0.2*mm"/> <comment>Distance between individual readout chips in rphi</comment>
+        <constant name="VTXO_sens_z_sens_spacing" value="0.2*mm"/> <comment>Distance between individual readout chips in rphi</comment>
+
+        <constant name="VTXO_insensitive_thickness_below"  value="0e-03*mm"/> <comment> Assume no insensitive thickness </comment>
+        <constant name="VTXO_sensitive_thickness"          value="50e-03*mm"/> <comment> Assume 50 microns thick sensitive volume </comment>
+        <constant name="VTXO_insensitive_thickness_above"  value="0e-03*mm"/> <comment> Assume no insensitive thickness </comment>
+        <constant name="VTXO_sensor_thickness"   value="VTXO_insensitive_thickness_below+VTXO_sensitive_thickness+VTXO_insensitive_thickness_above"/>
+
+        <comment> We use modules of four ATLASPix3 sensors </comment>
+        <constant name="VTXO_mod_z_sensitive" value="VTXO_sens_z_sensitive*2"/>
+        <constant name="VTXO_mod_z_periphery" value="VTXO_sens_z_periphery*2+VTXO_sens_z_sens_spacing"/>
+        <constant name="VTXO_mod_z" value="VTXO_mod_z_sensitive+VTXO_mod_z_periphery"/>
+        <constant name="VTXO_mod_rphi_sensitive" value="VTXO_sens_rphi_sensitive*2"/>
+        <constant name="VTXO_mod_rphi_periphery" value="VTXO_sens_rphi_periphery*2+VTXO_sens_rphi_sens_spacing"/>
+        <constant name="VTXO_mod_rphi" value="VTXO_mod_rphi_sensitive+VTXO_mod_rphi_periphery"/>
+    
+        <comment> Common VTXOB and VTXD support and readout parameters </comment>
+        <constant name="VTXO_support_fleece_thickness"          value="20e-03*mm"/>
+        <constant name="VTXO_support_paperGraphite_thickness"   value="25e-03*mm"/>
+        <constant name="VTXO_support_carbonFiber_thickness"     value="120e-03*mm"/>
+
+        <constant name="VTXO_coolingPipe_thickness"     value="0.0955*mm"/>
+        <constant name="VTXO_coolingPipe_width"         value="2.0*mm"/>
+        <constant name="VTXO_coolingWater_thickness"    value="2.0*mm"/>
+
+        <constant name="VTXO_flex_width"                value="16.2*mm"/>
+        <constant name="VTXO_flex_Aluminium_thickness"  value="0.100*mm"/>
+        <constant name="VTXO_flex_Kapton_thickness"     value="0.300*mm"/>
+        <constant name="VTXO_flex_glue_thickness"       value="0.100*mm"/>
+        <constant name="VTXO_flex_thickness"            value="VTXO_flex_Aluminium_thickness+VTXO_flex_Kapton_thickness+VTXO_flex_glue_thickness"/>
+
+        <constant name="VTXO_hybrid_thickness" value="0.4*mm"/> <comment> Hybrid PCB at the end of the stave </comment>
+        <constant name="VTXO_hybrid_length" value="12.1*mm"/>
+        <constant name="VTXO_hybrid_dx" value="0.1*mm"/>
+    </define>
+
+    <define> <comment> VTXOB layout parameters </comment>
+        <constant name="VTXOB_nStaves1" value="23"/>
+        <constant name="VTXOB_nStaves2" value="51"/>
+        <constant name="VTXOB_nModules1" value="8"/>           
+        <constant name="VTXOB_nModules2" value="16"/>          
+        <constant name="VTXOB_mod_z_spacing" value="0.2*mm"/> <comment> Should be done for VTXD as well! </comment>
+
+        <constant name="VTXOB_halfLength1" value="(VTXOB_nModules1*VTXO_mod_z+(VTXOB_nModules1-1)*VTXOB_mod_z_spacing)/2.0"/>
+        <constant name="VTXOB_halfLength2" value="(VTXOB_nModules2*VTXO_mod_z+(VTXOB_nModules2-1)*VTXOB_mod_z_spacing)/2.0"/>
+        <constant name="VTXOB_r1" value="VTXOB_r_min_layer"/>
+        <constant name="VTXOB_r2" value="VTXOB_r_max_layer"/>
+
+        <constant name="VTXOB_offset1" value="10.0*mm"/>
+        <constant name="VTXOB_offset2" value="20.0*mm"/>
+
+        <constant name="VTXOB_zoffset1" value="-1.0*mm"/> <comment> To make sure no gap at theta=90 degree exists, the two barrel layers are slightly offset </comment>
+        <constant name="VTXOB_zoffset2" value="+1.0*mm"/>
+
+        <comment> VTXOB support and readout properties </comment>
+        <constant name="VTXOB_support_thickness"            value="2.0*VTXO_support_fleece_thickness+VTXO_support_carbonFiber_thickness+VTXO_support_paperGraphite_thickness"/>
+        <constant name="VTXOB_coolingPipe_offset"           value="21.18*mm/2.0"/>
+        <constant name="VTXOB_trussStructure_thickness1"    value="0.501*mm"/> <comment> 326 mm length * 8.4 mm width / 5464.3 mm^3 volume = 0.501 mm of proxy carbon fiber thickness for light-weight truss structure </comment>
+        <constant name="VTXOB_trussStructure_thickness2"    value="0.477*mm"/> <comment> 652 mm length * 8.4 mm width / 11473.8 mm^3 volume = 0.477 mm of proxy carbon fiber thickness for light-weight truss structure </comment>
+        <constant name="VTXOB_trussStructure_distance"      value="4.0*mm"/>
+
+        <constant name="VTXOB_terminalPart1_width1"     value="(34.436*mm+25.604*mm)/2."/>
+        <constant name="VTXOB_terminalPart1_length1"    value="7.0*mm"/>
+        <constant name="VTXOB_terminalPart1_thickness1" value="744.577*mm*mm*mm/VTXOB_terminalPart1_width1/VTXOB_terminalPart1_length1"/> <comment> Proxy thickness to represent correct material budget </comment>
+        <constant name="VTXOB_terminalPart1_width2"     value="(25.604*mm+18.244*mm)/2."/>
+        <constant name="VTXOB_terminalPart1_length2"    value="7.0*mm"/>
+        <constant name="VTXOB_terminalPart1_thickness2" value="542.961*mm*mm*mm/VTXOB_terminalPart1_width2/VTXOB_terminalPart1_length2"/> <comment> Proxy thickness to represent correct material budget </comment>
+        <constant name="VTXOB_terminalPart1_width3"     value="8.0*mm"/>
+        <constant name="VTXOB_terminalPart1_length3"    value="8.0*mm"/>
+        <constant name="VTXOB_terminalPart1_thickness3" value="231.848*mm*mm*mm/VTXOB_terminalPart1_width3/VTXOB_terminalPart1_length3"/> <comment> Proxy thickness to represent correct material budget </comment>
+            
+        <constant name="VTXOB_terminalPart2_width1"     value="(36.0*mm+23.787*mm)/2."/>
+        <constant name="VTXOB_terminalPart2_length1"    value="7.0*mm"/>
+        <constant name="VTXOB_terminalPart2_thickness1" value="1162.157*mm*mm*mm/VTXOB_terminalPart2_width1/VTXOB_terminalPart2_length1"/>
+        <constant name="VTXOB_terminalPart2_width2"     value="(23.787*mm+18.381*mm)/2."/>
+        <constant name="VTXOB_terminalPart2_length2"    value="7.0*mm"/>
+        <constant name="VTXOB_terminalPart2_thickness2" value="569.724*mm*mm*mm/VTXOB_terminalPart2_width2/VTXOB_terminalPart2_length2"/>
+        <constant name="VTXOB_terminalPart2_width3"     value="8.5*mm"/>
+        <constant name="VTXOB_terminalPart2_length3"    value="9.25*mm"/>
+        <constant name="VTXOB_terminalPart2_thickness3" value="304.345*mm*mm*mm/VTXOB_terminalPart2_width3/VTXOB_terminalPart2_length3"/>
+    
+        <constant name="VTXOB_halfLength1_passive" value="2.0*(VTXOB_halfLength1+VTXOB_mod_z_spacing+VTXO_hybrid_length+VTXOB_terminalPart1_length1+VTXOB_terminalPart1_length3)"/> 
+        <constant name="VTXOB_halfLength2_passive" value="2.0*(VTXOB_halfLength2+VTXOB_mod_z_spacing+VTXO_hybrid_length+VTXOB_terminalPart2_length1+VTXOB_terminalPart2_length3)"/> 
+    </define>
+
+    <detectors>
+        <detector name="VertexOuterBarrel" type="VertexBarrel_detailed_o1_v03" vis="VXDVis" id="DetID_VXD_OuterBarrel" readout="VertexBarrelCollection"  region="VertexBarrelRegion">
+            <envelope vis="VXDVis">
+                <shape type="Assembly"/>
+            </envelope>
+
+            <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_BARREL"/>
+
+
+            <comment> Definition of our "stave" object that is used to build the barrel, this time for the outer vertex barrel layers </comment>
+            
+            <stave name="VTXOBStave1" length="2.*VTXOB_halfLength1">
+                <components name="flexes" r="0.0*mm" length="VTXOB_halfLength1">
+                    <component thickness="VTXO_flex_Aluminium_thickness" width="VTXO_flex_width" r="0.0*mm"                                                                  material="Al" vis="VTXCableVis"/>
+                    <component thickness="VTXO_flex_Kapton_thickness"    width="VTXO_flex_width" r="VTXO_flex_Aluminium_thickness"                                    material="KaptonVtx" vis="VTXCableVis"/>
+                    <component thickness="VTXO_flex_glue_thickness"      width="VTXO_flex_width" r="VTXO_flex_Aluminium_thickness+VTXO_flex_Kapton_thickness"  material="GlueEcobond45" vis="VTXCableVis"/>
+                </components>
+
+                <sensor name="ATLASPix3Quad" r="VTXO_flex_thickness" thickness="VTXO_sensor_thickness" material="Silicon">
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_outerVertex_module.xml"/>
+                </sensor>
+
+                <components name="support" r="VTXO_flex_thickness+VTXO_sensor_thickness" length="VTXOB_halfLength1">
+                    <component thickness="VTXO_support_fleece_thickness"         width="VTXO_mod_rphi" r="0.0*mm" material="CarbonFleece" vis="VTXSupportVis"/>
+                    <component thickness="VTXO_support_paperGraphite_thickness"  width="VTXO_mod_rphi" r="VTXO_support_fleece_thickness" material="CarbonFiberVtx" vis="VTXSupportVis"/> <!-- Thin stave holder: should be material="PaperGraphite", not implemented yet, but only marginal difference in X0 -->
+                    <component thickness="VTXO_support_carbonFiber_thickness"    width="VTXO_mod_rphi" r="VTXO_support_fleece_thickness+VTXO_support_paperGraphite_thickness" material="CarbonFiberVtx" vis="VTXSupportVis"/> <!-- Thin stave holder: should be material="K13D2U", but not implemented yet, but only marginal difference in X0 -->
+                    <component thickness="VTXO_support_fleece_thickness"         width="VTXO_mod_rphi" r="VTXO_support_fleece_thickness+VTXO_support_paperGraphite_thickness+VTXO_support_carbonFiber_thickness" material="CarbonFleece" vis="VTXSupportVis"/>
+
+                    <component thickness="VTXOB_trussStructure_thickness1" width="VTXO_mod_rphi"     r="VTXOB_support_thickness+VTXOB_trussStructure_distance" material="CarbonFiberVtx" vis="VTXtrussStructureVis"/> <!-- Proxy for the lightweight truss structure -->
+                </components>
+
+                <components name="coolingPipes" r="VTXO_flex_thickness+VTXO_sensor_thickness+VTXOB_support_thickness" length="VTXOB_halfLength1">
+                    <component thickness="VTXO_coolingPipe_thickness"  width="VTXO_coolingPipe_width" offset="VTXOB_coolingPipe_offset" r="0.0*mm" material="KaptonVtx" vis="VTXPipingVis"/> 
+                    <component thickness="VTXO_coolingWater_thickness" width="VTXO_coolingPipe_width" offset="VTXOB_coolingPipe_offset" r="VTXO_coolingPipe_thickness" material="Water" vis="VTXWaterVis"/>
+                    <component thickness="VTXO_coolingPipe_thickness"  width="VTXO_coolingPipe_width" offset="VTXOB_coolingPipe_offset" r="VTXO_coolingPipe_thickness+VTXO_coolingWater_thickness" material="KaptonVtx" vis="VTXPipingVis"/>
+
+                    <component thickness="VTXO_coolingPipe_thickness"  width="VTXO_coolingPipe_width" offset="-VTXOB_coolingPipe_offset" r="0.0*mm" material="KaptonVtx" vis="VTXPipingVis"/> 
+                    <component thickness="VTXO_coolingWater_thickness" width="VTXO_coolingPipe_width" offset="-VTXOB_coolingPipe_offset" r="VTXO_coolingPipe_thickness" material="Water" vis="VTXWaterVis"/>
+                    <component thickness="VTXO_coolingPipe_thickness"  width="VTXO_coolingPipe_width" offset="-VTXOB_coolingPipe_offset" r="VTXO_coolingPipe_thickness+VTXO_coolingWater_thickness" material="KaptonVtx" vis="VTXPipingVis"/>
+                </components>
+
+                <end_z name="endOfStave" r="0.0*mm">
+                    <component thickness="VTXO_hybrid_thickness" width="VTXO_mod_rphi" length="VTXO_hybrid_length" dz="VTXOB_mod_z_spacing" r="VTXO_flex_thickness-VTXO_hybrid_thickness" material="PCB" vis="VTXHybridVis"/>
+
+                    <component thickness="VTXOB_terminalPart1_thickness1" width="VTXOB_terminalPart1_width1" length="VTXOB_terminalPart1_length1" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" r="0.0*mm"                          material="PEEK" vis="VTXPEEKVis"/>
+                    <component thickness="VTXOB_terminalPart1_thickness2" width="VTXOB_terminalPart1_width2" length="VTXOB_terminalPart1_length2" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" r="6.5*mm"   material="PEEK" vis="VTXPEEKVis"/>
+                    <component thickness="VTXOB_terminalPart1_thickness3" width="VTXOB_terminalPart1_width3" length="VTXOB_terminalPart1_length3" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length+VTXOB_terminalPart1_length2" r="6.5*mm"   material="PEEK" vis="VTXPEEKVis"/>
+                </end_z>
+            </stave>
+
+            <comment> Definition of our "stave" object that is used to build the barrel, here for the outer layer </comment>
+            <stave name="VTXOBStave2" length="2.*VTXOB_halfLength2">
+                <components name="support" r="0.0*mm" length="VTXOB_halfLength2">
+                    <component thickness="VTXOB_trussStructure_thickness2" width="VTXO_mod_rphi"     r="-VTXOB_trussStructure_distance" material="CarbonFiberVtx" vis="VTXtrussStructureVis"/>   <!--Proxy for the lightweight truss structure -->
+
+                    <component thickness="VTXO_support_fleece_thickness"         width="VTXO_mod_rphi" r="0.0*mm" material="CarbonFleece" vis="VTXSupportVis"/>
+                    <component thickness="VTXO_support_paperGraphite_thickness"  width="VTXO_mod_rphi" r="VTXO_support_fleece_thickness" material="CarbonFiberVtx" vis="VTXSupportVis"/>   <!--Thin stave holder: should be material="PaperGraphite", not implemented yet! -->
+                    <component thickness="VTXO_support_carbonFiber_thickness"    width="VTXO_mod_rphi" r="VTXO_support_fleece_thickness+VTXO_support_paperGraphite_thickness" material="CarbonFiberVtx" vis="VTXSupportVis"/>
+                    <component thickness="VTXO_support_fleece_thickness"         width="VTXO_mod_rphi" r="VTXO_support_fleece_thickness+VTXO_support_paperGraphite_thickness+VTXO_support_carbonFiber_thickness" material="CarbonFleece" vis="VTXSupportVis"/>
+                </components>
+
+                <components name="coolingPipes" r="-VTXO_coolingPipe_thickness" length="VTXOB_halfLength2">
+                    <component thickness="VTXO_coolingPipe_thickness"  width="VTXO_coolingPipe_width" offset="VTXOB_coolingPipe_offset" r="0.0*mm" material="KaptonVtx" vis="VTXPipingVis"/> 
+                    <component thickness="VTXO_coolingWater_thickness" width="VTXO_coolingPipe_width" offset="VTXOB_coolingPipe_offset" r="-VTXO_coolingWater_thickness" material="Water" vis="VTXWaterVis"/>
+                    <component thickness="VTXO_coolingPipe_thickness"  width="VTXO_coolingPipe_width" offset="VTXOB_coolingPipe_offset" r="-VTXO_coolingWater_thickness-VTXO_coolingPipe_thickness" material="KaptonVtx" vis="VTXPipingVis"/>
+
+                    <component thickness="VTXO_coolingPipe_thickness"  width="VTXO_coolingPipe_width" offset="-VTXOB_coolingPipe_offset" r="0.0*mm" material="KaptonVtx" vis="VTXPipingVis"/> 
+                    <component thickness="VTXO_coolingWater_thickness" width="VTXO_coolingPipe_width" offset="-VTXOB_coolingPipe_offset" r="-VTXO_coolingWater_thickness" material="Water" vis="VTXWaterVis"/>
+                    <component thickness="VTXO_coolingPipe_thickness"  width="VTXO_coolingPipe_width" offset="-VTXOB_coolingPipe_offset" r="-VTXO_coolingWater_thickness-VTXO_coolingPipe_thickness" material="KaptonVtx" vis="VTXPipingVis"/>
+                </components>
+
+                <sensor name="ATLASPix3Quad" r="VTXOB_support_thickness" thickness="VTXO_sensor_thickness" material="Silicon">
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_outerVertex_module.xml"/>
+                </sensor>
+
+                <components name="flexes" r="VTXOB_support_thickness+VTXO_sensor_thickness" length="VTXOB_halfLength2">
+                    <component thickness="VTXO_flex_Aluminium_thickness" width="VTXO_flex_width" r="0.0*mm"                                                                  material="Al" vis="VTXCableVis"/>
+                    <component thickness="VTXO_flex_Kapton_thickness"    width="VTXO_flex_width" r="VTXO_flex_Aluminium_thickness"                                    material="KaptonVtx" vis="VTXCableVis"/>
+                    <component thickness="VTXO_flex_glue_thickness"      width="VTXO_flex_width" r="VTXO_flex_Aluminium_thickness+VTXO_flex_Kapton_thickness"  material="GlueEcobond45" vis="VTXCableVis"/>
+                </components>
+
+                <end_z name="endOfStave" r="VTXOB_support_thickness+VTXO_sensor_thickness">
+                    <component thickness="VTXO_hybrid_thickness" width="VTXO_mod_rphi" length="VTXO_hybrid_length" dz="VTXOB_mod_z_spacing" r="0.0*mm" material="PCB" vis="VTXHybridVis"/>
+
+                    <component thickness="VTXOB_terminalPart2_thickness1" width="VTXOB_terminalPart2_width1" length="VTXOB_terminalPart2_length1" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" r="-VTXOB_terminalPart2_thickness1"                                 material="PEEK" vis="VTXPEEKVis"/>
+                    <component thickness="VTXOB_terminalPart2_thickness2" width="VTXOB_terminalPart2_width2" length="VTXOB_terminalPart2_length2" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" r="-VTXOB_terminalPart2_thickness1-12.771*mm"   material="PEEK" vis="VTXPEEKVis"/>
+                    <component thickness="VTXOB_terminalPart2_thickness3" width="VTXOB_terminalPart2_width3" length="VTXOB_terminalPart2_length3" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length+VTXOB_terminalPart2_length2" r="-VTXOB_terminalPart2_thickness1-12.771*mm"   material="PEEK" vis="VTXPEEKVis"/>
+                </end_z>
+            </stave>
+
+            <comment> Outer vertex barrel </comment>
+            <layer nLadders="VTXOB_nStaves1" phi0="0.0" r="VTXOB_r1" offset="VTXOB_offset1" id="nInnerVertexLayers+0" nmodules="VTXOB_nModules1" name="VTXOBStave1" step="VTXOB_mod_z_spacing" motherVolThickness="1.2*cm" motherVolLength="VTXOB_halfLength1_passive" z_offset="VTXOB_zoffset1"/>
+            <layer nLadders="VTXOB_nStaves2" phi0="0.0" r="VTXOB_r2" offset="VTXOB_offset2" id="nInnerVertexLayers+1" nmodules="VTXOB_nModules2" name="VTXOBStave2" step="VTXOB_mod_z_spacing" motherVolThickness="3.0*cm" motherVolRmin="VTXOB_r2-VTXOB_terminalPart2_thickness1-12.771*mm" motherVolLength="VTXOB_halfLength2_passive" z_offset="VTXOB_zoffset2"/>
+        </detector>
+    </detectors>
+</lccdd>

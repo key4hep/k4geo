@@ -54,6 +54,13 @@ This model is based on `CLD_o2_v07` with the following changes:
 
 * correct the material used for the scintillator to G4_POLYSTYRENE so Birks' Law is taken into account.
 
+CLD_o2_v09
+----------
+
+This model is based on `CLD_o2_v08` with the following changes:
+
+* Correct the material budget of the vertex disks to 0.7% X0 per double-disk (see https://github.com/key4hep/k4geo/issues/613), to be in line with the CLD paper (https://arxiv.org/abs/1911.12230)
+
 CLD_o3_v01
 ----------
 
@@ -63,3 +70,8 @@ CLD_o4_v05
 ----------
 
 This model is based on CLD_o2_v05. The ECAL barrel is replaced by the Noble Liquid calorimeter from ALLEGRO to enable PandoraPFA technical developments. To accomodate the thicker ALLEGRO calorimeter, the CLD detectors after ECAL were pushed towards higher radius. 
+
+CLD_o5_v01
+----------
+
+This model is based on CLD_o2_v09. The vertex detector is replaced with the FCC-SEED vertex detector hosted in ILD_common_FCCee.
