@@ -451,7 +451,10 @@ SIM.outputConfig.forceLCIO = False
 def Geant4Output2EDM4hep_DRC_plugin(dd4hepSimulation):
     from DDG4 import EventAction, Kernel
 
+try:
     shared = dd4hepSimulation.numberOfThreads > 1
+except AttributeError:
+    shared = False
     evt_root = EventAction(
         Kernel().worker(), "Geant4Output2EDM4hep_DRC/" + dd4hepSimulation.outputFile, shared
     )
