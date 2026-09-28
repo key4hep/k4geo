@@ -453,6 +453,7 @@ def Geant4Output2EDM4hep_DRC_plugin(dd4hepSimulation):
 
     try:
         shared = dd4hepSimulation.numberOfThreads > 1
+    # DD4hep < 1.38 does not have multithreading
     except AttributeError:
         shared = False
 
