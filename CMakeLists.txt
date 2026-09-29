@@ -154,6 +154,9 @@ INSTALL(FILES ${hfiles}
   DESTINATION include/${PackageName}
   )
 
+# install dd4hep2root
+INSTALL(PROGRAMS utils/dd4hep2root.py DESTINATION bin RENAME dd4hep2root)
+
 #--- install compact files------------------------------
 if(INSTALL_COMPACT_FILES)
   INSTALL(DIRECTORY CaloTB CLIC FCalTB FCCee FCChh ILD fieldmaps MuColl SiD DESTINATION share/k4geo )
