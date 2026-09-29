@@ -155,7 +155,7 @@ INSTALL(FILES ${hfiles}
   )
 
 # install dd4hep2root
-INSTALL(PROGRAMS utils/dd4hep2root DESTINATION bin)
+INSTALL(PROGRAMS utils/dd4hep2root.py DESTINATION bin RENAME dd4hep2root)
 
 #--- install compact files------------------------------
 if(INSTALL_COMPACT_FILES)
