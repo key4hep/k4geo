@@ -4,7 +4,7 @@ mahmoud.ali@cern.ch
 
 Factory for IDEA muon system
 Expected xml structure (the 'sensitive' keyword is optional and defaults to false):
-<detector type="muonSystemMuRWELL_o1_v01" ...>
+<detector type="muonSystem_o1_v01" ...>
   <dimensions x="..." y="..." z="..." z_offset="..." x_offset="..." y_offset="...">  <!--  dimension of the local
 chamber envelope. x: the half length of the thickness of the chamber, y&z: the half length of the 2D plane dimensions of
 the chambers--> <sensitive type="tracker"/>
@@ -41,7 +41,7 @@ using dd4hep::rec::VolCylinder;
 using dd4hep::rec::VolPlane;
 using dd4hep::rec::volSurfaceList;
 
-static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml::Handle_t xmlElement,
+static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml::Handle_t xmlElement,
                                                     dd4hep::SensitiveDetector sensDet) {
   dd4hep::xml::DetElement xmlDet = static_cast<dd4hep::xml::DetElement>(xmlElement);
   std::string name = xmlDet.nameStr();
@@ -1272,4 +1272,4 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
   return detElement;
 }
 
-DECLARE_DETELEMENT(muonSystemMuRWELL_o1_v01, createmuonSystemMuRWELL_o1_v01)
+DECLARE_DETELEMENT(muonSystem_o1_v01, createmuonSystem_o1_v01)
