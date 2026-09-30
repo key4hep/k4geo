@@ -57,7 +57,7 @@
 
   <comment> Include plugin to generate edm4hep::TrackerHitPlane </comment>
   <plugins>
-    <!-- <plugin name="DD4hepVolumeManager"/> -->
+    <plugin name="DD4hepVolumeManager"/>
     <plugin name="InstallSurfaceManager"/>
   </plugins>
 
