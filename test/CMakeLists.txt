@@ -186,7 +186,7 @@ add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_
 # Tests for ALFA_01_v00 
 #--------------------------------------------------
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALFA/compact/ALFA_o1_v00/ALFA_o1_v00.xml
-  EXTRA_ARGS --gun.distribution uniform --gun.particle geantino)
+  EXTRA_ARGS --gun.distribution uniform --gun.particle e- --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/alfaSteeringFile.py)
 
 #--------------------------------------------------
 # Tests for MuonCollider geometries
