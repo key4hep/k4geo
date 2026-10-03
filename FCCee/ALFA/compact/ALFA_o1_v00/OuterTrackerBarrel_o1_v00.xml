@@ -44,7 +44,7 @@
 
     <comment> Barrel parameters </comment>
     <define>
-        <constant name="DetID_OTBar_Barrel"   value="67"/>   
+        <constant name="DetID_OTBar_Barrel"   value="3"/>   
         <constant name="OTBar_inner_radius"   value="500*mm"/>   
         <constant name="OTBar_outer_radius"   value="1800*mm"/>
         <constant name="OTBar_nGroupingModules" value="1"/> 
