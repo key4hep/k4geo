@@ -39,7 +39,91 @@
         </detector>
     </detectors>
 
+<!-- Using ODD Pixels definitions for now -->
+<define>
+    <!-- Overall pixel material binning-->
+    <constant name="pix_p_mat_b_z" value="200"/>
+    <constant name="pix_p_mat_b_phi" value="144"/>
+    <!-- Pixel endcap surface & material binning: setting -->
+    <constant name="pix_e_v_dz" value="20.*mm"/>
+    <constant name="pix_e_sf_b" value="2"/>
+    <constant name="pix_e_sf_b_r" value="2"/>
+    <constant name="pix_e_sf_e_r" value="1"/>
+    <constant name="pix_e_sf_b_phi" value="36"/>
+    <constant name="pix_e_sf_e_phi" value="1"/>
+    <constant name="pix_e_mat_b_r" value="50"/>
+    <constant name="pix_e_mat_b_phi" value="144"/>
+    <!-- Pixel barrel surface & material binning: setting -->
+    <constant name="pix_b_sf_b" value="2"/>
+    <constant name="pix_b_sf_b_z" value="14"/>
+    <constant name="pix_b_sf_e_z" value="1"/>
+    <constant name="pix_b_clear" value="1.*mm"/>
+    <constant name="pix_b_sf_e_phi" value="1"/>
+    <constant name="pix_b0_sf_b_phi" value="16"/>
+    <constant name="pix_b1_sf_b_phi" value="32"/>
+    <constant name="pix_b2_sf_b_phi" value="52"/>
+    <constant name="pix_b3_sf_b_phi" value="78"/>
+    <constant name="pix_b_mat_b_r" value="50"/>
+    <constant name="pix_b_mat_b_z" value="200"/>
+    <constant name="pix_b_mat_b_phi" value="144"/>
+  </define>
 
+<!--Using ODD short strip definitions for now-->
+<define>
+    <!-- Short strip material binning -->
+    <constant name="ss_p_mat_b_z" value="100"/>
+    <constant name="ss_p_mat_b_phi" value="144"/>
+    <!-- Short strip endcap surface & material binning: setting -->
+    <constant name="ss_e_sf_b" value="2"/>
+    <constant name="ss_e_sf_b_r" value="3"/>
+    <constant name="ss_e_sf_e_r" value="1"/>
+    <constant name="ss_e_sf_b_phi" value="42"/>
+    <constant name="ss_e_sf_e_phi" value="1"/>
+    <constant name="ss_e_clear" value="1.*mm"/>
+    <constant name="ss_e_mat_b_r" value="25"/>
+    <constant name="ss_e_mat_b_phi" value="144"/>
+    <!-- Short strip barrel surface & material binning: setting -->
+    <constant name="ss_b_sf_b" value="2"/>
+    <constant name="ss_b_sf_b_z" value="21"/>
+    <constant name="ss_b_sf_e_z" value="1"/>
+    <constant name="ss_b_clear" value="1.*mm"/>
+    <constant name="ss_b0_sf_b_phi" value="40"/>
+    <constant name="ss_b1_sf_b_phi" value="56"/>
+    <constant name="ss_b2_sf_b_phi" value="78"/>
+    <constant name="ss_b3_sf_b_phi" value="102"/>
+    <constant name="ss_b_sf_e_phi" value="1"/>
+    <constant name="ss_b_mat_b_r" value="25"/>
+    <constant name="ss_b_mat_b_z" value="100"/>
+    <constant name="ss_b_mat_b_phi" value="144"/>    
+</define>
+ 
+ 
+<!-- Using ODD long strip definitions for now-->
+<define>
+    <!-- Short strip material binning -->
+    <constant name="ls_p_mat_b_z" value="100"/>
+    <constant name="ls_p_mat_b_phi" value="144"/>
+    <!-- Long strip endcap surface binning: setting -->
+    <constant name="ls_e_sf_b" value="2"/>
+    <constant name="ls_e_sf_b_r" value="2"/>
+    <constant name="ls_e_sf_e_r" value="1"/>
+    <constant name="ls_e_sf_b_phi" value="48"/>
+    <constant name="ls_e_sf_e_phi" value="1"/>
+    <constant name="ls_e_clear" value="1.*mm"/>
+    <constant name="ls_e_mat_b_r" value="25"/>
+    <constant name="ls_e_mat_b_phi" value="144"/>
+    <!-- Long strip barrel surface binning: setting -->
+    <constant name="ls_b_sf_b" value="2"/>
+    <constant name="ls_b_sf_b_z" value="21"/>
+    <constant name="ls_b_sf_e_z" value="1"/>
+    <constant name="ls_b_clear" value="1.*mm"/>
+    <constant name="ls_b0_sf_b_phi" value="60"/>
+    <constant name="ls_b1_sf_b_phi" value="80"/>
+    <constant name="ls_b_sf_e_phi" value="1"/>
+    <constant name="ls_b_mat_b_r" value="50"/>
+    <constant name="ls_b_mat_b_z" value="100"/>
+    <constant name="ls_b_mat_b_phi" value="144"/>     
+</define>
 <!--*************************************Plugins*************************************************************-->
 
 <plugins>
