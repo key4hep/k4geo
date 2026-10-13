@@ -149,7 +149,7 @@ namespace DDSegmentation {
     const int phiBin = static_cast<int>(decoder()->get(cID, m_phiIndex));
     const int thetaBin = static_cast<int>(decoder()->get(cID, m_thetaIndex));
     const int rhoBin = static_cast<int>(decoder()->get(cID, m_rhoIndex));
-    //Clean the module and sector ID, so the neighbour finding only work by comparing the theta/phi/rho IDs. 
+    // Clean the module and sector ID, so the neighbour finding only work by comparing the theta/phi/rho IDs.
     CellID base = cID;
     clearExtraFields(base);
 
