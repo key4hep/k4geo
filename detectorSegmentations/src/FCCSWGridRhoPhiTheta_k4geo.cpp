@@ -35,7 +35,7 @@ namespace DDSegmentation {
     registerParameter("min_theta", "Minimum physical theta", m_minTheta, 0., SegmentationParameter::AngleUnit, true);
     registerParameter("max_theta", "Maximum physical theta", m_maxTheta, M_PI, SegmentationParameter::AngleUnit, true);
     registerParameter("clear_extra_fields", "Clear CellID fields other than system, phi, theta and rho",
-                      m_clearExtraFields, false);
+                      m_clearExtraFields, true);
     registerIdentifier("identifier_rho", "Cell ID identifier for rho", m_rhoID, "rho");
 
     m_thetaIndex = decoder()->index(fieldNameTheta());
@@ -149,13 +149,15 @@ namespace DDSegmentation {
     const int phiBin = static_cast<int>(decoder()->get(cID, m_phiIndex));
     const int thetaBin = static_cast<int>(decoder()->get(cID, m_thetaIndex));
     const int rhoBin = static_cast<int>(decoder()->get(cID, m_rhoIndex));
+    //Clean the module and sector ID, so the neighbour finding only work by comparing the theta/phi/rho IDs. 
+    CellID base = cID;
+    clearExtraFields(base);
 
     auto insertWithBin = [&](int fieldIndex, int bin) {
-      CellID neighbour = cID;
+      CellID neighbour = base;
       decoder()->set(neighbour, fieldIndex, bin);
-      clearExtraFields(neighbour);
       // A phi window wider than the full circle wraps back onto the cell itself.
-      if (neighbour != cID)
+      if (neighbour != base)
         neighbours.insert(neighbour);
     };
 

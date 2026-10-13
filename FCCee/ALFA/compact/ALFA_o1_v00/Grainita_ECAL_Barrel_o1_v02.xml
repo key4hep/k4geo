@@ -70,7 +70,7 @@
               min_theta="atan((InnerRadius+FrameThickness)/HalfZ)"
               max_theta="pi-atan((InnerRadius+FrameThickness)/HalfZ)"
               clear_extra_fields="1"
-              offset_R="InnerRadius+FrameThickness"/>
+              offset_R="InnerRadius"/>
       <id>system:5,stave:6,sector:7,phi:-16,theta:16,rho:5</id>
     </readout>
   </readouts> 
