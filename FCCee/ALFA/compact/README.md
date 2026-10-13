@@ -10,6 +10,7 @@ Each module is fullfilled with averaged material: 79% ZnWO4 + 21% heavy liquid +
 No real fiber volume in the geometry. 
 Inactive material include: carbon-fiber front and backword supporting, carbon-fiber module frame. 
 Readout is achieved with DD4hep::Segmentation FCCSWGridRhoPhiTheta\_k4geo, granularity 3.2 mrad (theta) * 3.2 mrad (phi) in transverse and 4 in longitudinal. 
+Details can be found in [this report](https://indico.cern.ch/event/1683237/#4-simulation-and-performance-s).
 Note: segmentation is not matched with the quasi-pointing module geometry. 
 
 

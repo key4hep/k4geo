@@ -92,5 +92,6 @@ Introduced the segmented crystal ECAL with timing layer. The main crystals in th
 
 ## Grainita ECAL
 ### v02
-A simplified ALFA ECAL geometry with quasi-point modules but no fibers. Average material for ZnWO4 + liquid as sensitive material. 
+A simplified ALFA ECAL geometry with quasi-point modules but no fibers. Average material for ZnWO4 + liquid as sensitive material. Details can be found in [this report](https://indico.cern.ch/event/1683237/#4-simulation-and-performance-s).
+
 
