@@ -36,7 +36,7 @@
     <constant name="ModuleTiltAngle"      value="1.5*deg"/>
 
     <!-- Cell -->
-    <!-- Segmentation to achieve readout granularity of 7 mm in frout of ECAL barrel surface.
+    <!-- Segmentation to achieve readout granularity of 7 mm in front of ECAL barrel surface.
     It corresponds to AngularGranularity = 3.2 mrad
     Two longitudinal segmentations are achieved from short-long fiber structure.  -->
     <constant name="AngularGranularity"   value="3.2*mrad"/>   
@@ -67,8 +67,8 @@
               grid_size_theta="AngularGranularity"
               rho_bins="rho0 rho1 rho2"
               rho_bin_count="2"
-              min_theta="atan((InnerRadius+FrameThickness)/HalfZ)"
-              max_theta="pi-atan((InnerRadius+FrameThickness)/HalfZ)"
+              min_theta="atan((InnerRadius+FrameThickness)/HalfZ)-ModuleTiltAngle"
+              max_theta="pi-atan((InnerRadius+FrameThickness)/HalfZ)+ModuleTiltAngle"
               clear_extra_fields="1"
               offset_R="InnerRadius"/>
       <id>system:5,stave:6,sector:7,phi:-16,theta:16,rho:5</id>
