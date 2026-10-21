@@ -21,7 +21,7 @@ namespace sim {
     Geant4Sensitive* sensitive{};
     int rawCollectionID = 0;
     std::string rawCollectionName = "GrainitaCalorimeterHitsRaw";
-    // Arm length, in cells along phi and along theta, of the cross-shaped
+    // Arm length, in cells along phi and along theta, of the diamond-shaped
     // light-sharing window centred on the hit cell; 0 keeps only the hit cell.
     int neighborRadius = 3;
     const DDSegmentation::FCCSWGridRhoPhiTheta_k4geo* segmentation{};

@@ -44,10 +44,11 @@ namespace DDSegmentation {
      */
     virtual void neighbours(const CellID& cellID, std::set<CellID>& neighbours) const override;
 
-    /** Add the cells within a cross-shaped window around cellID: up to rPhi,
-     *  rTheta and rRho bins away along one axis at a time (no diagonals).
-     *  Phi neighbours wrap around at 2 pi; rho and theta do not.  The cell
-     *  itself is never added.
+    /** Add the cells within a diamond-shaped window around cellID, i.e. bin
+     *  offsets satisfying |dPhi|/rPhi + |dTheta|/rTheta + |dRho|/rRho <= 1
+     *  (an axis with radius 0 is not varied).  With (1, 1, 1) this gives the
+     *  face-sharing neighbours.  Phi neighbours wrap around at 2 pi; rho and
+     *  theta do not.  The cell itself is never added.
      */
     void neighboursInWindow(const CellID& cellID, std::set<CellID>& neighbours, int rPhi, int rTheta, int rRho) const;
 

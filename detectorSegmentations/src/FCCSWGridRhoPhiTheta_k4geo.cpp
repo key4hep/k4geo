@@ -3,6 +3,9 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdlib>
+#include <utility>
+#include <vector>
 
 namespace dd4hep {
 namespace DDSegmentation {
@@ -153,13 +156,9 @@ namespace DDSegmentation {
     CellID base = cID;
     clearExtraFields(base);
 
-    auto insertWithBin = [&](int fieldIndex, int bin) {
-      CellID neighbour = base;
-      decoder()->set(neighbour, fieldIndex, bin);
-      // A phi window wider than the full circle wraps back onto the cell itself.
-      if (neighbour != base)
-        neighbours.insert(neighbour);
-    };
+    // Allowed (offset, bin) pairs along each axis, including the cell's own bin.
+    std::vector<std::pair<int, int>> phiCandidates{{0, phiBin}}, thetaCandidates{{0, thetaBin}},
+        rhoCandidates{{0, rhoBin}};
 
     // phiFromXYZ() uses atan2(), hence phi bins are generally signed.  In
     // particular, they are not [0, phiBins()-1] when offset_phi is zero.
@@ -170,8 +169,8 @@ namespace DDSegmentation {
         return firstPhiBin + (relativeBin % phiBins() + phiBins()) % phiBins();
       };
       for (int d = 1; d <= rPhi; ++d) {
-        insertWithBin(m_phiIndex, wrapPhi(phiBin - d));
-        insertWithBin(m_phiIndex, wrapPhi(phiBin + d));
+        phiCandidates.push_back({-d, wrapPhi(phiBin - d)});
+        phiCandidates.push_back({d, wrapPhi(phiBin + d)});
       }
     }
 
@@ -181,9 +180,9 @@ namespace DDSegmentation {
     const int minThetaBin = firstThetaBin();
     const int maxThetaBin = lastThetaBin();
     for (int d = 1; d <= rTheta; ++d) {
-      for (const int candidate : {thetaBin - d, thetaBin + d}) {
-        if (candidate >= minThetaBin && candidate <= maxThetaBin)
-          insertWithBin(m_thetaIndex, candidate);
+      for (const int offset : {-d, d}) {
+        if (thetaBin + offset >= minThetaBin && thetaBin + offset <= maxThetaBin)
+          thetaCandidates.push_back({offset, thetaBin + offset});
       }
     }
 
@@ -198,9 +197,29 @@ namespace DDSegmentation {
     else if (m_rhoBinCount > 0)
       maxRhoBin = std::min(m_rhoBinCount - 1, maxRhoBin);
     for (int d = 1; d <= rRho; ++d) {
-      for (const int candidate : {rhoBin - d, rhoBin + d}) {
-        if (candidate >= minRhoBin && candidate <= maxRhoBin)
-          insertWithBin(m_rhoIndex, candidate);
+      for (const int offset : {-d, d}) {
+        if (rhoBin + offset >= minRhoBin && rhoBin + offset <= maxRhoBin)
+          rhoCandidates.push_back({offset, rhoBin + offset});
+      }
+    }
+
+    // Diamond (L1) window: |dPhi|/rPhi + |dTheta|/rTheta + |dRho|/rRho <= 1, evaluated in integers.
+    // An axis with radius 0 only has offset 0, so its weight value is irrelevant.
+    const long wPhi = std::max(rPhi, 1), wTheta = std::max(rTheta, 1), wRho = std::max(rRho, 1);
+    for (const auto& [dPhi, p] : phiCandidates) {
+      for (const auto& [dTheta, t] : thetaCandidates) {
+        for (const auto& [dRho, r] : rhoCandidates) {
+          if (std::abs(dPhi) * wTheta * wRho + std::abs(dTheta) * wPhi * wRho + std::abs(dRho) * wPhi * wTheta >
+              wPhi * wTheta * wRho)
+            continue;
+          CellID neighbour = base;
+          decoder()->set(neighbour, m_phiIndex, p);
+          decoder()->set(neighbour, m_thetaIndex, t);
+          decoder()->set(neighbour, m_rhoIndex, r);
+          // A phi window wider than the full circle wraps back onto the cell itself.
+          if (neighbour != base)
+            neighbours.insert(neighbour);
+        }
       }
     }
   }
