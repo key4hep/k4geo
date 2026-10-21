@@ -43,6 +43,7 @@ using dd4hep::rec::volSurfaceList;
 
 static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml::Handle_t xmlElement,
                                                     dd4hep::SensitiveDetector sensDet) {
+  sensDet.setType("tracker");
   dd4hep::xml::DetElement xmlDet = static_cast<dd4hep::xml::DetElement>(xmlElement);
   std::string name = xmlDet.nameStr();
   dd4hep::DetElement detElement(name, xmlDet.id());
@@ -485,8 +486,6 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
                   sliceVolume.setVisAttributes(lcdd, sliceDet.visStr());
                 }
                 if (slice.hasAttr("sensitive") && sliceDet.isSensitive()) {
-                  dd4hep::xml::Dimension sdType(xmlElement.child(_U(sensitive)));
-                  sensDet.setType(sdType.typeStr());
                   sliceVolume.setSensitiveDetector(sensDet);
                   slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
                   dd4hep::DetElement sliceDE(rectangleRemainderEnvDE, "slice_" + std::to_string(sensitiveSliceIndex),
@@ -527,8 +526,6 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
                   sliceVolume.setVisAttributes(lcdd, sliceDet.visStr());
                 }
                 if (slice.hasAttr("sensitive") && sliceDet.isSensitive()) {
-                  dd4hep::xml::Dimension sdType(xmlElement.child(_U(sensitive)));
-                  sensDet.setType(sdType.typeStr());
                   sliceVolume.setSensitiveDetector(sensDet);
                   slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
                   dd4hep::DetElement sliceDE(envDE, "slice_" + std::to_string(sensitiveSliceIndex),
@@ -659,8 +656,6 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
                   sliceVolume.setVisAttributes(lcdd, sliceDet.visStr());
                 }
                 if (slice.hasAttr("sensitive") && sliceDet.isSensitive()) {
-                  dd4hep::xml::Dimension sdType(xmlElement.child(_U(sensitive)));
-                  sensDet.setType(sdType.typeStr());
                   sliceVolume.setSensitiveDetector(sensDet);
                   slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
                   dd4hep::DetElement sliceDE(rectangleRemainderEnvDE, "slice_" + std::to_string(sensitiveSliceIndex),
@@ -701,8 +696,6 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
                   sliceVolume.setVisAttributes(lcdd, sliceDet.visStr());
                 }
                 if (slice.hasAttr("sensitive") && sliceDet.isSensitive()) {
-                  dd4hep::xml::Dimension sdType(xmlElement.child(_U(sensitive)));
-                  sensDet.setType(sdType.typeStr());
                   sliceVolume.setSensitiveDetector(sensDet);
                   slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
                   dd4hep::DetElement sliceDE(envDE, "slice_" + std::to_string(sensitiveSliceIndex),
@@ -1126,8 +1119,6 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
                   sliceVolume.setVisAttributes(lcdd, sliceDet.visStr());
                 }
                 if (slice.hasAttr("sensitive") && sliceDet.isSensitive()) {
-                  dd4hep::xml::Dimension sdType(xmlElement.child(_U(sensitive)));
-                  sensDet.setType(sdType.typeStr());
                   sliceVolume.setSensitiveDetector(sensDet);
                   slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
                   dd4hep::DetElement sliceDE(rectangleRemainderEnvDE, "slice_" + std::to_string(sensitiveSliceIndex),
@@ -1173,8 +1164,6 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
                   sliceVolume.setVisAttributes(lcdd, sliceDet.visStr());
                 }
                 if (slice.hasAttr("sensitive") && sliceDet.isSensitive()) {
-                  dd4hep::xml::Dimension sdType(xmlElement.child(_U(sensitive)));
-                  sensDet.setType(sdType.typeStr());
                   sliceVolume.setSensitiveDetector(sensDet);
                   slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
                   dd4hep::DetElement sliceDE(envDE, "slice_" + std::to_string(sensitiveSliceIndex),
