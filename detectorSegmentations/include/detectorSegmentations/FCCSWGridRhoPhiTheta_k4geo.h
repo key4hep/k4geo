@@ -77,6 +77,8 @@ namespace DDSegmentation {
   private:
     /// Clear all CellID fields except system, phi, theta and rho when enabled.
     void clearExtraFields(CellID& cellID) const;
+    /// Map a phi bin onto the range [firstPhiBin, firstPhiBin + phiBins() - 1] used for all phi IDs.
+    int wrapPhiBin(int bin) const;
 
     /// the grid size in rho
     double m_grid_rho;

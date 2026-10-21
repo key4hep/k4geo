@@ -74,7 +74,7 @@ namespace DDSegmentation {
 
     // dd4hep::Segmentation::positionToBin: int(floor((position + 0.5 * cellSize - offset) / cellSize));
     decoder()->set(cID, m_thetaIndex, positionToBin(lTheta, gridSizeTheta(), offsetTheta()));
-    decoder()->set(cID, m_phiIndex, positionToBin(lPhi, gridSizePhi(), offsetPhi()));
+    decoder()->set(cID, m_phiIndex, wrapPhiBin(positionToBin(lPhi, gridSizePhi(), offsetPhi())));
 
     // std::cout<<" Position to cellID "<<std::endl;
     // std::cout<<" Print rho bins: "<<std::endl;
@@ -132,6 +132,13 @@ namespace DDSegmentation {
       return m_offsetR / std::sin(m_theta) + 0.5 * (m_rhoBins[rhoValue] + m_rhoBins[rhoValue + 1]);
   }
 
+  int FCCSWGridRhoPhiTheta_k4geo::wrapPhiBin(int bin) const {
+    // phiFromXYZ() uses atan2(), hence phi bins are generally signed.  The first bin is
+    // positionToBin(-pi), written as floor(0.5 - n/2 - offset/size) so that it is exact for zero offset.
+    const int firstPhiBin = static_cast<int>(std::floor(0.5 - 0.5 * phiBins() - offsetPhi() / gridSizePhi()));
+    return firstPhiBin + ((bin - firstPhiBin) % phiBins() + phiBins()) % phiBins();
+  }
+
   int FCCSWGridRhoPhiTheta_k4geo::firstThetaBin() const {
     const auto& thetaField = (*decoder())[m_thetaIndex];
     return std::max(positionToBin(m_minTheta, gridSizeTheta(), offsetTheta()), static_cast<int>(thetaField.minValue()));
@@ -160,17 +167,10 @@ namespace DDSegmentation {
     std::vector<std::pair<int, int>> phiCandidates{{0, phiBin}}, thetaCandidates{{0, thetaBin}},
         rhoCandidates{{0, rhoBin}};
 
-    // phiFromXYZ() uses atan2(), hence phi bins are generally signed.  In
-    // particular, they are not [0, phiBins()-1] when offset_phi is zero.
     if (phiBins() > 1) {
-      const int firstPhiBin = positionToBin(-M_PI, gridSizePhi(), offsetPhi());
-      const auto wrapPhi = [&](int bin) {
-        const int relativeBin = bin - firstPhiBin;
-        return firstPhiBin + (relativeBin % phiBins() + phiBins()) % phiBins();
-      };
       for (int d = 1; d <= rPhi; ++d) {
-        phiCandidates.push_back({-d, wrapPhi(phiBin - d)});
-        phiCandidates.push_back({d, wrapPhi(phiBin + d)});
+        phiCandidates.push_back({-d, wrapPhiBin(phiBin - d)});
+        phiCandidates.push_back({d, wrapPhiBin(phiBin + d)});
       }
     }
 
