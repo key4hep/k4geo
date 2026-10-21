@@ -9,6 +9,7 @@
 // Includers from DD4hep
 #include "DD4hep/Printout.h"
 #include "DDRec/Vector3D.h"
+#include "XML/Utilities.h"
 #include <DD4hep/DetFactoryHelper.h>
 
 using namespace dd4hep;
@@ -115,6 +116,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   // Create the geometry
   DetElement ECAL(det_name, x_det.id());
+  dd4hep::xml::setDetectorTypeFlag(e, ECAL);
   Volume worldVol = description.pickMotherVolume(ECAL);
 
   TGeoTube* EcalBarrel = new TGeoTube(innerR, outerR, halfZ_out);
