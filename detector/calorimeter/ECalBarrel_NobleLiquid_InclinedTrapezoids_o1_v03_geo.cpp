@@ -245,8 +245,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
   // sensitive detector for the layers (and, if desired to study energy deposited in absorbers or up/downstream, in
   // services and cryo)
   dd4hep::SensitiveDetector sd = aSensDet;
-  dd4hep::xml::Dimension sdType = xmlDetElem.child(_U(sensitive));
-  sd.setType(sdType.typeStr());
+  sd.setType("calorimeter");
 
   // 3.a. Create the passive planes, readout in between of 2 passive planes and the remaining space filled with active
   // material
