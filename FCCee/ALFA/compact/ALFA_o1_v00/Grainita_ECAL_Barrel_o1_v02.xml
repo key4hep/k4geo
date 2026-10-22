@@ -1,0 +1,80 @@
+
+<lccdd>
+<!-- #==========================================================================
+     #  AIDA Detector description implementation 
+     #==========================================================================
+     # Copyright (C) Organisation europeenne pour la Recherche nucleaire (CERN)
+     # All rights reserved.
+     #
+     # For the licensing terms see $DD4hepINSTALL/LICENSE.
+     # For the list of contributors see $DD4hepINSTALL/doc/CREDITS.
+     #
+     #==========================================================================
+-->
+  <!-- <info name="Grainita_ECAL_Barrel_v02"
+    title="Grainita ECAL full detector geometry (first ver.)"
+    author="Fangyi Guo"
+    url="None"
+    status="development"
+    version="0.1">
+  </info> -->
+
+  <define>
+
+    <!-- Global structure -->
+    <constant name="InnerRadius"          value="ECalBarrel_inner_radius"/>
+    <constant name="OuterRadius"          value="ECalBarrel_outer_radius"/>
+    <constant name="CrystalThickness"     value="40.5*cm"/>
+    <constant name="BackSpace"            value="1.8*cm"/>
+    <constant name="HalfZ"                value="ECalBarrel_half_length"/>
+    <constant name="NumberOfPhiSectors"   value="72"/>
+    <constant name="NumberOfZModules"     value="15"/>
+
+    <!-- Module -->
+    <constant name="FrameThickness"       value="10*mm"/>
+    <constant name="SegThickness"         value="2.5*mm"/>
+    <constant name="ModuleTiltAngle"      value="1.5*deg"/>
+
+    <!-- Cell -->
+    <!-- Segmentation to achieve readout granularity of 7 mm in front of ECAL barrel surface.
+    It corresponds to AngularGranularity = 3.2 mrad
+    Two longitudinal segmentations are achieved from short-long fiber structure.  -->
+    <constant name="AngularGranularity"   value="3.2*mrad"/>   
+    <constant name="rho0"                 value="FrameThickness"/>   
+    <constant name="rho1"                 value="FrameThickness + CrystalThickness/5"/>   
+    <constant name="rho2"                 value="FrameThickness + CrystalThickness+10*mm"/>   
+
+
+  </define>
+  
+
+  <!-- Define the detector. A detector has a name, type to be returned in .cpp file with 
+       DECLARE_DETELEMENT(type,create_detector_c++method), vis attributes (optional),
+       and sensitive-detector (true/false), if sensitive="true" a readout must the passed.
+       If a detector contains sub-detectors, their information must be included as below.
+  -->
+  <detectors>
+    <detector name="Grainita_ECAL_Barrel_v02" type="Grainita_ECAL_Barrel_v02" vis="CaloVis" id ="10" readout="GrainitaEcalBarrelRO" material="MixGrains">
+    <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL"/>
+    </detector>
+  </detectors>
+
+
+  <readouts>
+    <readout name="GrainitaEcalBarrelRO">
+      <segmentation type="FCCSWGridRhoPhiTheta_k4geo"
+              phi_bins="2*pi/AngularGranularity"
+              grid_size_theta="AngularGranularity"
+              rho_bins="rho0 rho1 rho2"
+              rho_bin_count="2"
+              min_theta="atan((InnerRadius+FrameThickness)/HalfZ)-ModuleTiltAngle"
+              max_theta="pi-atan((InnerRadius+FrameThickness)/HalfZ)+ModuleTiltAngle"
+              clear_extra_fields="1"
+              offset_R="InnerRadius"/>
+      <id>system:5,stave:6,sector:7,phi:-16,theta:16,rho:5</id>
+    </readout>
+  </readouts> 
+
+
+
+</lccdd>
