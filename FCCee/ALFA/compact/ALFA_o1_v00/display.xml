@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+
+  <!-- Consolidated visualization (color) definitions -->
+
+  <display>
+
+    <!-- Outer Tracker Barrel -->
+    <vis name="OTBarEnvVis"          alpha="1.0" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+
+
+    <vis name="OTBarStaveVis"        alpha="1.0" r="1.0" g="0.5" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="OTBarSupportTrussVis"       alpha="1.0" r="0.6" g="0.6" b="0.6" showDaughters="true" visible="true"/>
+    <vis name="OTBarSupportFilledVis"       alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
+    <vis name="OTBarCoolingPlateVis" alpha="1.0" r="0.621" g="0.793" b="1.000" showDaughters="true" visible="true"/>
+
+    <vis name="OTBarCoolingPipeVis"       alpha="1.0" r="1.0" g="1.0" b="1.0" showDaughters="true" visible="false"/>
+    <vis name="OTBarCoolingFluidVis"        alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="false"/>
+    <vis name="OTBarPeripheryVis" alpha="1.0" r="0.0" g="0.6" b="0.0" showDaughters="true" visible="false"/>
+    <vis name="OTBarSensitiveVis" alpha="1.0" r="0.08" g="0.75" b="0.08" showDaughters="true" visible="false"/>
+    <vis name="OTBarCopperVis" alpha="1.0" r="0.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
+    <vis name="OTBarHDIVis" alpha="1.0" r="1.000" g="0.500" b="0.000" showDaughters="true" visible="false"/>
+    <vis name="OTBarFlexVis" alpha="1.0" r="1.000" g="0.000" b="1.000" showDaughters="true" visible="false"/>
+    <vis name="OTBarSupportPlateVis" alpha="1.0" r="0.41" g="0.51" b="0.59" showDaughters="true" visible="false"/>
+    <vis name="OTBarConnectorVis" alpha="1.0" r="0.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
+
+
+    <!-- Grainita ECAL  -->
+    <vis name="Invisible"        alpha="0.0" r="0.0" g="0.0"  b="0.0"   showDaughters="false" visible="false"/>
+    <vis name="SeeThrough"       alpha="0.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="false"/>
+
+    <vis name="CaloVis" alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="CaloLayerVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="CarbonFrameVis" alpha="1.0" r="0.375" g="0.375" b="0.375" showDaughters="true" visible="true"/>
+    <vis name="SensitiveVis" alpha="1.0" r="0.4" g="0.7" b="1.0" showDaughters="false" visible="true"/>
+    <vis name="WLSFiberVis" alpha="1.0" r="1.0" g="0.3" b="0.2" showDaughters="true" visible="true"/>
+    <vis name="FiberCladdingVis" alpha="1.0" r="1.0" g="0.6" b="0.2" showDaughters="true" visible="true"/>
+
+  </display>
+
+</lccdd>
