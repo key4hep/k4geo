@@ -64,7 +64,6 @@
 
 	    <type_flags type=" DetType_CALORIMETER + DetType_HADRONIC + DetType_ENDCAP"/>
 
-            <sensitive type="SimpleCalorimeterSD"/>
 
             <envelope vis="HCALVis">
                 <shape type="Assembly"/>
@@ -108,7 +107,6 @@
 
 	    <type_flags type=" DetType_CALORIMETER + DetType_HADRONIC + DetType_ENDCAP + DetType_AUXILIARY"/>
 
-            <sensitive type="SimpleCalorimeterSD"/>
 
             <envelope vis="HCALVis">
                 <shape type="Assembly"/>
@@ -140,5 +138,4 @@
     
     
 </lccdd>
-
 

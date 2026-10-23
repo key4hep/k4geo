@@ -953,7 +953,6 @@
               readout="SCEPCal_Main"
               vis="scepcalAssemblyGlobalVis"
               sensitive="true">
-    <sensitive type="calorimeter"/>
     <type_flags type="DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL + DetType_ENDCAP"/>
 
     <!-- SCEPCal main layer dimensions, last block is for partial visualisation -->
@@ -1010,7 +1009,6 @@
               readout="SCEPCal_Timing"
               vis="scepcalAssemblyGlobalVis"
               sensitive="true">
-      <sensitive type="calorimeter"/>
 
       <dim    barrelHalfZ="scepcal_barrel_half_z"
               barrelInnerR="scepcal_barrel_inner_r" 
