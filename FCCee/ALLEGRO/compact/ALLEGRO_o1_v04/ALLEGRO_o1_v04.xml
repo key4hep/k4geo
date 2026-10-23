@@ -17,8 +17,8 @@
   <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml" />
 
   <includes>
-    <gdmlFile  ref="elements.xml"/>
-    <gdmlFile  ref="materials.xml"/>
+    <gdmlFile  ref="../ALLEGRO_o1_v03/elements.xml"/>
+    <gdmlFile  ref="../ALLEGRO_o1_v03/materials.xml"/>
   </includes>
 
   <define>
@@ -28,8 +28,8 @@
     <constant name="world_z" value="world_size"/>
   </define>
 
-  <include ref="./DectDimensions.xml" />
-  <include ref="./display.xml" />
+  <include ref="../ALLEGRO_o1_v03/DectDimensions.xml" />
+  <include ref="../ALLEGRO_o1_v03/display.xml" />
 
   <!-- shape based model of the beam pipe -->
   <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
