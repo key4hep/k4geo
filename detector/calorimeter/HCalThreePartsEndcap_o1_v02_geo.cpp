@@ -43,8 +43,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
   envelopeVolume.setVisAttributes(lcdd, dimensions.visStr());
 
   // Set sensitive detector type
-  Dimension sensDetType = xmlElement.child(_Unicode(sensitive));
-  sensDet.setType(sensDetType.typeStr());
+  sensDet.setType("calorimeter");
 
   xml_comp_t xEndPlate = xmlElement.child(_Unicode(end_plate));
   double dZEndPlate = xEndPlate.thickness() / 2.;
