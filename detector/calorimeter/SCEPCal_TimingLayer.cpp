@@ -490,8 +490,7 @@ static dd4hep::Ref_t create_detector_SCEPCal_TimingLayer(dd4hep::Detector& theDe
   // Initialization
   dd4hep::DetElement ScepcalDetElement(detName, detectorXML.id());
   dd4hep::Volume experimentalHall = theDetector.pickMotherVolume(ScepcalDetElement);
-  dd4hep::xml::Dimension sdType = detectorXML.child(_Unicode(sensitive));
-  sens.setType(sdType.typeStr());
+  sens.setType("calorimeter");
   dd4hep::Readout readout = sens.readout();
   dd4hep::Segmentation geomseg = readout.segmentation();
   dd4hep::Segmentation* _geoSeg = &geomseg;

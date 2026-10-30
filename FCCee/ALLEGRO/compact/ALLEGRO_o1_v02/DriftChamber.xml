@@ -77,7 +77,6 @@
 
   <detectors>
     <detector id="DetID_DCH" name="CDCH" type="DriftChamber_o1_v01" readout="DriftChamber_simHits" vis="CDCH"> <!-- region="CDCH_region">-->
-      <sensitive type="tracker"/>
     </detector>
   </detectors>
 

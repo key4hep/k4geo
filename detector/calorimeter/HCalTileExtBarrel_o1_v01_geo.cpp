@@ -19,8 +19,6 @@ static void buildEB(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet
                     dd4hep::DetElement& aHCal, xml_det_t aXmlElement, int sign) {
 
   dd4hep::SensitiveDetector sensDet = aSensDet;
-  Dimension sensDetType = aXmlElement.child(_Unicode(sensitive));
-  sensDet.setType(sensDetType.typeStr());
 
   Dimension dimensions(aXmlElement.child(_Unicode(dimensions)));
   xml_comp_t xEndPlate = aXmlElement.child(_Unicode(end_plate));
@@ -300,6 +298,7 @@ static void buildEB(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet
 
 static dd4hep::Ref_t createHCalEB(dd4hep::Detector& lcdd, xml_h xmlElement, dd4hep::SensitiveDetector sensDet) {
 
+  sensDet.setType("calorimeter");
   xml_det_t xmlDet = xmlElement;
   std::string detName = xmlDet.nameStr();
 
