@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+    <info name="TkLayoutTracker" title="TkLayoutTracker" author="Z.Drasal" url="http://fcc-tklayout.web.cern.ch/fcc-tklayout" status="optimization" version="FCChh_v3.03">
+        <comment>The tracker geometry as designed and optimized by tkLayout software - design version: FCChh_v3.03</comment>
+    </info>
+    <readouts>
+        <readout name="TrackerBarrelReadout">
+            <segmentation type="CartesianGridXZ" grid_size_x="0.005*mm" grid_size_z="0.010*mm"/>
+            <id>system:4,layer:5,module:18,x:-15,z:-15</id>
+        </readout>
+        <readout name="TrackerEndcapReadout">
+            <segmentation type="CartesianGridXZ" grid_size_x="0.005*mm" grid_size_z="0.010*mm"/>
+            <id>system:4,posneg:1,disc:5,ring:4,component:17,x:-15,z:-15</id>
+        </readout>
+    </readouts>
+    <include ref="FCChh_v3.03_Definitions.xml"/>
+
+    <!--Material Binning-->
+    <include ref="../FCChh_MaterialBinning.xml"/>
+
+    <detectors>
+        <detector id="0" name="beampipe" type="BeamTube">
+            <dimensions rmin="CentralBeamTube_rmin" rmax="CentralBeamTube_rmax" z="CentralBeamTube_dz" material="Beryllium" vis="violet"/>
+            <type_flags type="DetType_TRACKER + DetType_BEAMPIPE" />
+        </detector>
+        <detector id="1" name="FCChhInner" type="DD4hep_SubdetectorAssembly" vis="BlueVisTrans">
+            <composite name="InnerBRL"/>
+            <composite name="InnerECAP"/>
+        </detector>
+        <detector id="2" name="FCChhOuter" type="DD4hep_SubdetectorAssembly" vis="BlueVisTrans">
+            <composite name="OuterBRL"/>
+            <composite name="OuterECAP"/>
+        </detector>
+        <detector id="3" name="FCChhFwdEcap_Inner" type="DD4hep_SubdetectorAssembly" vis="BlueVisTrans">
+            <composite name="FwdIECAP"/>
+        </detector>
+         <detector id="4" name="FCChhFwdEcap_Outer" type="DD4hep_SubdetectorAssembly" vis="BlueVisTrans">
+            <composite name="FwdECAP"/>
+        </detector>
+    </detectors>
+
+<!-- Using ODD Pixels definitions for now -->
+<define>
+    <!-- Overall pixel material binning-->
+    <constant name="pix_p_mat_b_z" value="200"/>
+    <constant name="pix_p_mat_b_phi" value="144"/>
+    <!-- Pixel endcap surface & material binning: setting -->
+    <constant name="pix_e_v_dz" value="20.*mm"/>
+    <constant name="pix_e_sf_b" value="2"/>
+    <constant name="pix_e_sf_b_r" value="2"/>
+    <constant name="pix_e_sf_e_r" value="1"/>
+    <constant name="pix_e_sf_b_phi" value="36"/>
+    <constant name="pix_e_sf_e_phi" value="1"/>
+    <constant name="pix_e_mat_b_r" value="50"/>
+    <constant name="pix_e_mat_b_phi" value="144"/>
+    <!-- Pixel barrel surface & material binning: setting -->
+    <constant name="pix_b_sf_b" value="2"/>
+    <constant name="pix_b_sf_b_z" value="14"/>
+    <constant name="pix_b_sf_e_z" value="1"/>
+    <constant name="pix_b_clear" value="1.*mm"/>
+    <constant name="pix_b_sf_e_phi" value="1"/>
+    <constant name="pix_b0_sf_b_phi" value="16"/>
+    <constant name="pix_b1_sf_b_phi" value="32"/>
+    <constant name="pix_b2_sf_b_phi" value="52"/>
+    <constant name="pix_b3_sf_b_phi" value="78"/>
+    <constant name="pix_b_mat_b_r" value="50"/>
+    <constant name="pix_b_mat_b_z" value="200"/>
+    <constant name="pix_b_mat_b_phi" value="144"/>
+  </define>
+
+<!--Using ODD short strip definitions for now-->
+<define>
+    <!-- Short strip material binning -->
+    <constant name="ss_p_mat_b_z" value="100"/>
+    <constant name="ss_p_mat_b_phi" value="144"/>
+    <!-- Short strip endcap surface & material binning: setting -->
+    <constant name="ss_e_sf_b" value="2"/>
+    <constant name="ss_e_sf_b_r" value="3"/>
+    <constant name="ss_e_sf_e_r" value="1"/>
+    <constant name="ss_e_sf_b_phi" value="42"/>
+    <constant name="ss_e_sf_e_phi" value="1"/>
+    <constant name="ss_e_clear" value="1.*mm"/>
+    <constant name="ss_e_mat_b_r" value="25"/>
+    <constant name="ss_e_mat_b_phi" value="144"/>
+    <!-- Short strip barrel surface & material binning: setting -->
+    <constant name="ss_b_sf_b" value="2"/>
+    <constant name="ss_b_sf_b_z" value="21"/>
+    <constant name="ss_b_sf_e_z" value="1"/>
+    <constant name="ss_b_clear" value="1.*mm"/>
+    <constant name="ss_b0_sf_b_phi" value="40"/>
+    <constant name="ss_b1_sf_b_phi" value="56"/>
+    <constant name="ss_b2_sf_b_phi" value="78"/>
+    <constant name="ss_b3_sf_b_phi" value="102"/>
+    <constant name="ss_b_sf_e_phi" value="1"/>
+    <constant name="ss_b_mat_b_r" value="25"/>
+    <constant name="ss_b_mat_b_z" value="100"/>
+    <constant name="ss_b_mat_b_phi" value="144"/>    
+</define>
+ 
+ 
+<!-- Using ODD long strip definitions for now-->
+<define>
+    <!-- Short strip material binning -->
+    <constant name="ls_p_mat_b_z" value="100"/>
+    <constant name="ls_p_mat_b_phi" value="144"/>
+    <!-- Long strip endcap surface binning: setting -->
+    <constant name="ls_e_sf_b" value="2"/>
+    <constant name="ls_e_sf_b_r" value="2"/>
+    <constant name="ls_e_sf_e_r" value="1"/>
+    <constant name="ls_e_sf_b_phi" value="48"/>
+    <constant name="ls_e_sf_e_phi" value="1"/>
+    <constant name="ls_e_clear" value="1.*mm"/>
+    <constant name="ls_e_mat_b_r" value="25"/>
+    <constant name="ls_e_mat_b_phi" value="144"/>
+    <!-- Long strip barrel surface binning: setting -->
+    <constant name="ls_b_sf_b" value="2"/>
+    <constant name="ls_b_sf_b_z" value="21"/>
+    <constant name="ls_b_sf_e_z" value="1"/>
+    <constant name="ls_b_clear" value="1.*mm"/>
+    <constant name="ls_b0_sf_b_phi" value="60"/>
+    <constant name="ls_b1_sf_b_phi" value="80"/>
+    <constant name="ls_b_sf_e_phi" value="1"/>
+    <constant name="ls_b_mat_b_r" value="50"/>
+    <constant name="ls_b_mat_b_z" value="100"/>
+    <constant name="ls_b_mat_b_phi" value="144"/>     
+</define>
+<!--*************************************Plugins*************************************************************-->
+
+<plugins>
+     <plugin name="DD4hep_ParametersPlugin">                              <!--for inner BRL-->
+        <argument value="InnerBRL"/>
+        <argument value="layer_pattern=layer\d"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">                             <!-- for inner pos ecap-->
+        <argument value="FCChhInner/InnerECAP/InnerECAPposEndcap"/>
+        <argument value="layer_pattern=disc\d"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">                             <!--for inner neg ecap-->
+        <argument value="FCChhInner/InnerECAP/InnerECAPnegEndcap"/>
+        <argument value="layer_pattern=disc\d"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">                                   <!--for outer BRL-->
+        <argument value="OuterBRL"/>
+        <argument value="layer_pattern=layer\d"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">                              <!-- for outer pos ecap-->
+        <argument value="FCChhOuter/OuterECAP/OuterECAPposEndcap"/>
+        <argument value="layer_pattern=disc\d"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">                               <!-- for outer neg ecap-->
+        <argument value="FCChhOuter/OuterECAP/OuterECAPnegEndcap"/>
+        <argument value="layer_pattern=disc\d"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">                          <!--for forward inner neg ecap-->
+        <argument value="FCChhFwdEcap_Inner/FwdIECAP/FwdIECAPnegEndcap"/>
+        <argument value="layer_pattern=disc\d"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">                            <!--for forward innerpos ecap-->
+        <argument value="FCChhFwdEcap_Inner/FwdIECAP/FwdIECAPposEndcap"/>
+        <argument value="layer_pattern=disc\d"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">                            <!--for forward outer neg ecap-->
+        <argument value="FCChhFwdEcap_Outer/FwdECAP/FwdECAPnegEndcap"/>
+        <argument value="layer_pattern=disc\d"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">                             <!--for forward outer pos ecap-->
+        <argument value="FCChhFwdEcap_Outer/FwdECAP/FwdECAPposEndcap"/>
+        <argument value="layer_pattern=disc\d"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">     
+        <argument value="beampipe"/>
+        <argument value="passive_layer: bool = true"/>
+        <argument value="acts_volume: bool = true"/>
+        <argument value="acts_volume_type: int = 3"/>
+        <!-- <argument value="acts_volume_bvalues_n: int = 3"/>
+        <argument value="acts_volume_bvalues_0: double = 0"/>
+        <argument value="acts_volume_bvalues_1: double = CentralBeamTube_rmax"/>
+        <argument value="acts_volume_bvalues_2: double = Tracker_dz"/>
+        <argument value="acts_volume_internals: bool = true"/>
+        <argument value="acts_volume_internals_type: str = layer"/>
+        <argument value="acts_portal_proto_material_2: bool = true"/>
+        <argument value="acts_portal_proto_material_2_binning_dim: int = 1"/>
+        <argument value="acts_portal_proto_material_2_binning_z_type: str = equidistant"/>
+        <argument value="acts_portal_proto_material_2_binning_z_n: int = 1"/>
+        <argument value="acts_portal_proto_material_2_binning_z_autorange: bool = true"/>
+        <argument value="acts_portal_proto_material_2_binning_phi_type: str = equidistant"/>
+        <argument value="acts_portal_proto_material_2_binning_phi_n: int = 1"/> -->
+    </plugin>
+</plugins>
+
+</lccdd>
