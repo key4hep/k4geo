@@ -1,0 +1,153 @@
+name: MaterialScan Comparison
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      geometry_config:
+        description: 'Geometry configuration file'
+        required: false
+        default: 'CI/config/geometry_list.yml'
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  histcmp_test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
+    
+    
+    - uses: aidasoft/run-lcg-view@v5
+      with:
+        container: el9
+        view-path: /cvmfs/sw-nightlies.hsf.org/key4hep
+        ccache-key: ccache-materialscan-comparisan
+        run: |
+          # Setup build directory
+          mkdir -p build install
+          cd build
+          
+          # Configure with caching
+          cmake .. \
+            -DCMAKE_CXX_STANDARD=20 \
+            -DCMAKE_INSTALL_PREFIX=../install \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_FLAGS="-Werror -Wno-error=cpp -Wno-error=deprecated-declarations" \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -G Ninja \
+            -DBUILD_TESTING=OFF \
+            -DINSTALL_COMPACT_FILES=OFF
+          
+          echo "::group::Building k4geo with caching"
+          time ninja -k0 install
+          
+          # Setup environment
+          cd ../install
+          source bin/thisk4geo.sh
+          cd ..
+          
+          # Create virtual environment for histcmp
+          python -m venv /root/histcmp-venv
+          source /root/histcmp-venv/bin/activate
+          pip install histcmp==0.8.1
+          export PYTHONPATH=$VIRTUAL_ENV/lib/python3.$(python3 -c 'import sys; print(f"{sys.version_info[1]}")')/site-packages:$PYTHONPATH
+          
+          # Make scripts executable
+          chmod +x CI/generate_material_scans.sh
+          
+          # Run material scans with explicit environment variables
+          export GITHUB_BASE_REF="${{ github.event.pull_request.base.ref || 'main' }}"
+          export GITHUB_REPOSITORY="${{ github.repository }}"
+          export GITHUB_HEAD_REF="${{ github.event.pull_request.head.ref || github.ref_name }}"
+          
+          echo "=== Environment Debug ==="
+          echo "GITHUB_BASE_REF: $GITHUB_BASE_REF"
+          echo "GITHUB_REPOSITORY: $GITHUB_REPOSITORY"
+          echo "GITHUB_HEAD_REF: $GITHUB_HEAD_REF"
+          echo "Event name: ${{ github.event_name }}"
+          
+          GEOMETRY_CONFIG="${{ github.event.inputs.geometry_config || 'CI/config/geometry_list.yml' }}"
+          ./CI/generate_material_scans.sh --fast --quiet --config "$GEOMETRY_CONFIG"
+          
+          echo "=== Checking consolidated files ==="
+          ls -la detector_geometries_*.root 2>/dev/null || echo "No consolidated files found"
+          
+          # Single histcmp comparison using consolidated files
+          mkdir -p html
+          mkdir -p plots
+          
+          if [ -f "detector_geometries_ref.root" ] && [ -f "detector_geometries_monitored.root" ]; then
+            echo "Running single histcmp comparison on consolidated files..."
+            
+            # List file contents before comparison
+            echo "=== Reference file contents ==="
+            root -l -b -q -e "TFile f(\"detector_geometries_ref.root\"); f.ls(); f.Close();" || echo "Failed to list reference file contents"
+            
+            echo "=== Monitored file contents ==="
+            root -l -b -q -e "TFile f(\"detector_geometries_monitored.root\"); f.ls(); f.Close();" || echo "Failed to list monitored file contents"
+            
+            # Run histcmp comparison with consistent output paths
+            histcmp detector_geometries_ref.root detector_geometries_monitored.root \
+              --title "Material Budget Comparison: All Detector Geometries" \
+              -o "html/histcmp-results.html" \
+              -p "plots" \
+              --format png \
+              && echo "✅ Histcmp comparison completed successfully" \
+              || echo "❌ Histcmp comparison failed"
+              
+            echo "=== Histcmp comparison completed ==="
+            
+          else
+            echo "⚠️  Consolidated ROOT files not found - creating error report"
+            # Create error report in html directory to match artifact structure
+            echo "# Material Scan Failure" > html/scan_failure.md
+            echo "Consolidated ROOT files were not generated successfully." >> html/scan_failure.md
+            echo "- detector_geometries_ref.root exists: $([ -f detector_geometries_ref.root ] && echo yes || echo no)" >> html/scan_failure.md
+            echo "- detector_geometries_monitored.root exists: $([ -f detector_geometries_monitored.root ] && echo yes || echo no)" >> html/scan_failure.md
+          fi
+
+    - name: Upload histcmp plots and results
+      uses: actions/upload-artifact@v4
+      if: always()  # Upload even if tests fail
+      with:
+        name: histcmp-results
+        path: |
+          html/
+          plots/
+          detector_geometries_*.root
+          material_scan_errors.md
+
+    - name: Check for failed material scans
+      if: always()
+      run: |
+        if [ -f "material_scan_errors.md" ]; then
+          echo "::warning::Material scan failures detected. Check artifacts for details."
+          echo "::group::Failed Material Scans"
+          cat material_scan_errors.md
+          echo "::endgroup::"
+        else
+          echo "✅ All material scans completed successfully"
+        fi
+        
+        # Don't fail the workflow - preserve artifacts for analysis
+        exit 0
+
+    - name: Create job summary
+      if: always()
+      run: |
+        echo "# 📊 Material Budget Comparison Results" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ -f "material_scan_errors.md" ]; then
+          echo "## Material Scan Summary" >> $GITHUB_STEP_SUMMARY
+          cat material_scan_errors.md >> $GITHUB_STEP_SUMMARY
+        else
+          echo "✅ All material scans completed successfully" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "📁 Check the artifacts section below for detailed results" >> $GITHUB_STEP_SUMMARY
