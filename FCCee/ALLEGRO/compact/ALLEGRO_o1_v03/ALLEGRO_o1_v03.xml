@@ -54,6 +54,23 @@
   <!-- Include plugins attaching additional info to the geometry and needed to generate edm4hep::TrackerHitPlane, see e.g. CLD detector-concept case https://github.com/key4hep/k4geo/blob/main/FCCee/CLD/compact/CLD_o2_v08/CLD_o2_v08.xml#L333-L390 -->
   <plugins>
 
+    <!-- helper surfaces at the inner face of the ECal, used by the tracking (e.g. ConformalTracking) to extrapolate the tracks to the calorimeter -->
+    <!-- symmetry=0: cylindrical barrel and disk-shaped endcap faces -->
+    <plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
+      <argument value="ECalBarrel"/>
+      <argument value="length=2.*BarECal_dz"/>
+      <argument value="radius=BarECal_rmin"/>
+      <argument value="symmetry=0"/>
+      <argument value="systemID=DetID_ECAL_Barrel"/>
+    </plugin>
+    <plugin name="DD4hep_CaloFaceEndcapSurfacePlugin">
+      <argument value="EMEC_turbine"/>
+      <argument value="zpos=EMEC_min_z"/>
+      <argument value="radius=EMEC_outer_radius"/>
+      <argument value="symmetry=0"/>
+      <argument value="systemID=DetID_ECAL_Endcap"/>
+    </plugin>
+
     <plugin name="InstallSurfaceManager"/>
 
   </plugins>
