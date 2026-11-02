@@ -22,10 +22,11 @@ set(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH}  ${PROJECT_SOURCE_DIR}/cmake )
 set(LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
-include(cmake/Key4hepConfig.cmake)
-
 include(GNUInstallDirs)
 set(CMAKE_INSTALL_LIBDIR lib)
+
+include(cmake/Key4hepConfig.cmake)
+
 set(CMAKE_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
 #------------- set the default installation directory to be the source directory
