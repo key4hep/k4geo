@@ -101,7 +101,7 @@ SIM.vertexSigma = [0.0, 0.0, 0.0, 0.0]
 SIM.action.calo = "Geant4ScintillatorCalorimeterAction"
 
 ## List of patterns matching sensitive detectors of type Calorimeter.
-SIM.action.calorimeterSDTypes = ["calorimeter", "DRcaloSiPMSD"]
+SIM.action.calorimeterSDTypes = ["calorimeter"]
 
 ##  set the default event action
 SIM.action.event = []

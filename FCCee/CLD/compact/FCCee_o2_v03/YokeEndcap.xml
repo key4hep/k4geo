@@ -28,7 +28,6 @@
             
             <type_flags type=" DetType_CALORIMETER + DetType_MUON + DetType_ENDCAP"/>
 
-            <sensitive type="SimpleCalorimeterSD"/>
 
             <envelope vis="YOKEVis">
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
@@ -73,5 +72,4 @@
     
     
 </lccdd>
-
 

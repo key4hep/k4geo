@@ -1,3 +1,164 @@
+# v00-27
+
+* 2026-10-29 Juan Miguel Carceller ([PR#625](https://github.com/key4hep/k4geo/pull/625))
+  - Hardcode generic `tracker` or `calorimeter` sensitive-detector types in geometry constructors and remove XML type overrides and obsolete sensitive-detector labels.
+
+* 2026-10-25 Juan Miguel Carceller ([PR#675](https://github.com/key4hep/k4geo/pull/675))
+  - Remove unused `m_offsetrho` member to fix the Clang warning.
+
+* 2026-10-23 armin-ilg ([PR#674](https://github.com/key4hep/k4geo/pull/674))
+  - Make sure silicon wrapper is the same between ALLEGRO_o1_v04 and ALLEGRO_o1_03 (see https://github.com/key4hep/k4geo/issues/673)
+
+* 2026-10-22 Edi ([PR#669](https://github.com/key4hep/k4geo/pull/669))
+  - Create ALFA compact folder `FCCee/ALFA/compact/`
+   - Add `ALFA_o1_v00.xml` master geo file 
+   - Add `OuterTrackerBarrel_o1_v00.xml` using 
+      - `detector/tracker/VertexBarrel_detailed_o1_v03_geo.cpp`
+      - Geometry invariance of IDEA_o1_v04 tested w/ node traversal using [this script](https://github.com/Edler1/ALFA-config/tree/main/geo_compare)
+      - (VTX + SiWr) Simulation/Digitization invariance of IDEA_o1_v04 tested using [this script](https://github.com/Edler1/ALFA-config/tree/main/sim_compare)
+   - Minor changes to `VertexBarrel_detailed_o1_v03_geo.cpp`
+      - Add support for `Tube` component in rectangular components
+      - Add support rphi spacing between sensors `step_rhi`
+      - Add support for multiple sensors on same stave via "type" flag
+      - Add support for multiple sensors along rphi for not curved/rectangular sensors
+   - Add `Grainita_ECAL_Barrel_o1_v02.xml` using [by Fangyi Guo]
+      - reference: [FCC Full Sim Working Meeting](https://indico.cern.ch/event/1707475/#47-status-of-grainita-simulati)
+      - `detector/calorimeter/Grainita_ECAL_Barrel_v02.cpp`
+      - `detectorSegmentations/include/detectorSegmentations/FCCSWGridRhoPhiTheta_k4geo.h`
+      - `detectorSegmentations/src/FCCSWGridRhoPhiTheta_k4geo.cpp`
+      - `plugins/GrainitaCaloSDAction.h`
+      - `plugins/GrainitaCaloSDAction.cpp`
+
+* 2026-09-29 pablo ([PR#668](https://github.com/key4hep/k4geo/pull/668))
+  - Add dd4hep2root.py to bin
+
+* 2026-09-28 andread3vita ([PR#665](https://github.com/key4hep/k4geo/pull/665))
+  - Set the flag controlling how workers share events to `false` when running in single-threaded mode. This change applies to the steering file in the examples.
+
+* 2026-09-25 pablo ([PR#667](https://github.com/key4hep/k4geo/pull/667))
+  - Store predefined ROOT colors before loading the file in `dd4hep2root.py`
+  - Link `detector_types.xml` in IDEA_o1_v01 to make conversion work
+
+* 2026-09-23 Thomas Madlener ([PR#612](https://github.com/key4hep/k4geo/pull/612))
+  - Adding FCC-SEED vertex detector layout as option to ILD (see https://github.com/iLCSoft/ILDConfig/pull/188), ALLEGRO, IDEA, and CLD (option CLD_o5_v01)
+  - Fixing CLD disk material budget from CLD_o2_v09 and CLD_o5_v01 on (https://github.com/key4hep/k4geo/issues/613)
+  - Updating ALLEGRO vertex detector and silicon wrapper properties: 20x20 µm^2 pixels everywhere in vertex, 50x50 µm^2 pitch pixels in SiWr, only one layer of SiWr (see https://github.com/key4hep/k4geo/issues/617)
+  - Refactoring IDEA/ALLEGRO vertex detector. Inner vertex, outer vertex, and disks are now in separate xml files and can be flexibly combined (see `VertexComplete_o1_v04.xml`). Ultra-light inner vertex is in a standalone xml file (`VertexInnerBarrelUltraLight_o1_v04.xml`)
+
+* 2026-09-22 Archil Durglishvili ([PR#666](https://github.com/key4hep/k4geo/pull/666))
+  - ALLEGRO HCAL Endcap pseudo-layer position calculation is fixed for PandoraPFA.
+
+* 2026-09-22 pablo ([PR#662](https://github.com/key4hep/k4geo/pull/662))
+  - Map volumes to their closest predefined ROOT color in `utils/dd4hep2root.py`
+
+* 2026-09-21 Juan Miguel Carceller ([PR#651](https://github.com/key4hep/k4geo/pull/651))
+  - Remove Lorenzo Pezzotti as CODEOWNER for FCCee IDEA geometries
+
+* 2026-09-17 Massimo Casarsa ([PR#658](https://github.com/key4hep/k4geo/pull/658))
+  * Introduce MuSIC_v3, an updated MuSIC detector geometry.
+  * Instrument each nozzle with three silicon-detector disks forming the Forward Tracker, housed in air gaps within the nozzle.
+  * Reduce the number of vertex barrel and endcap layers and correct their layer IDs.
+  * Remove the yoke iron and use the HCAL barrel as the magnetic flux return.
+
+* 2026-09-14 Federico Meloni ([PR#663](https://github.com/key4hep/k4geo/pull/663))
+  - Added missing include `<numbers>` in FCCSWEndcapTurbine_k4geo.cpp to allow for macOS native builds
+
+* 2026-09-09 pablo ([PR#655](https://github.com/key4hep/k4geo/pull/655))
+  - Remove beam pipe vis attributes left from MDI
+  - Add remaining beam pipe vis attributes to ALLEGRO o1_v03, o1_v04 and o2_v01
+  - Add remaining beam pipe vis attributes to IDEA o1_v03, o1_v04 and o2_v01
+  - Add display.xml to IDEA_o2_v01_CI
+
+* 2026-09-09 Joshua Beirer ([PR#652](https://github.com/key4hep/k4geo/pull/652))
+  - Use air instead of vacuum for SCEPCal main and timing layer envelope volumes, avoiding unphysical vacuum regions that can trap low-energy charged particles in the magnetic field.
+
+* 2026-09-09 pablo ([PR#646](https://github.com/key4hep/k4geo/pull/646))
+  - Create `display.xml` file in `ILD_common_FCCee/` for `vis` attributes that do not exist on `ILD_common_v02/`.
+  - Solve dangling references from CAD imported beam pipe.
+
+* 2026-09-09 pablo ([PR#645](https://github.com/key4hep/k4geo/pull/645))
+  - Group vis definitions in a single `FCChh_Visualisation.xml` file.
+  - Rename `MuonEnvelopeVis` tag to `MuonAirEnvelopeVis` to avoid collision. 
+  - Fix typo in `exthcal_barrel_layer_vis` and `exthcal_barrel_seq1_vis`. 
+  - Add missing definitions for `violet` and `BlueVisTrans` tags. 
+  - Rename `FCChh_Visualisation.xml` to `display.xml`.
+  - Move `display.xml` to `common/` folder
+
+* 2026-09-08 SanghyunKo ([PR#659](https://github.com/key4hep/k4geo/pull/659))
+  - Fix detector type for IDEA o2 HCAL endcap
+
+* 2026-09-05 Juan Miguel Carceller ([PR#657](https://github.com/key4hep/k4geo/pull/657))
+  - Fix Alma 9 CI build by removing an unused variable.
+
+* 2026-09-04 pablo ([PR#643](https://github.com/key4hep/k4geo/pull/643))
+  - Create ```display.xml``` file with vis attributes for each CLD version
+  - Fix dangling references in each version
+
+* 2026-09-03 Joshua Beirer ([PR#654](https://github.com/key4hep/k4geo/pull/654))
+  - Pinned all GitHub actions to the full commit hash of their latest tag, so that a re-tagged action cannot silently change what runs in CI. The corresponding tag is kept as a comment on each line.
+    - `actions/checkout`: `v3`/`v4` -> `v7.0.1`
+    - `cvmfs-contrib/github-action-cvmfs`: `v5` -> `v5.5`
+    - `aidasoft/run-lcg-view`: `v4` -> `v6.0.2`
+  - Added a Dependabot configuration that checks for GitHub action updates weekly, to keep the pinned hashes up to date.
+
+* 2026-09-03 Joshua Beirer ([PR#653](https://github.com/key4hep/k4geo/pull/653))
+  - Bump to github-action-cvmfs@v5
+
+* 2026-09-02 mattiasoldani ([PR#650](https://github.com/key4hep/k4geo/pull/650))
+  - Update to the ALLEGRO HCAL geometry to make the detector structure more realistic, correct for some bugs and improve code readability. Further details can be found in the slides [26_07_soldani_allegro_hcal_k4geo_update.pdf](https://github.com/user-attachments/files/31649468/26_07_soldani_allegro_hcal_k4geo_update.pdf).
+
+* 2026-09-01 David ([PR#578](https://github.com/key4hep/k4geo/pull/578))
+  - Given phi symmetry in calorimeter, each phi wedge is now created from same logical volume hierarchy. This reduction in number of independent physical volumes created in SCEPCal saves O(8GB) of RSS.
+  - organized SCEPCal main layer and timing layer codes to move barrel and endcap creation into separate functions. Cache expensive/repeated function called into local variables.
+
+* 2026-08-31 Peter Onyisi ([PR#649](https://github.com/key4hep/k4geo/pull/649))
+  - Fix STT phi computations in `STT_info`: correctly include superlayer offsets and fix bug mixing local and global layer number; use defined constants instead of hard-coded floats
+  - Fix sign of `STT_info` stereo angle to match GEANT geometry
+
+* 2026-08-31 pablo ([PR#639](https://github.com/key4hep/k4geo/pull/639))
+  - Create `display.xml` file with vis attributes for each ALLEGRO version
+  - Fix dangling references in each version
+  - Fix typo with `hcal_master_vis` and `hcal_support_vis` vis definitions for HCAL Barrel and Endcaps.
+  - Fix typo with `endcapHcal_air_vis` vis definition for HCal Endcaps.
+  - Fix typo with `endcapHcal_barrel_layer_vis` and `endcapHcal_barrel_seq1_vis` vis definitions for Hcal Endcaps.
+  - Fix typo with `emec_envelope_vis` vis definition for ECal Endcaps.
+  - Rename `colors.xml` to `display.xml` in IDEA and update all comments.
+
+* 2026-08-25 John (JP) Dervan ([PR#642](https://github.com/key4hep/k4geo/pull/642))
+  - Fix `BoronOxide` material definition in `MAIA_v0`, `MuColl_v1`, `MuSIC_v2`; no boron present in composite definition, so boron neutron-capture cross section in muon system's `PyrexGlass` was zero.
+  - Fix `MAIA_v0` beampipe. Previously filled with `Air` instead of `Beam`. Also the beampipe walls did not reach the nozzles.
+
+* 2026-08-25 Federico Meloni ([PR#640](https://github.com/key4hep/k4geo/pull/640))
+  - Add initial realistic description of magnetic field for MAIA's central solenoid (MAIA_fieldMap_Solenoid5T_v1.root). A second xml using the field map is introduced alongside the analytic one with a test to keep them from drifting.
+
+* 2026-08-24 SanghyunKo ([PR#644](https://github.com/key4hep/k4geo/pull/644))
+  - Move the IDEA o2 test geometry back to FCCee/IDEA subfolder (follow-up of #611).
+
+* 2026-08-18 Thomas Madlener ([PR#636](https://github.com/key4hep/k4geo/pull/636))
+  - Remove the population of the `NeighbourSurfacesData` from the detector drivers as these are never used downstream by anything that is in production (or still being actively developed)
+  - Remove LCIO as a dependency because it is no longer necessary
+  - Deprecate the `K4GEO_USE_LCIO` option and default it to `OFF`.
+
+* 2026-08-17 Federico Meloni ([PR#638](https://github.com/key4hep/k4geo/pull/638))
+  - Extended MAIA's B solenoidal B field to zmax="ECalEndcap_min_z+2*env_safety" so that track states on the endcap face get a non-zero omega
+
+* 2026-08-16 SanghyunKo ([PR#611](https://github.com/key4hep/k4geo/pull/611))
+  - Correct the `DetType` flag of the IDEA o2 fiber HCAL from ECAL to HCAL, with the correct barrel and endcap flag
+  - Add the `DetType` flag for the IDEA o2 crystal ECAL
+  - Add the `dd4hep::rec::LayeredCalorimeterData` for the IDEA o2 ECAL & HCAL
+  - Fixing the bug that `nGamma` in the IDEA o2 crystal ECAL wasn't set properly in the endcap
+  - Add the truth Edep collection for the IDEA o2 fiber HCAL (needed for the truth linking)
+  - Properly populate the calo hit contributions for the IDEA o2 crystal ECAL (previously empty, needed for the truth linking)
+  - Add a CI test for IDEA o2 with a partial geometry of (Δθ, Δφ) = (30 deg, 30 deg) of ECAL & HCAL
+
+* 2026-08-15 Thomas Madlener ([PR#637](https://github.com/key4hep/k4geo/pull/637))
+  - Backport multithreading support to the DRC EDM4hep output action from the upstream EDM4hep output action that have been missing so far.
+
+* 2026-08-14 Joshua Beirer ([PR#628](https://github.com/key4hep/k4geo/pull/628))
+  - Reduced per-step DRTubes VolumeID encoding overhead by reusing the configured readout coder and caching its field indexes and constant fields
+  - Removed duplicated DRTubes readout descriptors and system IDs; CellID encoding now follows the compact detector configuration
+  - Corrected the DREndcapTubes detector metadata to identify it as an endcap
+
 # v00-26
 
 * 2026-08-13 Federico Meloni ([PR#633](https://github.com/key4hep/k4geo/pull/633))

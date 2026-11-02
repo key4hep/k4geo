@@ -176,8 +176,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
   // active layers in the bath.
   // sensitive detector for the layers
   dd4hep::SensitiveDetector sd = aSensDet;
-  dd4hep::xml::Dimension sdType = xmlDetElem.child(_U(sensitive));
-  sd.setType(sdType.typeStr());
+  sd.setType("calorimeter");
   lLog << INFO << "ECAL calorimeter volume rmin (cm) =  " << caloDim.rmin() << " rmax (cm) = " << caloDim.rmax()
        << endmsg;
 

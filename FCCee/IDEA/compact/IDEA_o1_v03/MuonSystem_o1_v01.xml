@@ -43,7 +43,6 @@
     <!-- mRWELL envelope -->
     <detector name="Muon-System" type="muonSystemMuRWELL_o1_v01" id="DetID_muonSystem" readout="MuonSystemCollection">
       <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
-      <sensitive type="tracker"/>
 
       <!-- Specify the detector parameters and the overlap /// if you want exclude any component, e.g: endcap, just put endcapDetectorLayerss=0 in the Endcap Entry  // radius is put in the middle, so its not the inner neither the outer -->
       <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>

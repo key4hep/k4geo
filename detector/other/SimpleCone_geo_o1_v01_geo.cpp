@@ -18,9 +18,8 @@ static dd4hep::Ref_t createSimpleCone(dd4hep::Detector& lcdd, xml_h e, dd4hep::S
   dd4hep::Volume coneVol(x_det.nameStr() + "_SimpleCone", cone, lcdd.material(coneDim.materialStr()));
 
   if (x_det.isSensitive()) {
-    dd4hep::xml::Dimension sdType(x_det.child(_U(sensitive)));
+    sensDet.setType("tracker");
     coneVol.setSensitiveDetector(sensDet);
-    sensDet.setType(sdType.typeStr());
   }
 
   dd4hep::PlacedVolume conePhys;

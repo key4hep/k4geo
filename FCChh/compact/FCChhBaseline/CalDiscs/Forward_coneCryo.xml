@@ -113,7 +113,6 @@
     <!-- electromagnetic calorimeter -->
     <detector name="EMFWD" type="CaloDiscs_o1_v01" id="FwdECal_id" readout="EMFwdPhiEta">
       <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_FORWARD"/>
-      <sensitive type="calorimeter"/>
       <dimensions rmin1="EMFWD_rmin1"  rmin2="EMFWD_rmin2" rmax="EMFWD_rmax" dz="(EMFWD_z2-EMFWD_z1)/2." z_offset="EMFWD_z1+(EMFWD_z2-EMFWD_z1)/2."/>
       <layers>
         <!-- thickness of a readout layer (how many 'unit layers' are merged together creating one readout) -->
@@ -142,7 +141,6 @@
     <!-- hadronic calorimeter -->
     <detector name="HFWD" type="CaloDiscs_o1_v01" id="FwdHCal_id" readout="HFwdPhiEta">
       <type_flags type=" DetType_CALORIMETER + DetType_HADRONIC + DetType_FORWARD"/>
-      <sensitive type="calorimeter"/>
       <dimensions rmin1="HFWD_rmin1"  rmin2="HFWD_rmin2" rmax="HFWD_rmax" dz="(HFWD_z2-HFWD_z1)/2." z_offset="HFWD_z1+(HFWD_z2-HFWD_z1)/2."/>
       <layers>
         <!-- thickness of a readout layer (how many 'unit layers' are merged together creating one readout) -->

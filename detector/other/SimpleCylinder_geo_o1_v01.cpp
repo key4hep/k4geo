@@ -20,9 +20,8 @@ static dd4hep::Ref_t createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4he
   dd4hep::Volume cylinderVol(x_det.nameStr() + "_SimpleCylinder", cylinder, lcdd.material(cylinderDim.materialStr()));
 
   if (x_det.isSensitive()) {
-    dd4hep::xml::Dimension sdType(x_det.child(_U(sensitive)));
+    sensDet.setType("tracker");
     cylinderVol.setSensitiveDetector(sensDet);
-    sensDet.setType(sdType.typeStr());
   }
 
   dd4hep::PlacedVolume cylinderPhys;

@@ -50,7 +50,6 @@
   <detectors>
     <detector id="ExtBarHCal_id" name="HCalExtBarrel" type="HCalTileExtBarrel_o1_v01" readout="HCalExtBarrelReadout" vis="extHcal_envelope">
       <type_flags type="DetType_CALORIMETER + DetType_HADRONIC + DetType_BARREL"/>
-      <sensitive type="calorimeter"/>
       <dimensions rmin1="ExtBarHCal1_rmin" rmin2="ExtBarHCal2_rmin" rmax1="ExtBarHCal1_rmax" rmax2="ExtBarHCal2_rmax" width="ExtBarHCal1_dz" dz="ExtBarHCal2_dz" offset="ExtBarHCal1_zOffset" z_offset="ExtBarHCal2_zOffset"/>
       <layers>
 	<layer id="0" name="type_1" material="Air" vis="extHcal_barrel_layer_vis">

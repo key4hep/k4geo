@@ -95,7 +95,6 @@ namespace DDSegmentation {
 
     /// the coordinate offset in rho / R
     double m_offsetR; // In cylinder case: offset depends on R not rho.
-    double m_offsetrho;
 
     /// the field name used for rho
     std::string m_rhoID;
