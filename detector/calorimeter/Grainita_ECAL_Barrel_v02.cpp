@@ -156,7 +156,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // cellDimensions() returns {dPhi, dTheta} (in rad); cellSize0 is along the beam (theta) for BarrelLayout
   layer.cellSize0 = cell_size[1];
   layer.cellSize1 = cell_size[0];
-  layer.inner_nRadiationLengths = Cframe_thick / MatCarbonfiber.radLength() + half_crystal_thick / MatCrystal.radLength();
+  layer.inner_nRadiationLengths =
+      Cframe_thick / MatCarbonfiber.radLength() + half_crystal_thick / MatCrystal.radLength();
   layer.outer_nRadiationLengths = half_crystal_thick / MatCrystal.radLength() + back_space / air.radLength() +
                                   Cframe_thick / MatCarbonfiber.radLength();
   layer.inner_nInteractionLengths =
