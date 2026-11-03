@@ -23,3 +23,6 @@ The CMake option `INSTALL_BEAMPIPE_STL_FILES=ON` downloads these STL.
 - MDI_o1_CADBased_v01
 -- continuation of MDI_o1_v01, fixed issue of a mis-rotation of the beam pipe separation
 Added MDI_standalone.xml to help debug MDI geometry
+
+- MDI_o1_ShapeBased_v02
+-- implemented SR Mask geometry change: SR mask was placed at 2.3m from the IP, consisting of two vertical trapezoids inside the beampipe with possibly different radial thicknesses
