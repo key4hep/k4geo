@@ -450,6 +450,21 @@ namespace ECalEndcap_Turbine_o1_v03 {
       }
     }
 
+    // make a noble liquid tube for the wheel and place it in the bath. The unit cells
+    // are placed inside it rather than directly in the bath, so that Geant4 voxelises
+    // each wheel separately: this drastically reduces the memory and the geometry
+    // initialisation time, with a few % increase in event processing time
+    // The tube coincides with the one used in buildOneBlade to cut the blades
+    dd4hep::Tube wheelShape(ri, ro, delZ / 2.);
+    dd4hep::Volume wheelVol(nobleLiquidElem.materialStr() + "_wheel" + std::to_string(iWheel), wheelShape,
+                            aLcdd.material(nobleLiquidElem.materialStr()));
+    dd4hep::PlacedVolume wheelPhysVol = aEnvelope.placeVolume(wheelVol, dd4hep::Position(0, 0, offsetZ));
+    // the wheel needs its own DetElement, parent of the DetElements of its cells: the placement names of
+    // the cells are only unique within a wheel, and DD4hep finds the placement of a DetElement (e.g. to compute
+    // its nominal transformation) by looking for its name below the placement of the parent DetElement
+    dd4hep::DetElement wheelDetElem(bathDetElem, "wheel" + std::to_string(iWheel), iWheel);
+    wheelDetElem.setPlacement(wheelPhysVol);
+
     for (int iUnitCell = 0; iUnitCell < nUnitCellsToDraw; iUnitCell++) {
 
       int modIndex = iUnitCell - nUnitCellsToDraw / 2;
@@ -488,12 +503,12 @@ namespace ECalEndcap_Turbine_o1_v03 {
 
       float xCell = ((ro + zminri) / 2.) * TMath::Cos(phi);
       float yCell = ((ro + zminri) / 2.) * TMath::Sin(phi); // ri*TMath::Sin(phi)/6.;
-      float zCell = offsetZ;
+      float zCell = 0.;
 
       dd4hep::Transform3D comCell(r3d, dd4hep::Translation3D(xCell, yCell, zCell));
 
-      // place passive volume in LAr bath
-      dd4hep::PlacedVolume passivePhysVol = aEnvelope.placeVolume(passiveVol, comCell);
+      // place passive volume in the wheel
+      dd4hep::PlacedVolume passivePhysVol = wheelVol.placeVolume(passiveVol, comCell);
       passivePhysVol.addPhysVolID("module", modIndex);
       passivePhysVol.addPhysVolID("wheel", iWheel);
       passivePhysVol.addPhysVolID("type", 1); // 0 = active, 1 = passive, 2 = readout
@@ -503,19 +518,19 @@ namespace ECalEndcap_Turbine_o1_v03 {
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03_geo", "Passive volume %s",
                        passivePhysVol.toString().c_str());
 
-      // place active volume in LAr bath
+      // place active volume in the wheel
 
       xCell = ((ro + zminri) / 2.) * TMath::Cos(phi + delPhi / 2.);
       yCell = ((ro + zminri) / 2.) * TMath::Sin(phi + delPhi / 2.); // ri*TMath::Sin(phi)/6.;
-      zCell = offsetZ;
+      zCell = 0.;
       dd4hep::Transform3D comCell2(r3d2, dd4hep::Translation3D(xCell, yCell, zCell));
-      dd4hep::PlacedVolume activePhysVol = aEnvelope.placeVolume(activeVol, comCell2);
+      dd4hep::PlacedVolume activePhysVol = wheelVol.placeVolume(activeVol, comCell2);
       activePhysVol.addPhysVolID("module", modIndex);
       activePhysVol.addPhysVolID("wheel", iWheel);
       activePhysVol.addPhysVolID("type", 0); // 0 = active, 1 = passive, 2 = readout
 
-      dd4hep::DetElement activeDetElem(bathDetElem, "active" + std::to_string(iUnitCell) + "_" + std::to_string(iWheel),
-                                       modIndex);
+      dd4hep::DetElement activeDetElem(wheelDetElem,
+                                       "active" + std::to_string(iUnitCell) + "_" + std::to_string(iWheel), modIndex);
 
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03_geo", "Active volume %s",
                        activePhysVol.toString().c_str());
