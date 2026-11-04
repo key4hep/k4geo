@@ -458,7 +458,12 @@ namespace ECalEndcap_Turbine_o1_v03 {
     dd4hep::Tube wheelShape(ri, ro, delZ / 2.);
     dd4hep::Volume wheelVol(nobleLiquidElem.materialStr() + "_wheel" + std::to_string(iWheel), wheelShape,
                             aLcdd.material(nobleLiquidElem.materialStr()));
-    aEnvelope.placeVolume(wheelVol, dd4hep::Position(0, 0, offsetZ));
+    dd4hep::PlacedVolume wheelPhysVol = aEnvelope.placeVolume(wheelVol, dd4hep::Position(0, 0, offsetZ));
+    // the wheel needs its own DetElement, parent of the DetElements of its cells: the placement names of
+    // the cells are only unique within a wheel, and DD4hep finds the placement of a DetElement (e.g. to compute
+    // its nominal transformation) by looking for its name below the placement of the parent DetElement
+    dd4hep::DetElement wheelDetElem(bathDetElem, "wheel" + std::to_string(iWheel), iWheel);
+    wheelDetElem.setPlacement(wheelPhysVol);
 
     for (int iUnitCell = 0; iUnitCell < nUnitCellsToDraw; iUnitCell++) {
 
@@ -524,8 +529,8 @@ namespace ECalEndcap_Turbine_o1_v03 {
       activePhysVol.addPhysVolID("wheel", iWheel);
       activePhysVol.addPhysVolID("type", 0); // 0 = active, 1 = passive, 2 = readout
 
-      dd4hep::DetElement activeDetElem(bathDetElem, "active" + std::to_string(iUnitCell) + "_" + std::to_string(iWheel),
-                                       modIndex);
+      dd4hep::DetElement activeDetElem(wheelDetElem,
+                                       "active" + std::to_string(iUnitCell) + "_" + std::to_string(iWheel), modIndex);
 
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03_geo", "Active volume %s",
                        activePhysVol.toString().c_str());
