@@ -127,14 +127,21 @@ namespace sim {
 
   // Function template specialization of Geant4SensitiveAction class.
   // Define collections created by this sensitivie action object
+  // Only the collections of this detector (barrel or endcap) are defined: DDSim writes the cellID
+  // encoding of a collection from the readout of the first sensitive detector defining it, so a
+  // collection defined by both instances would carry the other detector's encoding.
   template <>
   void Geant4SensitiveAction<DRTubesSDData>::defineCollections() {
-    m_collectionID = defineCollection<Geant4Calorimeter::Hit>("DRETScinRight");
-    m_userData.collection_cher_right = defineCollection<Geant4Calorimeter::Hit>("DRETCherRight");
-    m_userData.collection_scin_left = defineCollection<Geant4Calorimeter::Hit>("DRETScinLeft");
-    m_userData.collection_cher_left = defineCollection<Geant4Calorimeter::Hit>("DRETCherLeft");
-    m_userData.collection_drbt_cher = defineCollection<Geant4Calorimeter::Hit>("DRBTCher");
-    m_userData.collection_drbt_scin = defineCollection<Geant4Calorimeter::Hit>("DRBTScin");
+    if (m_userData.isBarrel) {
+      m_userData.collection_drbt_scin = defineCollection<Geant4Calorimeter::Hit>("DRBTScin");
+      m_userData.collection_drbt_cher = defineCollection<Geant4Calorimeter::Hit>("DRBTCher");
+      m_collectionID = m_userData.collection_drbt_scin;
+    } else {
+      m_collectionID = defineCollection<Geant4Calorimeter::Hit>("DRETScinRight");
+      m_userData.collection_cher_right = defineCollection<Geant4Calorimeter::Hit>("DRETCherRight");
+      m_userData.collection_scin_left = defineCollection<Geant4Calorimeter::Hit>("DRETScinLeft");
+      m_userData.collection_cher_left = defineCollection<Geant4Calorimeter::Hit>("DRETCherLeft");
+    }
     // Combined MC-truth energy-deposit collection for both scintillating and
     // Cherenkov fibers. The two are kept separable downstream by the cellID
     // (cherenkov bit: scint=0, Cherenkov=1; system field: endcap=25, barrel=28).
@@ -146,11 +153,6 @@ namespace sim {
                                                               DetElement det, Detector& lcdd_ref)
       : Geant4Sensitive(ctxt, nam, det, lcdd_ref), m_collectionID(0) {
     initialize();
-    defineCollections();
-
-    const Readout actionReadout = Geant4SensitiveAction<DRTubesSDData>::readout();
-    m_userData.coder = actionReadout.idSpec().decoder();
-    m_userData.indexes = fieldIndexes(*m_userData.coder);
     const DetType detectorType(m_detector.typeFlag());
     const bool isBarrel = detectorType.is(DetType::BARREL);
     const bool isEndcap = detectorType.is(DetType::ENDCAP);
@@ -158,6 +160,11 @@ namespace sim {
       except("DRTubesSDAction: detector '%s' must be exactly one of BARREL or ENDCAP", m_detector.name());
     }
     m_userData.isBarrel = isBarrel;
+    defineCollections();
+
+    const Readout actionReadout = Geant4SensitiveAction<DRTubesSDData>::readout();
+    m_userData.coder = actionReadout.idSpec().decoder();
+    m_userData.indexes = fieldIndexes(*m_userData.coder);
     m_userData.coder->set(m_userData.baseVolumeID, "system", m_detector.id());
     m_userData.coder->set(m_userData.baseVolumeID, "clad", 1);
     m_userData.coder->set(m_userData.baseVolumeID, "core", 1);
