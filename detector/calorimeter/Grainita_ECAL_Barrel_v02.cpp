@@ -8,11 +8,13 @@
 
 // Includers from DD4hep
 #include "DD4hep/Printout.h"
+#include "DDRec/DetectorData.h"
 #include "DDRec/Vector3D.h"
 #include "XML/Utilities.h"
 #include <DD4hep/DetFactoryHelper.h>
 
 using namespace dd4hep;
+using dd4hep::rec::LayeredCalorimeterData;
 
 // Build geometry
 //
@@ -25,6 +27,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   xml_det_t x_det = e;
   std::string det_name = x_det.nameStr();
   std::cout << "--> Going to create " << det_name << ", with ID: " << x_det.id() << std::endl;
+
+  // Define readout
+  Readout readout = sens.readout();
+  Segmentation seg = readout.segmentation();
+  const auto cell_size = seg.segmentation()->cellDimensions(0);
 
   // Define material
   Material air(description.material("Air"));
@@ -118,6 +125,46 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   DetElement ECAL(det_name, x_det.id());
   dd4hep::xml::setDetectorTypeFlag(e, ECAL);
   Volume worldVol = description.pickMotherVolume(ECAL);
+
+  // Calorimeter dimensions used by reconstruction and extrapolation tools.
+  // This detector has one physical sensitive crystal layer; its four rho bins
+  // are readout segmentation and therefore do not represent separate material
+  // layers here.
+  auto* caloData = new LayeredCalorimeterData;
+  caloData->layoutType = LayeredCalorimeterData::BarrelLayout;
+  caloData->inner_symmetry = nSec_phi;
+  caloData->outer_symmetry = nSec_phi;
+  caloData->inner_phi0 = 0.;
+  caloData->outer_phi0 = 0.;
+  caloData->gap0 = 2. * Cseg_thick;
+  caloData->gap1 = 2. * Cseg_thick;
+  caloData->gap2 = 0.;
+  caloData->extent[0] = innerR;
+  caloData->extent[1] = outerR;
+  caloData->extent[2] = 0.;
+  caloData->extent[3] = halfZ; // half length of the inner (front) surface
+  caloData->extent[4] = 0.;
+  caloData->extent[5] = 0.;
+
+  LayeredCalorimeterData::Layer layer;
+  const double half_crystal_thick = crystal_thick / 2.;
+  layer.distance = innerR + Cframe_thick + half_crystal_thick;
+  layer.absorberThickness = 0.;
+  layer.inner_thickness = Cframe_thick + half_crystal_thick;
+  layer.outer_thickness = half_crystal_thick + back_space + Cframe_thick;
+  layer.sensitive_thickness = crystal_thick;
+  // cellDimensions() returns {dPhi, dTheta} (in rad); cellSize0 is along the beam (theta) for BarrelLayout
+  layer.cellSize0 = cell_size[1];
+  layer.cellSize1 = cell_size[0];
+  layer.inner_nRadiationLengths =
+      Cframe_thick / MatCarbonfiber.radLength() + half_crystal_thick / MatCrystal.radLength();
+  layer.outer_nRadiationLengths = half_crystal_thick / MatCrystal.radLength() + back_space / air.radLength() +
+                                  Cframe_thick / MatCarbonfiber.radLength();
+  layer.inner_nInteractionLengths =
+      Cframe_thick / MatCarbonfiber.intLength() + half_crystal_thick / MatCrystal.intLength();
+  layer.outer_nInteractionLengths = half_crystal_thick / MatCrystal.intLength() + back_space / air.intLength() +
+                                    Cframe_thick / MatCarbonfiber.intLength();
+  caloData->layers.push_back(layer);
 
   TGeoTube* EcalBarrel = new TGeoTube(innerR, outerR, halfZ_out);
   Volume EcalBarrelVol("EcalBarrel", EcalBarrel, air);
@@ -287,6 +334,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   PlacedVolume EcalBarrel_plv = worldVol.placeVolume(EcalBarrelVol);
   EcalBarrel_plv.addPhysVolID("system", x_det.id());
   ECAL.setPlacement(EcalBarrel_plv);
+  ECAL.addExtension<LayeredCalorimeterData>(caloData);
 
   std::cout << "--> Grainita_ECAL_Barrel_v02::create_detector() end" << std::endl;
   return ECAL;
