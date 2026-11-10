@@ -67,10 +67,10 @@
        hack needed for the CAD modeled beampipe  -->
   <world material="Vacuum"/>
 
-  <!-- Include the MDI Collection for (CAD-based) Option 1 Version 01 (MDI_o1_CADBased_v01) -->
-  <include ref="../../../MDI/compact/MDI_o1_CADBased_v01/MDI_o1_CADBased_v01_collection.xml"/>
+  <!-- Include the MDI Collection for shape-based Option 1 Version 01 with the simple antisolenoid (o2)-->
+  <include ref="../../../MDI/compact/MDI_o1_ShapeBased_v01/MDI_o1_ShapeBased_v01_o2_collection.xml"/>
 
-  <!-- lumiCal from CLD_02_v07 -->
+  <!-- lumiCal from CLD_o2_v07 -->
   <include ref="../../../CLD/compact/CLD_o2_v07/LumiCal_o3_v02_05.xml"/>
 
   <!-- Vertex from CLD_o2_v09 -->
