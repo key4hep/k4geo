@@ -156,7 +156,7 @@ namespace sim {
     const DetType detectorType(m_detector.typeFlag());
     const bool isBarrel = detectorType.is(DetType::BARREL);
     const bool isEndcap = detectorType.is(DetType::ENDCAP);
-    if (isBarrel == isEndcap) {
+    if (isBarrel + isEndcap != 1) {
       except("DRTubesSDAction: detector '%s' must be exactly one of BARREL or ENDCAP", m_detector.name());
     }
     m_userData.isBarrel = isBarrel;
