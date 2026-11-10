@@ -162,7 +162,8 @@
            inner_field="SolenoidField"
            outer_field="SolenoidReturnField"
            zmax="EMBarrel_dz"
-           outer_radius="SolenoidOuterRadius">
+           inner_radius="SolenoidOuterRadius"
+           outer_radius="MuonTaggerEndcap_outer_radius">
     </field>
   </fields>
 
