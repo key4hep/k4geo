@@ -8,6 +8,9 @@ The code has been designed to be very flexible, where the user can choose the nu
  * If the side length do not fit with an integer number of 50 × 50 cm² , the builder will make a chamber with unusual dimensions, which can fit the excess area at the end of the side.
  * The availability to make multiple layers with different inner radius and barrel length.
  * The code is very general, it can be used to describe any detector system made from repeated tiles (e.g. pre-shower) and has the capability to fill the gaps with unusual dimensions tiles.
+ * 
+ 
+ The old name `muonSystemMuRWELL_o1_v01` is retained as an alias for backward compatibility.
 
 ## muonSystem_o1_v02.cpp
 The second version of the muon system driver. Instead of fixed `numDetectorLayers`/`numYokes` counts, `<Barrel>` and `<Endcap>` take an ordered sequence of `<layer type="detector"/>` and `<layer type="radiator" thickness="..." material="..."/>` child elements, allowing arbitrary detector/radiator arrangements (e.g. two detector layers, then a radiator, then a detector, then a radiator). The endcap sequence is mirrored for the negative side so that detector layer 0 is always closest to the IP in both endcaps.
