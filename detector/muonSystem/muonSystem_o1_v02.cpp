@@ -13,7 +13,6 @@ New in this version vs o1_v01:
 Expected XML structure:
 <detector type="muonSystem_o1_v02" ...>
   <dimensions x="chamberHalfThickness" y="chamberHalfY" z="chamberHalfZ" .../>
-  <sensitive type="tracker"/>
   <generalParameters numSides="..." overlapY="..." overlapZ="..." clearance="..."/>
 
   <Barrel rmin="..." length="...">
@@ -78,6 +77,8 @@ struct LayerSpec {
 static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
                                                      dd4hep::xml::Handle_t   xmlElement,
                                                      dd4hep::SensitiveDetector sensDet) {
+  // The chambers are tracking detectors (same as muonSystem_o1_v01)
+  sensDet.setType("tracker");
 
   dd4hep::xml::DetElement xmlDet = static_cast<dd4hep::xml::DetElement>(xmlElement);
   std::string  name        = xmlDet.nameStr();
@@ -493,8 +494,6 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
                                                      dd4hep::Position(sliceXOffset + sliceDet.x(), 0.0, 0.0)));
                 if (slice.hasAttr("vis"))       sliceVolume.setVisAttributes(lcdd, sliceDet.visStr());
                 if (slice.hasAttr("sensitive") && sliceDet.isSensitive()) {
-                  dd4hep::xml::Dimension sdType(xmlElement.child(_U(sensitive)));
-                  sensDet.setType(sdType.typeStr());
                   sliceVolume.setSensitiveDetector(sensDet);
                   slicePV.addPhysVolID("slice", sensitiveSliceIndex);
                   dd4hep::DetElement sliceDE(rrmDE, "slice_" + std::to_string(sensitiveSliceIndex), sensitiveSliceIndex);
@@ -525,8 +524,6 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
                                                      dd4hep::Position(sliceXOffset + sliceDet.x(), 0.0, 0.0)));
                 if (slice.hasAttr("vis"))       sliceVolume.setVisAttributes(lcdd, sliceDet.visStr());
                 if (slice.hasAttr("sensitive") && sliceDet.isSensitive()) {
-                  dd4hep::xml::Dimension sdType(xmlElement.child(_U(sensitive)));
-                  sensDet.setType(sdType.typeStr());
                   sliceVolume.setSensitiveDetector(sensDet);
                   slicePV.addPhysVolID("slice", sensitiveSliceIndex);
                   dd4hep::DetElement sliceDE(envDE, "slice_" + std::to_string(sensitiveSliceIndex), sensitiveSliceIndex);
@@ -800,8 +797,6 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
                                                        dd4hep::Position(sliceXOffset + sliceDet.x(), 0.0, 0.0)));
                   if (slice.hasAttr("vis"))       sliceVolume.setVisAttributes(lcdd, sliceDet.visStr());
                   if (slice.hasAttr("sensitive") && sliceDet.isSensitive()) {
-                    dd4hep::xml::Dimension sdType(xmlElement.child(_U(sensitive)));
-                    sensDet.setType(sdType.typeStr());
                     sliceVolume.setSensitiveDetector(sensDet);
                     slicePV.addPhysVolID("slice", sensitiveSliceIndex);
                     dd4hep::DetElement sliceDE(rrmDE, "slice_" + std::to_string(sensitiveSliceIndex), sensitiveSliceIndex);
@@ -833,8 +828,6 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
                                                        dd4hep::Position(sliceXOffset + sliceDet.x(), 0.0, 0.0)));
                   if (slice.hasAttr("vis"))       sliceVolume.setVisAttributes(lcdd, sliceDet.visStr());
                   if (slice.hasAttr("sensitive") && sliceDet.isSensitive()) {
-                    dd4hep::xml::Dimension sdType(xmlElement.child(_U(sensitive)));
-                    sensDet.setType(sdType.typeStr());
                     sliceVolume.setSensitiveDetector(sensDet);
                     slicePV.addPhysVolID("slice", sensitiveSliceIndex);
                     dd4hep::DetElement sliceDE(envDE, "slice_" + std::to_string(sensitiveSliceIndex), sensitiveSliceIndex);

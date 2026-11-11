@@ -881,8 +881,7 @@ static dd4hep::Ref_t create_element(dd4hep::Detector& description, xml_h e, dd4h
   builder.build_layer(CDCH_det, envelope, sens_det);
 
   dd4hep::printout(dd4hep::DEBUG, "CreateCDCH", "MotherVolume is: %s", envelope.name());
-  dd4hep::xml::Dimension sdType = x_det.child(_U(sensitive));
-  sens_det.setType(sdType.typeStr());
+  sens_det.setType("tracker");
 
   builder.buildVolumes(e);
   builder.placeDaughters(CDCH_det, envelope, e);

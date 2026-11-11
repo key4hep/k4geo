@@ -60,24 +60,4 @@
 
 </define>
 
-<display>
-  <vis name="vCDCH:Pb"            alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
-  <vis name="vCDCH:Sc"            alpha="0.6" r="0.8" g="0.8" b="0.0" showDaughters="true" visible="true"/>
-  <vis name="vCDCH:Plastic"       alpha="1.0" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
-  <vis name="vCDCH:Steel"         alpha="0.0" showDaughters="true" visible="false"/>
-  <vis name="vCDCH:Gas1"          alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
-  <vis name="vCDCH:Gas2"	  alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
-  <vis name="vCDCH:Gas3"    	  alpha="1.0" r="1.0" g="0.0" b="1.0" showDaughters="true" visible="false"/>
-  <vis name="vCDCH:Wire1"         alpha="1.0"  r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
-  <vis name="vCDCH:Wire2"         alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
-  <vis name="vCDCH:Wire3"         alpha="1.0" r="1.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
-  <vis name="vCDCH:Fwire"         alpha="1.0" r="1.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
-  <vis name="vCDCH:Stack"         showDaughters="true" visible="false"/>
-  <vis name="vCDCH:Fiber"         alpha="1.0" r="0.8" g="0.8" b="0.0" showDaughters="true" visible="true"/>
-  <vis name="vCDCH:ReadOutBox"    alpha="1.0" r="0.8" g="0.5" b="0.0" showDaughters="true" visible="true"/>
-  <vis name="vCDCH:ROSteel"       alpha="1.0" r="0.8" g="0.5" b="0.0" showDaughters="true" visible="true"/>
-  <vis name="vCDCH:Air"           showDaughters="true" visible="false"/>
-
-</display>
-
 </lccdd>

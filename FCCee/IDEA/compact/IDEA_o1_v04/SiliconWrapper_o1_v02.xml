@@ -20,17 +20,6 @@
 
     <comment> Number of layers: Either one layer (with staves at two different radii) or two layers (with staves at four different radii). To be chosen with 'SiWr_nLayers' in detector dimensions xml </comment>
 
-    <display>
-        <vis name="SiWrEnvVis"          alpha="0.2" r="1.0"  	g="1.0"     b="0.0"   showDaughters="true"  visible="true"/>
-        <vis name="SiWrSensitiveVis"    alpha="1.0" r="1.0"     g="1.0"     b="0.0"   showDaughters="true"  visible="true"/>
-        <vis name="SiWrPeripheryVis"    alpha="1.0" r="200/255" g="254/255" b="0.0"   showDaughters="true"  visible="true"/>    
-        <vis name="SiWrCableVis"        alpha="1.0" r="0.0"     g="1.0"     b="0.4"   showDaughters="true"  visible="true"/>
-        <vis name="SiWrPipingVis"       alpha="1.0" r="1.0"     g="1.0"     b="1.0"   showDaughters="true"  visible="true"/>
-        <vis name="SiWrWaterVis"        alpha="1.0" r="0.0"     g="0.0"     b="1.0"   showDaughters="true"  visible="true"/>
-        <vis name="SiWrSupportVis"  	alpha="0.8" r="0.25"   	g="0.25"    b="0.2"   showDaughters="true"  visible="true"/>
-        <vis name="SiWrStaveVis"  	    alpha="0.8" r="1.0"     g="0.5"     b="0.0"   showDaughters="false" visible="true"/> <comment> Hide details on weaker systens, otherwise use 'showDaughters="true"' </comment>
-    </display>
-
     <define> <comment> ATLASPix3 properties </comment>
         <constant name="SiWr_sens_rphi_sensitive"       value="19.8*mm"/> 
         <constant name="SiWr_sens_rphi_periphery"       value="0.4*mm"/> 

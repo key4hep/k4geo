@@ -16,32 +16,18 @@
 #include "DDSegmentation/CartesianGridXYZ.h"
 #include "DDSegmentation/PolarGridRPhi.h"
 
-#include "G4Step.hh"
-
 // CLHEP
 #include "CLHEP/Vector/ThreeVector.h"
 
-/** Given a XML element with several daughters with the same name, e.g.
- <detector> <layer name="1" /> <layer name="2"> </detector>
- this method returns the first daughter of type nodeName whose attribute has a given value
- e.g. returns <layer name="2"/> when called with (detector, "layer", "name", "1") */
 namespace det {
 namespace utils {
-  dd4hep::xml::Component getNodeByStrAttr(const dd4hep::xml::Handle_t& mother, const std::string& nodeName,
-                                          const std::string& attrName, const std::string& attrValue);
-
-  /// try to get attribute with double value, return defaultValue if attribute not found
-  double getAttrValueWithFallback(const dd4hep::xml::Component& node, const std::string& attrName,
-                                  const double& defaultValue);
-
-  /** Retrieves the cellID based on the position of the step and the detector segmentation.
-   *  @param aSeg Handle to the segmentation of the volume.
-   *  @param aStep Step in which particle deposited the energy.
-   *  @param aPreStepPoint Flag indicating if the position of the deposit is the beginning of the step (default)
-   *         or the middle of the step.
+  /** Get true field value of neighbour in cyclic bit field
+   *   @param[in] aCyclicId field value of neighbour
+   *   @param[in] aFieldExtremes Minimal and Maximal values of the fields.
+   *   return field value for neighbour in cyclic bit field
    */
 
-  uint64_t cellID(const dd4hep::Segmentation& aSeg, const G4Step& aStep, bool aPreStepPoint = true);
+  int cyclicNeighbour(int aCyclicId, std::pair<int, int> aFieldExtremes);
 
   /** Get number of possible combinations of bit fields for determination of neighbours.
    *   @param[in] aN number of field names.
@@ -57,14 +43,6 @@ namespace utils {
    */
 
   std::vector<std::vector<int>> permutations(int K);
-
-  /** Get true field value of neighbour in cyclic bit field
-   *   @param[in] aCyclicId field value of neighbour
-   *   @param[in] aFieldExtremes Minimal and Maximal values of the fields.
-   *   return field value for neighbour in cyclic bit field
-   */
-
-  int cyclicNeighbour(int aCyclicId, std::pair<int, int> aFieldExtremes);
 
   /**  Get neighbours in many dimensions.
    *   @param[in] aDecoder Handle to the bitfield decoder.
@@ -95,14 +73,6 @@ namespace utils {
       const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
       const dd4hep::DDSegmentation::BitFieldCoder& aDecoder, const std::vector<std::string>& aFieldNames,
       const std::vector<std::pair<int, int>>& aFieldExtremes, uint64_t aCellId, bool aDiagonal = false);
-
-  /** Get minimal and maximal values that can be decoded in the fields of the bitfield.
-   *   @param[in] aDecoder Handle to the bitfield decoder.
-   *   @param[in] aFieldNames Names of the fields for which extremes are found.
-   *   return Vector of pairs (min,max)
-   */
-  std::vector<std::pair<int, int>> bitfieldExtremes(const dd4hep::DDSegmentation::BitFieldCoder& aDecoder,
-                                                    const std::vector<std::string>& aFieldNames);
 
   /** Get the half widths of the box envelope (TGeoBBox).
    *   @param[in] aVolumeId The volume ID.

@@ -63,11 +63,9 @@ void buildOneSide(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, 
   lLog << DEBUG << "Last 'unit' layer = |absorber|active|readout|active|absorber| " << endmsg;
 
   dd4hep::SensitiveDetector sensDet = aSensDet;
-  dd4hep::xml::Dimension sensDetType = aXmlElement.child(_U(sensitive));
-  sensDet.setType(sensDetType.typeStr());
   lLog << INFO << "Dimensions of the envelope: rmin (cm) = " << dim.rmin1() << " rmin (cm) = " << dim.rmin2()
        << " rmax (cm) = " << dim.rmax() << " half-length (cm) = " << dim.dz()
-       << " Sensitive volume of type: " << sensDetType.typeStr() << endmsg;
+       << " Sensitive volume of type: " << sensDet.type() << endmsg;
   double length = dim.dz() * 2.;
   // First disc set is different: readout is first (HV), then half of active material, then absorber (GND)
   // Next disc sets have active material on both sides
@@ -273,6 +271,7 @@ void buildOneSide(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, 
 static dd4hep::Ref_t createCaloDiscs(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlElement,
                                      dd4hep::SensitiveDetector aSensDet) {
 
+  aSensDet.setType("calorimeter");
   dd4hep::xml::DetElement xmlDetElem = aXmlElement;
   std::string nameDet = xmlDetElem.nameStr();
   int idDet = xmlDetElem.id();

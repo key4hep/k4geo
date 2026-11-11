@@ -16,10 +16,6 @@
 #include "XML/DocumentHandler.h"
 #include "XML/Utilities.h"
 
-#include "UTIL/LCTrackerConf.h"
-#include <UTIL/BitField64.h>
-#include <UTIL/ILDConf.h>
-
 using namespace std;
 
 using dd4hep::_toString;
@@ -38,7 +34,6 @@ using dd4hep::SensitiveDetector;
 using dd4hep::Transform3D;
 using dd4hep::Tube;
 using dd4hep::Volume;
-using dd4hep::rec::NeighbourSurfacesData;
 using dd4hep::rec::ZPlanarData;
 
 static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens) {
@@ -53,13 +48,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   map<string, Placements> sensitives;
   PlacedVolume pv;
 
-  // for encoding
-  std::string cellIDEncoding = sens.readout().idSpec().fieldDescription();
-  UTIL::BitField64 encoder(cellIDEncoding);
-  encoder.reset();
-  encoder[lcio::LCTrackerCellID::subdet()] = det_id;
-  encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::barrel;
-
   // --- create an envelope volume and position it into the world ---------------------
 
   Volume envelope = dd4hep::xml::createPlacedEnvelope(theDetector, e, sdet);
@@ -70,7 +58,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
   //-----------------------------------------------------------------------------------
   ZPlanarData* zPlanarData = new ZPlanarData();
-  NeighbourSurfacesData* neighbourSurfacesData = new NeighbourSurfacesData();
 
   sens.setType("tracker");
 
@@ -179,54 +166,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       for (int j = 0; j < nz; j++) {
         string sensor_name = _toString(sensor_idx, "sensor%d");
 
-        ///////////////////
-
-        // get cellID and fill map< cellID of surface, vector of cellID of neighbouring surfaces >
-
-        // encoding
-
-        encoder[lcio::LCTrackerCellID::layer()] = lay_id;
-        encoder[lcio::LCTrackerCellID::module()] = module_idx;
-        encoder[lcio::LCTrackerCellID::sensor()] = sensor_idx;
-
-        const dd4hep::CellID cellID = encoder.lowWord(); // 32 bits
-
-        // compute neighbours
-
-        int n_neighbours_module = 1; // 1 gives the adjacent modules (i do not think we would like to change this)
-        int n_neighbours_sensor = 1;
-
-        int newmodule = 0, newsensor = 0;
-
-        for (int imodule = -n_neighbours_module; imodule <= n_neighbours_module; imodule++) {   // neighbouring modules
-          for (int isensor = -n_neighbours_sensor; isensor <= n_neighbours_sensor; isensor++) { // neighbouring sensors
-
-            if (imodule == 0 && isensor == 0)
-              continue; // cellID we started with
-            newmodule = module_idx + imodule;
-            newsensor = sensor_idx + isensor;
-
-            // compute special case at the boundary
-            // general computation to allow (if necessary) more then adjacent neighbours (ie: +-2)
-
-            if (newmodule < 0)
-              newmodule = nphi + newmodule;
-            if (newmodule >= nphi)
-              newmodule = newmodule - nphi;
-
-            if (newsensor < 0 || newsensor >= nz)
-              continue; // out of the stave
-
-            // encoding
-            encoder[lcio::LCTrackerCellID::module()] = newmodule;
-            encoder[lcio::LCTrackerCellID::sensor()] = newsensor;
-
-            neighbourSurfacesData->sameLayer[cellID].push_back(encoder.lowWord());
-          }
-        }
-
-        ///////////////////
-
         // FIXME
         sensor_name = module_name + sensor_name;
 
@@ -306,7 +245,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   }
   sdet.setAttributes(theDetector, envelope, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   sdet.addExtension<ZPlanarData>(zPlanarData);
-  sdet.addExtension<NeighbourSurfacesData>(neighbourSurfacesData);
 
   // envelope.setVisAttributes(theDetector.invisible());
   /*pv = theDetector.pickMotherVolume(sdet).placeVolume(assembly);

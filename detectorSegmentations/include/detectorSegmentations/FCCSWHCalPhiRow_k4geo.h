@@ -296,6 +296,8 @@ namespace DDSegmentation {
     std::vector<int> m_groupedRows;
     /// dz of row
     double m_dz_row;
+    /// dz of reduced row (first row in barrel layers)
+    double m_dz_reduced_row;
     /// the field name used for row
     std::string m_rowID;
     /// the detector layout (0 = Barrel; 1 = Endcap)
@@ -316,6 +318,12 @@ namespace DDSegmentation {
     /// Offset in z of the center of the sensitive volume within a row
     /// for odd layers.  (sequence_b for barrel, sequence_a for endcap.)
     double m_oddVolOffset;
+    /// Offset in z of the center of the sensitive volume within the reduced (first) row
+    /// for even layers.  (sequence_a for barrel)
+    double m_evenVolOffset_reduced;
+    /// Offset in z of the center of the sensitive volume within the reduced (first) row
+    /// for odd layers.  (sequence_b for barrel)
+    double m_oddVolOffset_reduced;
 
     /// Initialization common to all ctors.
     void commonSetup();
@@ -347,6 +355,8 @@ namespace DDSegmentation {
 
       /// z-offset between cell centers and volume centers.
       double zOffset = 0;
+      /// z-offset between cell centers and volume centers for reduced first row.
+      double zOffset_reduced_row = 0;
 
       /// cell indexes in each layer
       std::vector<int> cellIndexes{};

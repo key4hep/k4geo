@@ -16,6 +16,7 @@ These are based on the ILC-specific models located under ILD/compact
 - MDI taken from FCCee common MDI design
 - ECal ring removed
 - other subdetectors same as ILD_l5_v02
+- 08.2026: Updated vertex disks, now using the ones from CLD_o2_v09 with fixed material budget (see https://github.com/key4hep/k4geo/issues/613). Added option to replace CLD vertex with FCC-SEED vertex consisting of a novel barrel design with overlapping, curved sensors, and modified CLD disks with six single-hit disks.
 
 ##########################
 # ILD_FCCee_v02
@@ -30,4 +31,4 @@ These are based on the ILC-specific models located under ILD/compact
 - MDI taken from FCCee common MDI design
 - ECal ring removed
 - other subdetectors same as ILD_l5_v02
-
+- 08.2026: Updated vertex disks, now using the ones from CLD_o2_v09 with fixed material budget (see https://github.com/key4hep/k4geo/issues/613). Added option to replace CLD vertex with FCC-SEED vertex consisting of a novel barrel design with overlapping, curved sensors, and modified CLD disks with six single-hit disks.

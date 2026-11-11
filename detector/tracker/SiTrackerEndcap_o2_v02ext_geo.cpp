@@ -19,10 +19,7 @@
 //==========================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "DDRec/DetectorData.h"
-#include "UTIL/LCTrackerConf.h"
 #include "XML/Utilities.h"
-#include <UTIL/BitField64.h>
-#include <UTIL/ILDConf.h>
 #include <map>
 
 using namespace std;
@@ -55,13 +52,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   map<string, Placements> sensitives;
   PlacedVolume pv;
 
-  // encoding that was missing
-
-  std::string cellIDEncoding = sens.readout().idSpec().fieldDescription();
-  UTIL::BitField64 encoder(cellIDEncoding);
-  encoder.reset();
-  encoder[lcio::LCTrackerCellID::subdet()] = det_id;
-
   // --- create an envelope volume and position it into the world ---------------------
 
   Volume envelope = dd4hep::xml::createPlacedEnvelope(theDetector, e, sdet);
@@ -72,9 +62,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
   //-----------------------------------------------------------------------------------
   dd4hep::rec::ZDiskPetalsData* zDiskPetalsData = new dd4hep::rec::ZDiskPetalsData;
-  // neighbour surfaces added
-  dd4hep::rec::NeighbourSurfacesData* neighbourSurfacesData = new dd4hep::rec::NeighbourSurfacesData();
-  //
   std::map<std::string, double> moduleSensThickness;
 
   envelope.setVisAttributes(theDetector.invisible());
@@ -123,13 +110,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     int ring_num = 0;
     int petal_num = 0;
     double sumZ(0.), innerR(1e100), outerR(0.);
-    // loop only to count the number of rings in a disk - it is then needed for looking for neighborous when you are in
-    // a "border" cell
-    int nrings = 0;
-
-    for (xml_coll_t ri(x_layer, _U(ring)); ri; ++ri) {
-      nrings++;
-    }
     dd4hep::rec::ZDiskPetalsData::LayerLayout thisLayer;
 
     for (xml_coll_t ri(x_layer, _U(ring)); ri; ++ri) {
@@ -190,63 +170,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
           }
         }
 
-        // modified on  comparison with  TrackerEndcap_o2_v06_geo.cpp
-        // get cellID and fill map< cellID of surface, vector of cellID of neighbouring surfaces >
-        dd4hep::CellID cellID_reflect;
-        if (reflect) {
-          encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::bwd;
-          encoder[lcio::LCTrackerCellID::layer()] = l_id;
-          encoder[lcio::LCTrackerCellID::module()] = mod_num;
-          encoder[lcio::LCTrackerCellID::sensor()] = k;
-
-          cellID_reflect = encoder.lowWord(); // 32 bits
-        }
-
-        encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::fwd;
-        encoder[lcio::LCTrackerCellID::layer()] = l_id;
-        encoder[lcio::LCTrackerCellID::module()] = mod_num;
-        encoder[lcio::LCTrackerCellID::sensor()] = k;
-
-        const dd4hep::CellID cellID = encoder.lowWord(); // 32 bits
-
-        // compute neighbours
-
-        int n_neighbours_module = 1; // 1 gives the adjacent modules (i do not think we would like to change this)
-        int n_neighbours_sensor = 1;
-        int newmodule = 0, newsensor = 0;
-
-        for (int imodule = -n_neighbours_module; imodule <= n_neighbours_module; imodule++) {   // neighbouring modules
-          for (int isensor = -n_neighbours_sensor; isensor <= n_neighbours_sensor; isensor++) { // neighbouring sensors
-
-            if (imodule == 0 && isensor == 0)
-              continue; // cellID we started with
-            newmodule = mod_num + imodule;
-            newsensor = k + isensor;
-
-            // compute special case at the boundary
-            // general computation to allow (if necessary) more then adiacent neighbours (ie: +-2)
-            if (newsensor < 0)
-              newsensor = nmodules + newsensor;
-            if (newsensor >= nmodules)
-              newsensor = newsensor - nmodules;
-            if (newmodule < 0 || newmodule >= nrings)
-              continue; // out of disk
-
-            // encoding
-            encoder[lcio::LCTrackerCellID::module()] = newmodule;
-            encoder[lcio::LCTrackerCellID::sensor()] = newsensor;
-
-            neighbourSurfacesData->sameLayer[cellID].push_back(encoder.lowWord());
-
-            if (reflect) {
-              encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::bwd;
-              encoder[lcio::LCTrackerCellID::layer()] = l_id;
-              encoder[lcio::LCTrackerCellID::module()] = newmodule;
-              encoder[lcio::LCTrackerCellID::sensor()] = newsensor;
-              neighbourSurfacesData->sameLayer[cellID_reflect].push_back(encoder.lowWord());
-            }
-          }
-        }
         dz = -dz;
         phi += iphi;
       }
@@ -266,8 +189,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   sdet.setAttributes(theDetector, envelope, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
 
   sdet.addExtension<dd4hep::rec::ZDiskPetalsData>(zDiskPetalsData);
-  // added extension
-  sdet.addExtension<dd4hep::rec::NeighbourSurfacesData>(neighbourSurfacesData);
   std::cout << "XXX Tracker endcap layers:" << zDiskPetalsData->layers.size() << std::endl;
 
   return sdet;

@@ -1,0 +1,28 @@
+<lccdd>
+
+    <!-- Approximate realistic (Br, Bz) map for the MAIA solenoid, normalised to
+         5 T on axis at the origin.
+
+         Includes a real fringe field and a non-zero Br.
+
+         The map covers 0 < r < 7 m and 0 < z < 8 m and is mirrored to z < 0 by
+         the plugin.  The field is below 10 mT at the map boundary, and the
+         FieldBrBz plugin returns zero outside it. -->
+
+    <fields>
+        <field name="GlobalSolenoidMap" type="FieldBrBz"
+            filename="${k4geo_DIR}/fieldmaps/MAIA_fieldMap_Solenoid5T_v1.root"
+            treeName="ntuple"
+            rhoVarName="rho_mm"
+            zVarName="z_mm"
+            BrhoVarName="Brho"
+            BzVarName="Bz"
+            rScale="1.0"
+            zScale="1.0"
+            bScale="1.0"
+            coorUnits="mm"
+            BfieldUnits="tesla">
+        </field>
+    </fields>
+
+</lccdd>

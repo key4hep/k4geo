@@ -45,7 +45,6 @@ using dd4hep::Transform3D;
 using dd4hep::Trapezoid;
 using dd4hep::Tube;
 using dd4hep::Volume;
-using dd4hep::rec::NeighbourSurfacesData;
 using dd4hep::rec::ZDiskPetalsData;
 
 static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens) {

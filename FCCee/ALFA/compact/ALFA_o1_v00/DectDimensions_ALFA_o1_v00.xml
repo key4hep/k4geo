@@ -1,0 +1,30 @@
+<lccdd>
+
+  <comment> Global dimensions and detector identifiers for ALFA_o1_v00 </comment>
+  <define>
+
+    <constant name="DetID_OTBar_Barrel" value="3"/>
+    <constant name="DetID_ECAL_Barrel"  value="10"/>
+    <constant name="DetID_ECAL_Endcap"  value="11"/>
+    <constant name="DetID_HCAL_Barrel"  value="12"/>
+    <constant name="DetID_HCAL_Endcap"  value="13"/>
+
+    <constant name="env_safety" value="0.1*mm"/>
+
+    <constant name="tracker_region_zmax"   value="2.1*m"/>
+    <constant name="tracker_region_rmax"      value="1.8*m"/>
+
+    <constant name="OTBar_inner_radius"   value="500*mm"/>
+    <constant name="OTBar_outer_radius"   value="1800*mm"/>
+    <constant name="OTBar_nGroupingModules" value="1"/>
+
+    <constant name="ECalBarrel_inner_radius" value="2200*mm"/>
+    <constant name="ECalBarrel_outer_radius" value="2650*mm"/>
+    <constant name="ECalBarrel_half_length" value="2300*mm"/>
+
+    <constant name="Solenoid_coil_half_length"      value="2.0*m"/>
+    <constant name="Solenoid_coil_outer_radius"      value="2.7*m"/>
+
+  </define>
+
+</lccdd>

@@ -101,7 +101,7 @@ SIM.vertexSigma = [0.0, 0.0, 0.0, 0.0]
 SIM.action.calo = "Geant4ScintillatorCalorimeterAction"
 
 ## List of patterns matching sensitive detectors of type Calorimeter.
-SIM.action.calorimeterSDTypes = ["calorimeter", "DRcaloSiPMSD"]
+SIM.action.calorimeterSDTypes = ["calorimeter"]
 
 ##  set the default event action
 SIM.action.event = []
@@ -451,14 +451,23 @@ SIM.outputConfig.forceLCIO = False
 def Geant4Output2EDM4hep_DRC_plugin(dd4hepSimulation):
     from DDG4 import EventAction, Kernel
 
+    try:
+        shared = dd4hepSimulation.numberOfThreads > 1
+    # DD4hep < 1.38 does not have multithreading
+    except AttributeError:
+        shared = False
+
+    kernel = Kernel().worker()
+
     evt_root = EventAction(
-        Kernel(), "Geant4Output2EDM4hep_DRC/" + dd4hepSimulation.outputFile, True
+        kernel, "Geant4Output2EDM4hep_DRC/" + dd4hepSimulation.outputFile, shared
     )
     evt_root.Control = True
     output = dd4hepSimulation.outputFile
     evt_root.Output = output
     evt_root.enableUI()
-    Kernel().eventAction().add(evt_root)
+    kernel.eventAction().add(evt_root)
+
     return None
 
 

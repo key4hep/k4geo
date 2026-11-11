@@ -81,7 +81,7 @@ namespace sim {
     Geant4HitCollection* coll = (layer == m_userData._firstLayerNumber ? collection(m_userData._preShowerCollectionID)
                                                                        : collection(m_collectionID));
 
-    Hit* hit = coll->find<Hit>(CellIDCompare<Hit>(cell));
+    Hit* hit = coll->findByKey<Hit>(cell);
     if (h.totalEnergy() < std::numeric_limits<double>::epsilon()) {
       return true;
     } else if (!hit) {
@@ -90,7 +90,7 @@ namespace sim {
       Position global = h.localToGlobal(pos);
       hit = new Hit(global);
       hit->cellID = cell;
-      coll->add(hit);
+      coll->add(cell, hit);
       printM2("%s> CREATE hit with deposit:%e MeV  Pos:%8.2f %8.2f %8.2f  %s", c_name(), contrib.deposit, pos.X, pos.Y,
               pos.Z, handler.path().c_str());
       if (0 == hit->cellID) { // for debugging only!

@@ -675,8 +675,7 @@ namespace ECalEndcap_Turbine_o1_v02 {
     int idDet = xmlDetElem.id();
     dd4hep::xml::Dimension dim(xmlDetElem.dimensions());
     dd4hep::DetElement caloDetElem(nameDet, idDet);
-    dd4hep::xml::Dimension sdType = xmlDetElem.child(_U(sensitive));
-    aSensDet.setType(sdType.typeStr());
+    aSensDet.setType("calorimeter");
 
     ECalEndcapNumCalibLayers = aLcdd.constant<int>("ECalEndcapNumCalibLayers");
 

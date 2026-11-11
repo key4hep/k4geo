@@ -117,7 +117,6 @@
     <!-- electromagnetic calorimeter -->
     <detector name="EMEC" type="CaloDiscs_o1_v01" id="ExtBarECal_id" readout="EMECPhiEta">
       <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP"/>
-      <sensitive type="calorimeter"/>
       <dimensions rmin1="EMEC_rmin1"  rmin2="EMEC_rmin2" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>
       <layers>
         <!-- thickness of a readout layer (how many 'unit layers' are merged together creating one readout) -->
@@ -147,7 +146,6 @@
     <!-- hadronic calorimeter -->
     <detector name="HEC" type="CaloDiscs_o1_v01" id="HadronicEndCap_id" readout="HECPhiEta">
       <type_flags type=" DetType_CALORIMETER + DetType_HADRONIC + DetType_ENDCAP"/>
-      <sensitive type="calorimeter"/>
       <dimensions rmin1="HEC_rmin1"  rmin2="HEC_rmin2" rmax="HEC_rmax" dz="(HEC_z2-HEC_z1)/2." z_offset="HEC_z1+(HEC_z2-HEC_z1)/2."/>
       <layers>
         <!-- thickness of a readout layer (how many 'unit layers' are merged together creating one readout) -->

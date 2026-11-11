@@ -1,5 +1,6 @@
 #include "detectorSegmentations/FCCSWEndcapTurbine_k4geo.h"
 #include "DD4hep/Detector.h"
+#include <numbers>
 
 namespace dd4hep {
 namespace DDSegmentation {
@@ -26,7 +27,7 @@ namespace DDSegmentation {
 
     registerParameter("grid_size_rho", "Grid size in rho", m_gridSizeRho, std::vector<double>());
     registerParameter("grid_size_z", "Grid size in z", m_gridSizeZ, std::vector<double>());
-    registerParameter("offset_z", "Offset in z1", m_offsetZ, std::vector<double>());
+    registerParameter("offset_z", "Offset in z", m_offsetZ, std::vector<double>());
     registerParameter("offset_theta", "Angular offset in theta", m_offsetTheta, 0., SegmentationParameter::AngleUnit,
                       true);
     registerParameter("mergedModules", "Number of merged modules per wheel", m_mergedModules, std::vector<int>());
@@ -170,18 +171,26 @@ namespace DDSegmentation {
     m_zIndex = decoder()->index(m_zID);
     m_sideIndex = decoder()->index(m_sideID);
     m_layerIndex = decoder()->index(m_layerID);
+
+    // precalculate some quantities that will be used to determine positions
+    unsigned nWheels = m_bladeAngle.size();
+    for (unsigned iWheel = 0; iWheel < nWheels; iWheel++) {
+      m_cscBladeAngle.push_back(1. / std::sin(m_bladeAngle[iWheel]));
+      m_gangedRhoLayers.push_back(m_numReadoutRhoLayers[iWheel] / m_numCalibRhoLayers[iWheel]);
+      m_gangedZLayers.push_back(m_numReadoutZLayers[iWheel] / m_numCalibZLayers[iWheel]);
+    }
   }
 
-  /// determine the local position based on the cell ID
+  /// determine the local position of the readout cell with respect to its
+  /// parent calibration cell based on the cell ID
   Vector3D FCCSWEndcapTurbine_k4geo::position(const CellID& cID) const {
 
-    double rhoVal = rho(cID);
-    double zVal = z(cID);
-    double phiVal = phi(cID);
-    Vector3D pos = PositionRhoZPhi(rhoVal, zVal, phiVal);
-    // account for the fact that the -z endcap is mirrored wrt to the +z one
-    if (pos.Z < 0.)
-      pos.Y = -pos.Y;
+    double xVal = 0.;             // this is the direction perpendicular to the blade face
+    double zVal = getLocalZ(cID); // coincides with the rho direction in the center
+                                  // of the blade
+    double yVal = getLocalY(cID);
+
+    Vector3D pos = Position(xVal, yVal, zVal);
 
     return pos;
   }
@@ -204,7 +213,7 @@ namespace DDSegmentation {
     }
     decoder()->set(cID, m_rhoIndex, iRho);
 
-    double lZ = TMath::Abs(globalPosition.Z);
+    double lZ = std::abs(globalPosition.Z);
     int iZ = positionToBin(lZ, m_gridSizeZ[iWheel], m_offsetZ[iWheel] + m_gridSizeZ[iWheel] / 2.);
     if (iZ < 0) {
       iZ = 0;
@@ -226,46 +235,124 @@ namespace DDSegmentation {
     return cID;
   }
 
-  /// determine the radial position in transverse plane (rho) based on the cell ID
-  double FCCSWEndcapTurbine_k4geo::rho(const CellID cID) const {
+  /// determine the radial position in transverse plane (rho) based on the
+  /// cell ID (this is in the global coordinate frame of the detector)
+  double FCCSWEndcapTurbine_k4geo::getGlobalRho(const CellID cID) const {
     CellID rhoValue = decoder()->get(cID, m_rhoIndex);
     CellID iWheel = decoder()->get(cID, m_wheelIndex);
 
     return binToPosition(rhoValue, m_gridSizeRho[iWheel], m_offsetRho[iWheel]) + m_gridSizeRho[iWheel] / 2.;
   }
 
-  /// determine the azimuthal angle (phi) based on the cell ID
-  double FCCSWEndcapTurbine_k4geo::phi(const CellID cID) const {
-    CellID iModule = decoder()->get(cID, m_moduleIndex);
-    CellID iWheel = decoder()->get(cID, m_wheelIndex);
-
-    double phiCent = twopi * (iModule + 0.5) / (m_nUnitCells[iWheel] / m_mergedModules[iWheel]);
-    double rhoLoc = rho(cID);
-
-    double zdepth = m_numReadoutZLayers[iWheel] * m_gridSizeZ[iWheel];
-
-    double zLoc = TMath::Abs(z(cID)) - m_offsetZ[iWheel] - zdepth / 2;
-
-    // calculation position in frame with unit cell at phi = 0
-    double y = zLoc / TMath::Tan(m_bladeAngle[iWheel]);
-    double x = TMath::Sqrt(rhoLoc * rhoLoc - y * y);
-    double locPhi = TMath::ATan2(y, x);
-
-    // now rotate by phi position of the unit cell
-    double phi = locPhi + phiCent;
-    if (phi > TMath::Pi())
-      phi = phi - TMath::TwoPi();
-
-    return phi;
-  }
-
-  /// determine the longitudinal position (z) based on the cell ID
-  double FCCSWEndcapTurbine_k4geo::z(const CellID cID) const {
+  /// determine the longitudinal position (z) based on the cell ID, in the
+  /// global coordinate frame of the detector
+  double FCCSWEndcapTurbine_k4geo::getGlobalZ(const CellID cID) const {
     CellID zValue = decoder()->get(cID, m_zIndex);
     CellID sideValue = decoder()->get(cID, m_sideIndex);
     CellID iWheel = decoder()->get(cID, m_wheelIndex);
     return ((long long int)sideValue) *
            (binToPosition(zValue, m_gridSizeZ[iWheel], m_offsetZ[iWheel]) + m_gridSizeZ[iWheel] / 2.);
+  }
+
+  /// determine the phi position based on the cell ID, in the
+  /// global coordinate frame of the detector
+  double FCCSWEndcapTurbine_k4geo::getGlobalPhi(const CellID cID) const {
+    CellID iModule = decoder()->get(cID, m_moduleIndex);
+    CellID iWheel = decoder()->get(cID, m_wheelIndex);
+    CellID iSide = decoder()->get(cID, m_sideIndex);
+
+    double phiCent = dd4hep::twopi * (iModule + 0.5) / (m_nUnitCells[iWheel] / m_mergedModules[iWheel]);
+    double rho = getGlobalRho(cID);
+
+    double zdepth = m_numReadoutZLayers[iWheel] * m_gridSizeZ[iWheel];
+
+    double zFromCent = std::abs(getGlobalZ(cID)) - m_offsetZ[iWheel] - zdepth / 2;
+
+    // calculation position in frame with unit cell at phi = 0
+    // line below is equivalent to zFromCent/tan(bladeAngle)
+    double y = zFromCent * std::sqrt(m_cscBladeAngle[iWheel] * m_cscBladeAngle[iWheel] - 1.);
+    double x = std::sqrt(rho * rho - y * y);
+    double locPhi = std::atan2(y, x);
+
+    // now rotate by phi position of the unit cell
+    double phi = locPhi + phiCent;
+    if (phi > std::numbers::pi)
+      phi = phi - dd4hep::twopi;
+
+    if (iSide != 1)
+      phi = -phi;
+
+    return phi;
+  }
+
+  /// determine the local z position of a readout cell with respect to the
+  /// parent calibration cell.  In the local coordinates, z is the direction
+  /// pointing upward from the beamline through the center of a turbine blade
+
+  double FCCSWEndcapTurbine_k4geo::getLocalZ(const CellID cID) const {
+
+    /// initialize vector of local Z positions if necessary
+    const std::vector<EndcapTurbineWheelLocalZ>* wlzs = m_localZPositions.load();
+    if (!wlzs) {
+      std::vector<EndcapTurbineWheelLocalZ>* wlzs_new = new std::vector<EndcapTurbineWheelLocalZ>;
+      int nWheels = m_numReadoutRhoLayers.size();
+      for (int jWheel = 0; jWheel < nWheels; jWheel++) {
+        EndcapTurbineWheelLocalZ wlz(m_numReadoutRhoLayers[jWheel], m_numReadoutZLayers[jWheel]);
+        wlzs_new->emplace_back(wlz);
+        for (int jRho = 0; jRho < m_numReadoutRhoLayers[jWheel]; jRho++) {
+          for (int jZ = 0; jZ < m_numReadoutZLayers[jWheel]; jZ++) {
+            /// get center position of calibration cell.  The volume is formed from the intersection of a Trd2
+            /// and a Tube.  The z position is the center of the Trd2.  So, redo the calculation of the Trd2 size
+            /// from k4geo, and find its z center in global coordinates.  Then find the z center of the readout
+            /// cell in global coordinates, and subtract the two to get the local z position of the readout cell.
+            unsigned jCalibRho = jRho / m_gangedRhoLayers[jWheel];
+            float calibRhoMin = m_offsetRho[jWheel] + jCalibRho * m_gangedRhoLayers[jWheel] * m_gridSizeRho[jWheel];
+            float calibRhoMax = calibRhoMin + m_gangedRhoLayers[jWheel] * m_gridSizeRho[jWheel];
+            float calibZmax = calibRhoMax;
+            /// angFactor is equivalent to 1/tan(bladeAngle)^2
+            float angFactor = m_cscBladeAngle[jWheel] * m_cscBladeAngle[jWheel] - 1.;
+            float calibZmin = std::sqrt(calibRhoMin * calibRhoMin -
+                                        ((m_numReadoutZLayers[jWheel] + 1) * (m_numReadoutZLayers[jWheel] + 1) *
+                                         m_gridSizeZ[jWheel] * m_gridSizeZ[jWheel] / 4) *
+                                            angFactor);
+            float calibZcent = (calibZmax + calibZmin) / 2.;
+
+            // get center position of readout cell
+            float readoutRhoCent = m_offsetRho[jWheel] + (jRho + 0.5) * m_gridSizeRho[jWheel];
+            float readoutZPos = (jZ - m_numReadoutZLayers[jWheel] / 2 + 0.5) * m_gridSizeZ[jWheel];
+
+            float readoutZcent = std::sqrt(readoutRhoCent * readoutRhoCent - readoutZPos * readoutZPos * angFactor);
+
+            wlzs_new->at(jWheel).setLocalZ(jRho, jZ, readoutZcent - calibZcent);
+          }
+        }
+      }
+      if (m_localZPositions.compare_exchange_strong(wlzs, wlzs_new)) {
+        wlzs = wlzs_new;
+      } else {
+        delete wlzs_new;
+      }
+    }
+
+    CellID iWheel = decoder()->get(cID, m_wheelIndex);
+    CellID iRho = decoder()->get(cID, m_rhoIndex);
+    CellID iZ = decoder()->get(cID, m_zIndex);
+
+    return wlzs->at(iWheel).getLocalZ(iRho, iZ);
+  }
+
+  /// determine the local y position of a readout cell with respect to the
+  /// parent calibration cell.  In the local coordinates, y is the direction
+  /// pointing across the turbine blade, from one straight edge to the other
+
+  double FCCSWEndcapTurbine_k4geo::getLocalY(const CellID cID) const {
+
+    CellID iWheel = decoder()->get(cID, m_wheelIndex);
+    CellID iZ = decoder()->get(cID, m_zIndex);
+
+    return ((iZ % m_gangedZLayers[iWheel] - m_gangedZLayers[iWheel] / 2.) * m_gridSizeZ[iWheel] +
+            (1 - m_gangedZLayers[iWheel] % 2) * m_gridSizeZ[iWheel] / 2) *
+           m_cscBladeAngle[iWheel];
   }
 
   /// determine expected layer value based on wheel, rho, and z indices

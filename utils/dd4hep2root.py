@@ -30,9 +30,45 @@ def convert(compact_files, out_path):
     import ROOT
 
     ROOT.gSystem.Load("libDDCore")
+
+    # Store predefined ROOT colors before loading the files
+    predefinedColors = dict(
+        (color.GetNumber(), color) for color in ROOT.gROOT.GetListOfColors() if color
+    )
+    cachedColors = dict((num, num) for num in predefinedColors)
+
     description = ROOT.dd4hep.Detector.getInstance()
     for cfile in compact_files:
         description.fromXML(cfile)
+
+    def mapColor(colorNumber):
+        if colorNumber not in cachedColors:
+            color = ROOT.gROOT.GetColor(colorNumber)
+
+            # Guard clause in case GetColor() doesn't return a valid color
+            if not color:
+                return colorNumber
+
+            r, g, b = color.GetRed(), color.GetGreen(), color.GetBlue()
+
+            # Score every predefined ROOT color by square distance
+            mostSimilar = min(
+                predefinedColors,
+                key=lambda num: (
+                    (predefinedColors[num].GetRed() - r) ** 2
+                    + (predefinedColors[num].GetGreen() - g) ** 2
+                    + (predefinedColors[num].GetBlue() - b) ** 2
+                ),
+            )
+
+            cachedColors[colorNumber] = mostSimilar
+
+        return cachedColors[colorNumber]
+
+    # Map volumes to the closest predefined ROOT colors
+    for volume in ROOT.gGeoManager.GetListOfVolumes():
+        volume.SetLineColor(mapColor(volume.GetLineColor()))
+        volume.SetFillColor(mapColor(volume.GetFillColor()))
 
     ROOT.gGeoManager.SetVisLevel(9)
     ROOT.gGeoManager.SetVisOption(0)

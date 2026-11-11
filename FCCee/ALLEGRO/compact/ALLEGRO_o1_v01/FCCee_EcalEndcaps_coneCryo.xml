@@ -42,16 +42,6 @@
     <constant name="EMEC_readout_thickness" value="1.2*mm"/>
   </define>
 
-  <display>
-    <vis name="emec_cryo_vis" r="0.6" g="0.6" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
-    <vis name="emec_bath_vis" r="0.6" g="0.4" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
-    <vis name="emec_envelope_vis_vis" r="0.6" g="0.3" b="0" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
-    <vis name="emec_layer_vis" r="0.6" g="0.3" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
-    <vis name="emec_lar_vis" r="0.5" g="0.3" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
-    <vis name="emec_pb_vis" r="0.5" g="0.5" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
-    <vis name="emec_readout_vis" r="0.5" g="0.1" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
-  </display> 
-  
   <readouts>
     <readout name="ECalEndcapPhiEta">
       <segmentation type="FCCSWGridPhiEta_k4geo" phi_bins="704" offset_phi="-pi+(pi/704.)" grid_size_eta="0.05" offset_eta="-2.91"/>
@@ -98,7 +88,6 @@
     </detector>
     <!-- electromagnetic calorimeter -->
     <detector name="EMEC" type="CaloDiscs_o1_v01" id="DetID_ECAL_Endcap" readout="ECalEndcapPhiEta" vis="emec_envelope_vis">
-      <sensitive type="SimpleCalorimeterSD"/>
       <dimensions rmin1="EMEC_rmin1"  rmin2="EMEC_rmin2" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>
       <layers> 
         <!-- thickness of a readout layer (how many 'unit layers' are merged together creating one readout) -->

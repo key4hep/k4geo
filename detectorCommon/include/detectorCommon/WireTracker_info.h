@@ -499,6 +499,8 @@ namespace rec {
     std::vector<angle_t> stereo{};
     // placement radius of sensitive wire in innermost layers of each superlayer
     std::vector<length_t> innermost_radius{};
+    // phi offset of sector 0
+    std::vector<angle_t> offset{};
 
     //--------------------------------------------------------------
     // setters
@@ -508,8 +510,11 @@ namespace rec {
     void Add_nsectors(int _val) { nsectors.push_back(_val); }
     void Add_ntubesPerSector(int _val) { ntubesPerSector.push_back(_val); }
     void Add_delta_phi(angle_t _val) { delta_phi.push_back(_val); }
-    void Add_stereo(angle_t _val) { stereo.push_back(_val); }
+    // The stereo angle as implemented in the geometry is the opposite rotation to the one implemented by
+    // WireTracker_info
+    void Add_stereo(angle_t _val) { stereo.push_back(-_val); }
     void Add_innermost_radius(length_t _val) { innermost_radius.push_back(_val); }
+    void Add_offset(angle_t _val) { offset.push_back(_val); }
 
     //--------------------------------------------------------------
     // STT geo helpers
@@ -518,12 +523,15 @@ namespace rec {
     // STT geo interface implementation
 
     /// Global phi positioning in STT,
-    /// sum of sector phi + phi offset due to layer staggering + tube phi within the layer.
+    /// sum of sector phi + phi offset due to layer staggering + tube phi within the layer
+    /// + overall superlayer offset.
     /// Note that the direction of diagonal gap between sectors changes per superlayer.
     angle_t Get_cell_phi_angle(int superlayer, int ilayer, int sector, int tube) const override final {
-      angle_t phi_start = sector * (2 * dd4hep::pi / this->nsectors.at(superlayer));
-      angle_t phi_rel = (ilayer + 2 * tube) * this->delta_phi.at(superlayer) * pow(-1, superlayer);
-      return phi_start + phi_rel;
+      auto layer = CalculateLocalLayerFromILayer(ilayer, superlayer);
+      angle_t phi_start = sector * (dd4hep::twopi / this->nsectors.at(superlayer));
+      angle_t phi_rel = (layer + 2 * tube) * this->delta_phi.at(superlayer) * pow(-1, superlayer);
+      angle_t phi_offset = this->offset.at(superlayer);
+      return phi_start + phi_rel + phi_offset;
     }
 
     /// Calculate the global layer starting form the layer index within the super layer
@@ -533,6 +541,14 @@ namespace rec {
       int inner_layers = std::accumulate(sum_begin, sum_begin + superlayer, 0);
       layer_t ilayer = layer + inner_layers + 1;
       return ilayer;
+    }
+
+    /// Calculate the global layer starting form the layer index within the super layer
+    /// (super)layer counting starts at 0, while global layer numbers starts at 1.
+    layer_t CalculateLocalLayerFromILayer(layer_t ilayer, int superlayer) const {
+      auto sum_begin = nlayersPerSuperlayer.begin();
+      int inner_layers = std::accumulate(sum_begin, sum_begin + superlayer, 0);
+      return ilayer - inner_layers - 1;
     }
 
     //--------------------------------------------------------------

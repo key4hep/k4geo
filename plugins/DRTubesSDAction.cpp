@@ -9,6 +9,8 @@
 //**************************************************************************
 
 // Includers from DD4HEP
+#include "DD4hep/DetType.h"
+#include "DD4hep/Readout.h"
 #include "DD4hep/Segmentations.h"
 #include "DD4hep/Version.h"
 #include "DDG4/Factories.h"
@@ -20,6 +22,7 @@
 
 // Includers from Geant4
 #include "CLHEP/Units/PhysicalConstants.h"
+#include "G4EmProcessSubType.hh"
 #include "G4OpBoundaryProcess.hh"
 #include "G4OpticalPhoton.hh"
 #include "G4Poisson.hh"
@@ -32,10 +35,41 @@
 // Includers from project files
 #include "DRTubesSglHpr.hh"
 
+// Standard library includes
+#include <cmath>
+#include <cstddef>
+#include <string>
+
 // #define DRTubesSDDebug
 
 namespace dd4hep {
 namespace sim {
+
+  namespace {
+    // Positions of the volume-ID fields used by this action inside the readout
+    // descriptor. They are resolved once per detector so that the fields can be
+    // reordered in the XML without touching this code.
+    struct FieldIndexes {
+      std::size_t stave;
+      std::size_t tower;
+      std::size_t air;
+      std::size_t column;
+      std::size_t row;
+      std::size_t cherenkov;
+    };
+
+    FieldIndexes fieldIndexes(const BitFieldCoder& coder) {
+      return {
+          .stave = coder.index("stave"),
+          .tower = coder.index("tower"),
+          .air = coder.index("air"),
+          .column = coder.index("col"),
+          .row = coder.index("row"),
+          .cherenkov = coder.index("cherenkov"),
+      };
+    }
+  } // namespace
+
   class DRTubesSDData {
     // Constructor and destructor
     //
@@ -54,12 +88,24 @@ namespace sim {
     // Fields
     //
   public:
-    Geant4Sensitive* sensitive{};
+    // Volume-ID encoding of this detector, taken from the <readout> id string
+    // of the compact description
+    const BitFieldCoder* coder{nullptr};
+    FieldIndexes indexes{};
+    // Volume ID with the fields that never change for an accepted step already set.
+    // Cladding steps return before encoding, so core is always 1 here. The endcap
+    // has no air volume, so its unset air field remains zero.
+    VolumeID baseVolumeID{0};
+    // DDSim creates a separate action instance for each mapped detector, so the
+    // hierarchy only needs to be selected once rather than inferred from every step.
+    bool isBarrel{false};
+
     int collection_cher_right;
     int collection_cher_left;
     int collection_scin_left;
     int collection_drbt_cher;
     int collection_drbt_scin;
+    int collection_edep;
   };
 } // namespace sim
 } // namespace dd4hep
@@ -67,17 +113,39 @@ namespace sim {
 namespace dd4hep {
 namespace sim {
 
+  namespace {
+    VolumeID encodeVolumeID(const BitFieldCoder& coder, const FieldIndexes& indexes, VolumeID volumeID, int stave,
+                            int tower, int column, int row, int cherenkov) {
+      coder.set(volumeID, indexes.stave, stave);
+      coder.set(volumeID, indexes.tower, tower);
+      coder.set(volumeID, indexes.column, column);
+      coder.set(volumeID, indexes.row, row);
+      coder.set(volumeID, indexes.cherenkov, cherenkov);
+      return volumeID;
+    }
+  } // namespace
+
   // Function template specialization of Geant4SensitiveAction class.
   // Define collections created by this sensitivie action object
+  // Only the collections of this detector (barrel or endcap) are defined: DDSim writes the cellID
+  // encoding of a collection from the readout of the first sensitive detector defining it, so a
+  // collection defined by both instances would carry the other detector's encoding.
   template <>
   void Geant4SensitiveAction<DRTubesSDData>::defineCollections() {
-    std::string ROname = m_sensitive.readout().name();
-    m_collectionID = defineCollection<Geant4Calorimeter::Hit>("DRETScinRight");
-    m_userData.collection_cher_right = defineCollection<Geant4Calorimeter::Hit>("DRETCherRight");
-    m_userData.collection_scin_left = defineCollection<Geant4Calorimeter::Hit>("DRETScinLeft");
-    m_userData.collection_cher_left = defineCollection<Geant4Calorimeter::Hit>("DRETCherLeft");
-    m_userData.collection_drbt_cher = defineCollection<Geant4Calorimeter::Hit>("DRBTCher");
-    m_userData.collection_drbt_scin = defineCollection<Geant4Calorimeter::Hit>("DRBTScin");
+    if (m_userData.isBarrel) {
+      m_userData.collection_drbt_scin = defineCollection<Geant4Calorimeter::Hit>("DRBTScin");
+      m_userData.collection_drbt_cher = defineCollection<Geant4Calorimeter::Hit>("DRBTCher");
+      m_collectionID = m_userData.collection_drbt_scin;
+    } else {
+      m_collectionID = defineCollection<Geant4Calorimeter::Hit>("DRETScinRight");
+      m_userData.collection_cher_right = defineCollection<Geant4Calorimeter::Hit>("DRETCherRight");
+      m_userData.collection_scin_left = defineCollection<Geant4Calorimeter::Hit>("DRETScinLeft");
+      m_userData.collection_cher_left = defineCollection<Geant4Calorimeter::Hit>("DRETCherLeft");
+    }
+    // Combined MC-truth energy-deposit collection for both scintillating and
+    // Cherenkov fibers. The two are kept separable downstream by the cellID
+    // (cherenkov bit: scint=0, Cherenkov=1; system field: endcap=25, barrel=28).
+    m_userData.collection_edep = defineCollection<Geant4Calorimeter::Hit>("DRTubeEdep");
   }
 
   template <>
@@ -85,7 +153,21 @@ namespace sim {
                                                               DetElement det, Detector& lcdd_ref)
       : Geant4Sensitive(ctxt, nam, det, lcdd_ref), m_collectionID(0) {
     initialize();
+    const DetType detectorType(m_detector.typeFlag());
+    const bool isBarrel = detectorType.is(DetType::BARREL);
+    const bool isEndcap = detectorType.is(DetType::ENDCAP);
+    if (isBarrel + isEndcap != 1) {
+      except("DRTubesSDAction: detector '%s' must be exactly one of BARREL or ENDCAP", m_detector.name());
+    }
+    m_userData.isBarrel = isBarrel;
     defineCollections();
+
+    const Readout actionReadout = Geant4SensitiveAction<DRTubesSDData>::readout();
+    m_userData.coder = actionReadout.idSpec().decoder();
+    m_userData.indexes = fieldIndexes(*m_userData.coder);
+    m_userData.coder->set(m_userData.baseVolumeID, "system", m_detector.id());
+    m_userData.coder->set(m_userData.baseVolumeID, "clad", 1);
+    m_userData.coder->set(m_userData.baseVolumeID, "core", 1);
     InstanceCount::increment(this);
     declareProperty("PhotonsTimeBinWidth", m_userData.m_PhotonsTimeBinWidth = 0.1 * CLHEP::ns);
   }
@@ -135,7 +217,9 @@ namespace sim {
     // skipping steps in C fibers cladding and killing optical photons
     // in C fibers cladding. It is common to the endcap and barrel calo.
     auto Edep = aStep->GetTotalEnergyDeposit();
-    auto cpNo = aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber();
+    // All the volume IDs of this step are recreated from the copy numbers of this touchable
+    const auto* touchable = aStep->GetPreStepPoint()->GetTouchable();
+    auto cpNo = touchable->GetCopyNumber();
     // The second bit of the CopyNumber corresponds to the "core" entry:
     // 1 if the step is in the fiber core (S or C) and 0 if it is
     // in the fiber cladding (C only)
@@ -159,35 +243,20 @@ namespace sim {
 
     // Now we are inside fibers' core volume (either Scintillating or Cherenkov)
 
-    // Now we check if we are in the barrel and the endcap calo.
-    // For the barrel GetCopyNumber(3) would be the air-volume with cpno 63
-    // For the endcap GetCopyNumber(3) is never 63
-    // (patchy for the moment, can be improved later on)
-    //
-    bool IsBarrel = aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(3) == 63;
-
     VolumeID VolID = 0;                  // this 64-bits VolumeID will be recreated for barrel and endcap volumes
     Geant4HitCollection* coll = nullptr; // to be assigned correctly below
 
-    if (!IsBarrel) { // get VolumeID and hit collection for endcap
+    if (!m_userData.isBarrel) { // get VolumeID and hit collection for endcap
       // We recreate the TubeID from the tube copynumber:
       // fist16 bits for the columnID and second 16 bits for the rowID
-      auto TubeID = aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(2);
+      auto TubeID = touchable->GetCopyNumber(2);
       unsigned int ColumnID = TubeID >> 16;
       unsigned int RowID = TubeID & 0xFFFF;
-      auto TowerID = static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(3));
-      auto StaveID = static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(4));
+      auto TowerID = static_cast<unsigned int>(touchable->GetCopyNumber(3));
+      auto StaveID = static_cast<unsigned int>(touchable->GetCopyNumber(4));
 
-      BitFieldCoder bc("system:5,stave:10,tower:6,air:1,col:16,row:16,clad:1,core:1,cherenkov:1");
-      bc.set(VolID, "system", 25); // this number is set in DectDimensions_IDEA_o2_v01.xml
-      bc.set(VolID, "stave", StaveID);
-      bc.set(VolID, "tower", TowerID);
-      bc.set(VolID, "air", 0);
-      bc.set(VolID, "col", ColumnID);
-      bc.set(VolID, "row", RowID);
-      bc.set(VolID, "clad", 1);
-      bc.set(VolID, "core", CoreID);
-      bc.set(VolID, "cherenkov", CherenkovID);
+      VolID = encodeVolumeID(*m_userData.coder, m_userData.indexes, m_userData.baseVolumeID, StaveID, TowerID, ColumnID,
+                             RowID, CherenkovID);
 
       /* If you want to compare the 64-bits VolID created here
        * with the original DD4hep volumeID:
@@ -198,15 +267,15 @@ namespace sim {
        * 3. Uncomment the code below */
       // clang-format off
     /*std::cout<<"Volume id, created "<<VolID<<" and DD4hep original "<<volumeID(aStep)<<std::endl;
-    std::cout<<"system id, created "<<25<<" and DD4hep original "<<bc.get(volumeID(aStep),"system")<<std::endl;
-    std::cout<<"stave id, created "<<StaveID<<" and DD4hep original "<<bc.get(volumeID(aStep),"stave")<<std::endl;
-    std::cout<<"tower id, created "<<TowerID<<" and DD4hep original "<<bc.get(volumeID(aStep),"tower")<<std::endl;
-    std::cout<<"air id, created "<<0<<" and DD4hep original "<<bc.get(volumeID(aStep),"air")<<std::endl;
-    std::cout<<"col id, created "<<ColumnID<<" and DD4hep original "<<bc.get(volumeID(aStep),"col")<<std::endl;
-    std::cout<<"row id, created "<<RowID<<" and DD4hep original "<<bc.get(volumeID(aStep),"row")<<std::endl;
-    std::cout<<"clad id, created "<<1<<" and DD4hep original "<<bc.get(volumeID(aStep),"clad")<<std::endl;
-    std::cout<<"core id, created "<<CoreID<<" and DD4hep original "<<bc.get(volumeID(aStep),"core")<<std::endl;
-    std::cout<<"cherenkov id, created "<<CherenkovID<<" and DD4hep original "<<bc.get(volumeID(aStep),"cherenkov")<<std::endl;*/
+    std::cout<<"system id, created "<<m_detector.id()<<" and DD4hep original "<<m_userData.coder->get(volumeID(aStep),"system")<<std::endl;
+    std::cout<<"stave id, created "<<StaveID<<" and DD4hep original "<<m_userData.coder->get(volumeID(aStep),"stave")<<std::endl;
+    std::cout<<"tower id, created "<<TowerID<<" and DD4hep original "<<m_userData.coder->get(volumeID(aStep),"tower")<<std::endl;
+    std::cout<<"air id, created "<<m_userData.coder->get(VolID,"air")<<" and DD4hep original "<<m_userData.coder->get(volumeID(aStep),"air")<<std::endl;
+    std::cout<<"col id, created "<<ColumnID<<" and DD4hep original "<<m_userData.coder->get(volumeID(aStep),"col")<<std::endl;
+    std::cout<<"row id, created "<<RowID<<" and DD4hep original "<<m_userData.coder->get(volumeID(aStep),"row")<<std::endl;
+    std::cout<<"clad id, created "<<1<<" and DD4hep original "<<m_userData.coder->get(volumeID(aStep),"clad")<<std::endl;
+    std::cout<<"core id, created "<<CoreID<<" and DD4hep original "<<m_userData.coder->get(volumeID(aStep),"core")<<std::endl;
+    std::cout<<"cherenkov id, created "<<CherenkovID<<" and DD4hep original "<<m_userData.coder->get(volumeID(aStep),"cherenkov")<<std::endl;*/
       // clang-format on
 
       bool IsRight = (aStep->GetPreStepPoint()->GetPosition().z() > 0.);
@@ -220,22 +289,18 @@ namespace sim {
 
       // We recreate the TubeID from the tube copynumber:
       // fist16 bits for the columnID and second 16 bits for the rowID
-      auto TubeID = aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(2);
+      auto TubeID = touchable->GetCopyNumber(2);
       int ColumnID = TubeID >> 16;
       unsigned int RowID = TubeID & 0xFFFF;
-      auto TowerID = static_cast<int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(4));
-      auto StaveID = static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(5));
+      // Depth 3 is the air placement in the barrel hierarchy. Its actual copy
+      // number is the value encoded in the readout's "air" field.
+      const auto AirID = touchable->GetCopyNumber(3);
+      auto TowerID = static_cast<int>(touchable->GetCopyNumber(4));
+      auto StaveID = static_cast<unsigned int>(touchable->GetCopyNumber(5));
 
-      BitFieldCoder bcbarrel("system:5,stave:10,tower:-8,air:6,col:-16,row:16,clad:1,core:1,cherenkov:1");
-      bcbarrel.set(VolID, "system", 28); // this number is set in DectDimensions_IDEA_o2_v01.xml
-      bcbarrel.set(VolID, "stave", StaveID);
-      bcbarrel.set(VolID, "tower", TowerID);
-      bcbarrel.set(VolID, "air", 63);
-      bcbarrel.set(VolID, "col", ColumnID);
-      bcbarrel.set(VolID, "row", RowID);
-      bcbarrel.set(VolID, "clad", 1);
-      bcbarrel.set(VolID, "core", CoreID);
-      bcbarrel.set(VolID, "cherenkov", CherenkovID);
+      VolID = encodeVolumeID(*m_userData.coder, m_userData.indexes, m_userData.baseVolumeID, StaveID, TowerID, ColumnID,
+                             RowID, CherenkovID);
+      m_userData.coder->set(VolID, m_userData.indexes.air, AirID);
 
       /* If you want to compare the 64-bits VolID created here
        * with the original DD4hep volumeID:
@@ -246,15 +311,15 @@ namespace sim {
        * 3. Uncomment the code below */
       // clang-format off
     /*std::cout<<"Volume id, created "<<VolID<<" and DD4hep original "<<volumeID(aStep)<<std::endl;
-    std::cout<<"system id, created "<<28<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"system")<<std::endl;
-    std::cout<<"stave id, created "<<StaveID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"stave")<<std::endl;
-    std::cout<<"tower id, created "<<TowerID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"tower")<<std::endl;
-    std::cout<<"air id, created "<<1<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"air")<<std::endl;
-    std::cout<<"col id, created "<<ColumnID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"col")<<std::endl;
-    std::cout<<"row id, created "<<RowID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"row")<<std::endl;
-    std::cout<<"clad id, created "<<1<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"clad")<<std::endl;
-    std::cout<<"core id, created "<<CoreID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"core")<<std::endl;
-    std::cout<<"cherenkov id, created "<<CherenkovID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"cherenkov")<<std::endl;*/
+    std::cout<<"system id, created "<<m_detector.id()<<" and DD4hep original "<<m_userData.coder->get(volumeID(aStep),"system")<<std::endl;
+    std::cout<<"stave id, created "<<StaveID<<" and DD4hep original "<<m_userData.coder->get(volumeID(aStep),"stave")<<std::endl;
+    std::cout<<"tower id, created "<<TowerID<<" and DD4hep original "<<m_userData.coder->get(volumeID(aStep),"tower")<<std::endl;
+    std::cout<<"air id, created "<<m_userData.coder->get(VolID,"air")<<" and DD4hep original "<<m_userData.coder->get(volumeID(aStep),"air")<<std::endl;
+    std::cout<<"col id, created "<<ColumnID<<" and DD4hep original "<<m_userData.coder->get(volumeID(aStep),"col")<<std::endl;
+    std::cout<<"row id, created "<<RowID<<" and DD4hep original "<<m_userData.coder->get(volumeID(aStep),"row")<<std::endl;
+    std::cout<<"clad id, created "<<1<<" and DD4hep original "<<m_userData.coder->get(volumeID(aStep),"clad")<<std::endl;
+    std::cout<<"core id, created "<<CoreID<<" and DD4hep original "<<m_userData.coder->get(volumeID(aStep),"core")<<std::endl;
+    std::cout<<"cherenkov id, created "<<CherenkovID<<" and DD4hep original "<<m_userData.coder->get(volumeID(aStep),"cherenkov")<<std::endl;*/
       // clang-format on
 
       coll = (IsScin) ? collection(m_userData.collection_drbt_scin) : collection(m_userData.collection_drbt_cher);
@@ -270,7 +335,35 @@ namespace sim {
     G4int signalhit = 0;
     G4double hitTimeOfArrival = 0.;    // time of arrival of hit photons at SiPM
     G4double hitBinTimeOfArrival = 0.; // bin time of arrival of hit photons at SiPM
-    if (IsScin) {                      // it is a scintillating fiber
+
+    // Record the raw (un-quenched) MC-truth energy deposit of this step into the
+    // combined DREdep collection, keyed by this fiber's VolID. One contribution
+    // per step, same convention as SCEPCal_MainSDAction (the ECAL). No Birks and
+    // no signal smearing here: this is pure truth info, not an estimate of the
+    // reconstructed signal. The lambda carries no threshold of its own; each call
+    // site below applies the appropriate sub-threshold gate.
+    auto recordTruthEdep = [&]() {
+      Geant4HitCollection* edepColl = collection(m_userData.collection_edep);
+      auto* edepHit = edepColl->findByKey<Geant4Calorimeter::Hit>(VolID);
+      if (!edepHit) {
+        edepHit = new Geant4Calorimeter::Hit();
+        edepHit->cellID = VolID;
+        G4ThreeVector eFiberVec = DRTubesSglHpr::CalculateFiberPosition(aStep);
+        edepHit->position = Position(eFiberVec.x(), eFiberVec.y(), eFiberVec.z());
+        edepHit->energyDeposit = 0.;
+        edepColl->add(VolID, edepHit);
+      }
+      // extractContribution(aStep) returns the raw ionizing deposit (MeV, no Birks);
+      // the EDM4hep converter divides by 1000 -> GeV, so we do NOT multiply by GeV
+      // here (unlike the photo-electron signal hits below).
+      auto edepContrib = Geant4Calorimeter::Hit::extractContribution(aStep);
+      edepHit->energyDeposit += edepContrib.deposit;
+      edepHit->truth.emplace_back(edepContrib);
+      Geant4StepHandler eStepHandler(aStep);
+      mark(eStepHandler.track); // keep the depositing track so getParticle() resolves
+    };
+
+    if (IsScin) { // it is a scintillating fiber
 
       if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() == 0 || steplength == 0.) {
         return true; // not ionizing particle
@@ -285,6 +378,9 @@ namespace sim {
           thisPhotonsTimeBinWidth);
       if (signalhit == 0)
         return true;
+      // We are past the signalhit>0 check, so this scintillating step is above
+      // threshold: record its truth energy deposit (gate = the signal itself).
+      recordTruthEdep();
     } // end of scintillating fibre sigal calculation
 
     else { // it is a Cherenkov fiber
@@ -330,9 +426,36 @@ namespace sim {
           return true;
         } // end of swich cases
       } // end of optical photon
-      else {
+      else { // a charged ionizing particle crossing the Cherenkov fiber core
+        // The Cherenkov fiber has no scintillation signal of its own, and its
+        // optical signal is carried by separate optical-photon tracks (handled
+        // above) that are decoupled from this charged step -- so there is no native
+        // per-step signal here to gate on. Instead we record this fiber's MC-truth
+        // deposit only if the step actually RADIATED Cherenkov light, i.e. it
+        // produced an optical-photon secondary via the Cerenkov process. This is
+        // the physically meaningful gate for a Cherenkov fiber: it ties the truth
+        // deposit to the relativistic, EM-like steps the C channel is sensitive to,
+        // and it naturally drops non-radiating / sub-threshold ionization so the
+        // truth collection does not blow up. We inspect the per-step secondaries
+        // (GetSecondaryInCurrentStep), so the condition means "this step radiated".
+        bool emittedCerenkov = false;
+        const auto* secondaries = aStep->GetSecondaryInCurrentStep();
+        if (secondaries) {
+          for (const auto* sec : *secondaries) {
+            const G4VProcess* creator = sec->GetCreatorProcess();
+            if (sec->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition() && creator &&
+                creator->GetProcessSubType() == G4EmProcessSubType::fCerenkov) {
+              emittedCerenkov = true;
+              break;
+            }
+          } // loop over secondaries
+        } // if secondaries
+
+        if (emittedCerenkov)
+          recordTruthEdep();
+
         return true;
-      }
+      } // end of not optical photon
     } // end of Cherenkov fiber
 
     // We are going to create an hit per each fiber with a signal above 0

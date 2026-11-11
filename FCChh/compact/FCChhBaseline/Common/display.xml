@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+       xmlns:xs="http://www.w3.org/2001/XMLSchema"
+       xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+  <info name="FCCVis"
+        title="Visualisation parameters"
+        author="J. Lingemann"
+        url="no"
+        status="development"
+        version="1.0">
+    <comment>Visualisation parameters for FCChh baseline 1</comment>
+  </info>
+  <display>
+    <!-- Global palette (originally retrieved from FCChh_Visualisation.xml) -->
+    <vis name="TrackerVisEnv" r="0.87" g="0.27" b="0.15" alpha="0.0" showDaughters="true" visible="false"/>
+    <vis name="TrackerVis" r="0.87" g="0.27" b="0.15" alpha="1" showDaughters="false" visible="true"/>
+    <vis name="HCalEnvVis" r="0.25" g="0.29" b="0.91" alpha="0.1" showDaughters="true" visible="false"/>
+    <vis name="HCalVis" r="0.2" g="0.6" b="0.2" alpha="1" showDaughters="false" visible="true"/>
+    <vis name="HCalIronVis" r="0.3" g="0.3" b="0.3" alpha="1" showDaughters="false" visible="true"/>
+    <vis name="ECalEnvVis" r="0.25" g="0.29" b="0.91" alpha="1" showDaughters="true" visible="true"/>
+    <vis name="ECalVis" r="0.25" g="0.29" b="0.91" alpha="1" showDaughters="false" visible="true"/>
+    <vis name="ECalVisLAr" r="0.1" g="0.1" b="0.8" alpha="1" showDaughters="false" visible="true"/>
+    <vis name="ECalCryo" r="0.25" g="0.25" b="0.25" alpha="1" showDaughters="false" visible="true"/>
+
+    <!-- Solenoids (originally retrieved from FCChh_Solenoids.xml) -->
+    <vis name="SolenoidVis" r="0.3" g="0.3" b="0.3" alpha="1" showDaughters="false" visible="true"/>
+
+    <!-- Shielding (originally retrieved from FCChh_Shielding.xml) -->
+    <vis name="ShieldingVis" r="0.7" g="0.7" b="0.7" alpha="0.8" showDaughters="false" visible="true"/>
+
+    <!-- ECal barrel (originally retrieved from ECalInclined/FCChh_ECalBarrel_Common.xml) -->
+    <vis name="ecal_envelope" r="0.1" g="0.2" b="0.6" alpha="1" showDaughers="false" visible="true"/>
+
+    <!-- HCal barrel (originally retrieved from HCalTile/FCChh_HCalBarrel_TileCal.xml) -->
+    <vis name="hcal_steel_vis" r="0.5" g="0.5" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid"/>
+    <vis name="hcal_steel_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid"/>
+    <vis name="hcal_steel_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid"/>
+    <vis name="hcal_face_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid"/>
+    <vis name="hcal_end_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid"/>
+    <vis name="hcal_polystyrene_vis" r="0.0" g="0.6" b="0.3" alpha="0.8" showDaughters="true" visible="true"/>
+    <vis name="hcal_envelope" r="0.6" g="0.8" b="0.6" alpha="1" showDaughers="true" visible="true"/>
+    <vis name="hcal_barrel_seq1_vis" r="0.1" g="0.8" b="0.6" alpha="1" showDaughers="true" visible="true"/>
+    <vis name="hcal_barrel_seq2_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughers="true" visible="true"/>
+    <vis name="hcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughers="true" visible="true"/>
+    <vis name="hcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughers="true" visible="true"/>
+
+    <!-- HCal extended barrel (originally retrieved from HCalTile/FCChh_HCalExtendedBarrel_TileCal.xml) -->
+    <vis name="extHcal_steel_vis" r="0.5" g="0.5" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid"/>
+    <vis name="extHcal_steel_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid"/>
+    <vis name="extHcal_steel_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid"/>
+    <vis name="extHcal_face_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid"/>
+    <vis name="extHcal_end_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid"/>
+    <vis name="extHcal_polystyrene_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid"/>
+    <vis name="extHcal_envelope" r="0.6" g="0.8" b="0.6" alpha="1" showDaughers="true" visible="true"/>
+    <vis name="extHcal_barrel_seq1_vis" r="0.1" g="0.8" b="0.6" alpha="1" showDaughers="true" visible="true"/>
+    <vis name="extHcal_barrel_seq2_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughers="true" visible="true"/>
+    <vis name="extHcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughers="true" visible="true"/>
+    <vis name="extHcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughers="true" visible="true"/>
+
+    <!-- Tail catcher (originally retrieved from TailCatcher/FCChh_TailCatcher.xml) -->
+    <vis name="MuonEnvelopeVis" r="0.87" g="0.5" b="0.0" a="0.2" showDaughters="false" visible="true"/>
+    <vis name="MuonEnvelopeEndcapVis" r="0.91" g="0.64" b="0.29" a="0.2" showDaughters="false" visible="true"/>
+    <vis name="MuonEnvelopeFwdVis" r="0.90" g="0.72" b="0.48" a="0.2" showDaughters="false" visible="true"/>
+
+    <!-- TrackerTkLayout (originally referenced in TrackerTkLayout/Tracker.xml) -->
+    <vis name="violet" r="0.56" g="0.0" b="1.0" alpha="1" showDaughters="false" visible="true"/>
+    <vis name="BlueVisTrans" r="0.0" g="0.0" b="1.0" alpha="0.3" showDaughters="true" visible="true"/>
+    
+    <!-- Subdetector variants not included by default in FCChh_DectMaster.xml -->
+
+    <!-- Beam Tube (originally retrieved from FCChh_BeamTube.xml) -->
+    <vis name="BeamPipeVis" r="0.2" g="0.7" b="0.3" a="1" showDaughters="false" visible="true"/>
+
+    <!-- HCal Air (originally retrieved from Common/HcalAir.xml) -->
+    <vis name="HCalEnvelopeVis" r="0.2" g="0.6" b="0.2" alpha="1" showDaughters="false" visible="true"/>
+
+    <!-- ECal Air (originally retrieved from FCChh_ECalAir.xml) -->
+    <vis name="ECalEnvelopeVis" r="0.25" g="0.29" b="0.91" a="0.2" showDaughters="false" visible="true"/>
+    <vis name="ECalEnvelopeExtBarVis" r="0.49" g="0.51" b="0.91" a="0.2" showDaughters="false" visible="true"/>
+    <vis name="ECalEnvelopeFwdVis" r="0.65" g="0.67" b="0.87" a="0.2" showDaughters="false" visible="true"/>
+
+    <!-- Muon Air (originally retrieved from FCChh_MuonAir.xml) -->
+    <vis name="MuonAirEnvelopeVis" r="0.90" g="0.72" b="0.48" a="0.2" showDaughters="false" visible="true"/>
+
+  </display>
+</lccdd>

@@ -15,10 +15,6 @@
 
   </define>
 
-  <display>
-    <vis name="EndCalVis" r="0.8" g="0.8" b="0" showDaughters="false" visible="true"/>
-  </display>
-
   <detectors>
 
     <detector name="CaloBarrel" type="DD4hep_DiskTracker" id="DetID_Calo_Barrel" reflect="false" vis="EndCalVis">

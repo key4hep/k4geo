@@ -12,7 +12,7 @@ project(${PackageName} LANGUAGES CXX)
 
 # project version
 SET( ${PackageName}_VERSION_MAJOR 0 )
-SET( ${PackageName}_VERSION_MINOR 25 )
+SET( ${PackageName}_VERSION_MINOR 27 )
 SET( ${PackageName}_VERSION_PATCH 0 )
 
 SET( ${PackageName}_VERSION "${${PackageName}_VERSION_MAJOR}.${${PackageName}_VERSION_MINOR}" )
@@ -22,10 +22,11 @@ set(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH}  ${PROJECT_SOURCE_DIR}/cmake )
 set(LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
-include(cmake/Key4hepConfig.cmake)
-
 include(GNUInstallDirs)
 set(CMAKE_INSTALL_LIBDIR lib)
+
+include(cmake/Key4hepConfig.cmake)
+
 set(CMAKE_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
 #------------- set the default installation directory to be the source directory
@@ -44,6 +45,7 @@ ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 option(BUILD_TESTING "Enable and build tests" ON)
 option(INSTALL_COMPACT_FILES "Copy compact files to install area" OFF)
 option(INSTALL_BEAMPIPE_STL_FILES "Download CAD files for building the detailed beampipe" OFF)
+option(INSTALL_VERTEX_STL_FILES "Download CAD files for IDEA vertex detector" OFF)
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -52,19 +54,13 @@ find_package(DD4hep 1.31 REQUIRED COMPONENTS DDRec DDG4 DDParsers)
 find_package ( ROOT REQUIRED COMPONENTS Geom GenVector)
 message ( STATUS "ROOT_VERSION: ${ROOT_VERSION}" )
 
-find_package( Geant4 REQUIRED ) 
-OPTION(K4GEO_USE_LCIO "Enable or disable the use of LCIO, which is needed for some detector constructors and plugins" ON)
+find_package( Geant4 REQUIRED )
+
+# Deprecated: k4geo no longer uses LCIO. The option is kept temporarily so that
+# existing configurations passing it do not fail outright.
+OPTION(K4GEO_USE_LCIO "Deprecated and without effect: k4geo does not depend on LCIO anymore" OFF)
 if(K4GEO_USE_LCIO)
-  find_package(LCIO REQUIRED)
-  # Shim for older LCIO versions
-  if(NOT TARGET LCIO::lcio)
-    add_library(LCIO::lcio INTERFACE IMPORTED GLOBAL)
-    set_target_properties(LCIO::lcio
-      PROPERTIES
-      INTERFACE_INCLUDE_DIRECTORIES "${LCIO_INCLUDE_DIRS}"
-      INTERFACE_LINK_LIBRARIES "${LCIO_LIBRARIES}"
-    )
-  endif()
+  message(DEPRECATION "K4GEO_USE_LCIO is deprecated and has no effect, since k4geo does not depend on LCIO anymore. The option will be removed in a future release, please stop setting it.")
 endif()
 
 file(GLOB sources
@@ -80,29 +76,6 @@ file(GLOB sources
   ./plugins/LinearSortingPolicy.cpp
   ./detector/PID/ARC_geo_o1_v01.cpp
   )
-
-if(NOT K4GEO_USE_LCIO)
-  set(lcio_sources # in ./detector/tracker
-    TrackerEndcap_o2_v05_geo.cpp
-    SiTrackerEndcap_o2_v02ext_geo.cpp
-    TrackerBarrel_o1_v03_geo.cpp
-    TrackerBarrel_o1_v04_geo.cpp
-    TrackerBarrel_o1_v05_geo.cpp
-    TrackerBarrel_o1_v06_geo.cpp
-    TrackerEndcap_o1_v05_geo.cpp
-    TrackerEndcap_o2_v06_geo.cpp
-    TrackerEndcap_o2_v07_geo.cpp
-    StrawTubeTracker_o1_v01_geo.cpp
-    VertexBarrel_detailed_o1_v01_geo.cpp
-    VertexEndcap_o1_v05_geo.cpp
-    ZPlanarTracker_geo.cpp
-    ZSegmentedPlanarTracker_geo.cpp
-    )
-  foreach(lcio_source ${lcio_sources})
-    list(FILTER sources EXCLUDE REGEX "${lcio_source}")
-  endforeach()
-  message(STATUS "Use of LCIO is DISABLED, some detectors that depend on LCIO will not be built: ${lcio_sources}")
-endif()
 
 if(${DD4hep_VERSION} VERSION_LESS 1.29)
   set(FILES_DEPENDINGON_DCH_INFO_H "DriftChamber_o1_v02.cpp" )
@@ -126,6 +99,8 @@ file(GLOB G4sources
   ./plugins/DRTubesSDAction.cpp
   ./plugins/SCEPCal_MainSDAction.cpp
   ./plugins/SCEPCal_TimingSDAction.cpp
+  ./plugins/GrainitaCaloSDAction.h
+  ./plugins/GrainitaCaloSDAction.cpp
 )
 
 if(DD4HEP_USE_PYROOT)
@@ -149,11 +124,6 @@ target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detect
 
 target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ROOT::Core detectorSegmentations detectorCommon)
 target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core detectorSegmentations detectorCommon podio::podioRootIO EDM4HEP::edm4hep ${Geant4_LIBRARIES})
-
-if(K4GEO_USE_LCIO)
-  target_link_libraries(${PackageName}   LCIO::lcio)
-  target_link_libraries(${PackageName}G4 LCIO::lcio)
-endif()
 
 #Create this_package.sh file, and install
 dd4hep_instantiate_package(${PackageName})
@@ -186,6 +156,9 @@ FILE(GLOB hfiles "ILD/include/*.h")
 INSTALL(FILES ${hfiles}
   DESTINATION include/${PackageName}
   )
+
+# install dd4hep2root
+INSTALL(PROGRAMS utils/dd4hep2root.py DESTINATION bin RENAME dd4hep2root)
 
 #--- install compact files------------------------------
 if(INSTALL_COMPACT_FILES)
@@ -256,4 +229,47 @@ if(INSTALL_BEAMPIPE_STL_FILES)
     file(MAKE_DIRECTORY share/k4geo/FCCee)
     INSTALL(DIRECTORY ${OUTPUT_DIR} DESTINATION share/k4geo/FCCee/MDI/compact/stl_files )
 
+endif()
+
+if(INSTALL_VERTEX_STL_FILES)
+
+    file(MAKE_DIRECTORY share/k4geo/FCCee)
+
+    set(STL_FILES
+          "VertexCoolingCones_o1_v03.stl"
+          "VertexSupport_CarbonFiber_o1_v03.stl"
+          "VertexSupport_PEEK_o1_v03.stl"
+        )
+    # Set main FCC url
+    set(FCC_URL "https://fccsw.web.cern.ch/fccsw/filesForSimDigiReco")
+    set(STL_PATH "IDEA/IDEA_o1_v03/STL_FILES")
+
+    # Set the output directory where the file will be placed
+    set(OUTPUT_DIR "${PROJECT_SOURCE_DIR}/FCCee/IDEA/compact/IDEA_o1_v03/")
+
+    foreach(STL_FILE ${STL_FILES})
+        set(FULL_URL "${FCC_URL}/${STL_PATH}/${STL_FILE}")
+        message(DEBUG "Downloading file ${FULL_URL}")
+        set(OUTPUT_FILE "${OUTPUT_DIR}/${STL_FILE}")
+
+        if(EXISTS "${OUTPUT_FILE}")
+          message(STATUS "File ${STL_FILE} already exists. Skipping download.")
+        else()
+          # Download the file
+          file(DOWNLOAD ${FULL_URL} ${OUTPUT_FILE}
+            SHOW_PROGRESS
+            STATUS download_status)
+
+          list(GET download_status 0 status_code)
+          if(NOT status_code EQUAL 0)
+              list(GET download_status 1 error_message)
+              message(FATAL_ERROR "Failed to download file: ${error_message}")
+          endif()
+        endif()
+
+        install(
+            FILES "${OUTPUT_DIR}/${STL_FILE}"
+            DESTINATION share/k4geo/FCCee/IDEA/compact/IDEA_o1_v03/stl_files
+        )
+    endforeach()
 endif()

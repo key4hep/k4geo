@@ -20,6 +20,9 @@ It also allows the possibility to segment the volume into N layers
 **/
 static dd4hep::Ref_t createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector sensDet) {
   xml_det_t x_det = e;
+  if (x_det.isSensitive()) {
+    sensDet.setType("calorimeter");
+  }
 
   // get detector name, ID and dimensions from compact file
   std::string name = x_det.nameStr();
@@ -118,9 +121,7 @@ static dd4hep::Ref_t createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4he
             x_det.nameStr() + _toString(iEndcap, "_side%d") + _toString(iLayer, "_layer%d"), cylinderL,
             lcdd.material(cylinderDim.materialStr()));
         if (x_det.isSensitive()) {
-          dd4hep::xml::Dimension sdType(x_det.child(_U(sensitive)));
           cylinderLVol.setSensitiveDetector(sensDet);
-          sensDet.setType(sdType.typeStr());
         }
         detMaster.setVisAttributes(lcdd, x_det.visStr(), cylinderLVol);
 
@@ -248,9 +249,7 @@ static dd4hep::Ref_t createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4he
       dd4hep::Volume cylinderLVol(x_det.nameStr() + _toString(iLayer, "_layer%d"), cylinderL,
                                   lcdd.material(cylinderDim.materialStr()));
       if (x_det.isSensitive()) {
-        dd4hep::xml::Dimension sdType(x_det.child(_U(sensitive)));
         cylinderLVol.setSensitiveDetector(sensDet);
-        sensDet.setType(sdType.typeStr());
       }
       detMaster.setVisAttributes(lcdd, x_det.visStr(), cylinderLVol);
 

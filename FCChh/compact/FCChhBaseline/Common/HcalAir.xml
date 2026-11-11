@@ -11,9 +11,6 @@
         version="1.0">
     <comment>HCal Place-Holder</comment>
   </info>
-  <display>
-    <vis name="HCalEnvelopeVis" r="0.2" g="0.6" b="0.2" alpha="1" showDaughters="false" visible="true"/>
-  </display>
   <detectors>
     <detector name="HCalEnvelope" type="SimpleCylinder_o1_v01"  vis="HCalEnvelopeVis">
       <comment>Envelope for HCal barrel</comment>

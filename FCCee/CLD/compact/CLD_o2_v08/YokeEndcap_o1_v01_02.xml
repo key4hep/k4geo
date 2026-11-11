@@ -8,11 +8,6 @@
         </readout>
     </readouts>
 
-        <!--  Definition of the used visualization attributes    -->
-    <display>
-        <vis name="YokeEndcapVis"          alpha="1" r="1"    g="0.4"  b="0.62" showDaughters="true" visible="true"/>
-    </display>
-
     <!--  Includes for sensitives and support                -->
     <detectors>
 

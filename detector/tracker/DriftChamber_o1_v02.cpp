@@ -294,7 +294,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
       DCH_length_t swlength = 0.5 * DCH_i->WireLength(ilayer, cell_rave_z0) -
                               cell_swire_radius * cos(DCH_i->stereoangle_z0(cell_rave_z0)) - safety_z_interspace;
       if (buildSenseWires) {
-        dd4hep::Tube swire_s(0., dch_SWire_thickness, swlength);
+        dd4hep::Tube swire_s(0., cell_swire_radius, swlength);
         dd4hep::Volume swire_v(cell_name + "_swire", swire_s, dch_SWire_material);
         swire_v.setVisAttributes(wiresVis);
         // Change sign of stereo angle to place properly the wire inside the twisted tube

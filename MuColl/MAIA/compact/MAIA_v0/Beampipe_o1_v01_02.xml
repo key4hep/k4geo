@@ -3,6 +3,14 @@
     <define>
         <constant name="Beampipe_inner_radius" value="2.3*cm" />
         <constant name="Beampipe_outer_radius" value="2.4*cm" />
+
+        <!-- z at which the outer surface of the nozzle reaches the inner / outer radius of
+             the wall. The wall runs as a cylinder up to the first, and is then closed off
+             by a conical section following the nozzle until it is fully absorbed by it at
+             the second. The env_safety offset keeps the Be clear of the W by ~2 um in r.
+             The nozzle profile itself lives in MAIA_v0.xml, so these track it. -->
+        <constant name="Beampipe_wall_zjoint" value="Nozzle_zmin + (Beampipe_inner_radius - Nozzle_rmax_zmin)/Nozzle_outer_slope - env_safety" />
+        <constant name="Beampipe_wall_zend"   value="Nozzle_zmin + (Beampipe_outer_radius - Nozzle_rmax_zmin)/Nozzle_outer_slope - env_safety" />
     </define>
     
     <!--  Definition of the used visualization attributes    -->
@@ -20,9 +28,58 @@
                 <shape type="Assembly"/>
             </envelope>
 
-            <section type="Center" start="0*mm" end="Nozzle_zmin" rMin1="Beampipe_inner_radius" rMin2="Beampipe_inner_radius" rMax1="Beampipe_outer_radius" rMax2="Beampipe_outer_radius" material="Beryllium" name="VertexInnerBe" />
+            <!-- Cylindrical part of the wall: from the IP up to the point where the outer
+                 surface of the nozzle tip reaches Beampipe_inner_radius. -->
+            <section type="Center" start="0*mm" end="Beampipe_wall_zjoint" rMin1="Beampipe_inner_radius" rMin2="Beampipe_inner_radius" rMax1="Beampipe_outer_radius" rMax2="Beampipe_outer_radius" material="Beryllium" name="VertexInnerBe" />
+
+            <!-- Conical closing section: the inner surface follows the nozzle tip until the
+                 wall has been fully absorbed by it at Beampipe_wall_zend. -->
+            <section type="Center" start="Beampipe_wall_zjoint" end="Beampipe_wall_zend" rMin1="Beampipe_inner_radius" rMin2="Beampipe_outer_radius" rMax1="Beampipe_outer_radius" rMax2="Beampipe_outer_radius" material="Beryllium" name="VertexInnerBeNozzleJoint" />
+
+            <!-- NOTE: the driver (DD4hep_Beampipe_o1_v01) only ever builds the *wall* of a
+                 section; with nocore="true" the inside is left to the mother volume. The
+                 volume inside the pipe is therefore built explicitly below. -->
 
         </detector>
-        
+
+        <!-- Everything inside the beam pipe, from -Nozzle_tip_zmax to +Nozzle_tip_zmax,
+             filled with the "beam" material: a tube of radius Beampipe_inner_radius from
+             which both tungsten nozzle tips are subtracted, so each nozzle sits fully
+             inside it and the bore through the nozzle stays part of the beam volume.
+             Built as a single volume so that no geometry boundary sits at the IP. -->
+        <detector name="BeampipeCore" type="MaterialEnvelope_o1_v01" vis="BeamPipeVis">
+            <envelope vis="BlueVis">
+                <shape type="BooleanShape" operation="Subtraction" material="beam">
+                    <shape type="BooleanShape" operation="Subtraction">
+                        <shape type="Tube" rmin="0" rmax="Beampipe_inner_radius" dz="Nozzle_tip_zmax"/>
+                        <shape type="Cone" rmin1="Nozzle_rmax_zmin - env_safety" rmax1="Nozzle_rmax_zmin + env_safety" rmin2="Nozzle_rmin_tip - env_safety" rmax2="Nozzle_rmax_tip + env_safety" z="(Nozzle_tip_zmax - Nozzle_zmin)/2"/>
+                        <position x="0" y="0" z="(Nozzle_zmin + Nozzle_tip_zmax)/2"/>
+                    </shape>
+                    <!-- -z tip: Cone z1/z2 ends swapped so a plain translation lands each end correctly -->
+                    <shape type="Cone" rmin1="Nozzle_rmin_tip - env_safety" rmax1="Nozzle_rmax_tip + env_safety" rmin2="Nozzle_rmax_zmin - env_safety" rmax2="Nozzle_rmax_zmin + env_safety" z="(Nozzle_tip_zmax - Nozzle_zmin)/2"/>
+                    <position x="0" y="0" z="-(Nozzle_zmin + Nozzle_tip_zmax)/2"/>
+                </shape>
+                <position x="0" y="0" z="0"/>
+            </envelope>
+        </detector>
+
+
+        <!-- Beam volume inside the bore of the nozzle, from the end of the nozzle tip
+             (where it joins BeampipeCore) out to the end of the nozzle. rmax follows the
+             nozzle's rmin, inset by env_safety so the two never touch. -->
+        <detector name="BeampipeBore_right" type="DD4hep_PolyconeSupport" vis="BeamPipeVis">
+            <material name="beam"/>
+            <zplane z="Nozzle_tip_zmax" rmin="0" rmax="Nozzle_rmin_tip - env_safety" />
+            <zplane z="Nozzle_kink_z"   rmin="0" rmax="Nozzle_rmin_kink - env_safety" />
+            <zplane z="Nozzle_end_z"    rmin="0" rmax="Nozzle_rmin_end - env_safety" />
+        </detector>
+
+        <detector name="BeampipeBore_left" type="DD4hep_PolyconeSupport" vis="BeamPipeVis">
+            <material name="beam"/>
+            <zplane z="-Nozzle_tip_zmax" rmin="0" rmax="Nozzle_rmin_tip - env_safety" />
+            <zplane z="-Nozzle_kink_z"   rmin="0" rmax="Nozzle_rmin_kink - env_safety" />
+            <zplane z="-Nozzle_end_z"    rmin="0" rmax="Nozzle_rmin_end - env_safety" />
+        </detector>
+
     </detectors>
 </lccdd>

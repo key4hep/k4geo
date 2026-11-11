@@ -29,14 +29,6 @@
         </detector>
     </detectors>
     
-    <display>
-        <vis name="VTXSensitiveVis"     alpha="1.0" r="1.0"     g="1.0"  b="0.0"      showDaughters="true"  visible="true"/>
-        <vis name="VTXPeripheryVis"     alpha="1.0" r="1.0"     g="0.9"  b="0.1"      showDaughters="true"  visible="true"/>
-        <vis name="TerminalPartVis"     alpha="1.0" r="1.0"     g="0.65" b="0.0"    showDaughters="true"  visible="true"/>
-        <vis name="TrussStructureVis"   alpha="0.3" r="0.5"     g="0.5"  b="0.5"    showDaughters="true"  visible="true"/>
-    </display>
-     
-
     <define>
         <!-- Vertex inner barrel (VTXIB): Let's take the ARCADIA sensor! -->
             <constant name="VTXIB_sens_z" value="1.6*cm"/> <!-- Chip length, use modified ARCADIA with length of 1.6cm instead of 2.56cm-->       

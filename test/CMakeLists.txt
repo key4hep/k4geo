@@ -114,12 +114,18 @@ SET_TESTS_PROPERTIES( ${test_name} PROPERTIES TIMEOUT 900)
 endif()
 
 #--------------------------------------------------
-# test for IDEA o2 v01
-#if(DCH_INFO_H_EXIST)
-#SET( test_name "test_IDEA_o2_v01" )
-#add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o2_v01/IDEA_o2_v01.xml --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o2_v01.py -N 1 --random.seed 1988301045 --outputFile=testIDEA_o2_v01.root )
-#    SET_TESTS_PROPERTIES( ${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception; EXCEPTION;ERROR;Error" TIMEOUT 600)
-#endif()
+# test for IDEA o2 v01 -- CI wedge (partial barrel geometry).
+# The full IDEA_o2_v01 geometry needs ~18 GB and cannot run on CI, so we load a barrel phi/theta
+# wedge (IDEA_o2_v01_CI.xml) and fire a pi- into it to exercise the SCEPCal + DRBT sensitive
+# detectors.  The steering skips the DREndcapTubes SD when the compact file is a "*_CI.xml".
+if(DCH_INFO_H_EXIST)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o2_v01_CI/IDEA_o2_v01_CI.xml
+  N_EVENTS 1
+  EXTRA_ARGS --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o2_v01.py
+             --gun.particle pi- --gun.energy 10*GeV --gun.direction 0.966,0.259,0.01
+             --random.seed 1988301045
+  PROPERTIES TIMEOUT 900 RUN_SERIAL TRUE)
+endif()
 
 #--------------------------------------------------
 # test for ARC o1 v01
@@ -177,11 +183,19 @@ add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_
   EXTRA_ARGS --gun.distribution uniform --gun.particle geantino)
 
 #--------------------------------------------------
+# Tests for ALFA_01_v00 
+#--------------------------------------------------
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALFA/compact/ALFA_o1_v00/ALFA_o1_v00.xml
+    EXTRA_ARGS --gun.distribution uniform --gun.particle e- --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_ALFA_o1_v00.py)
+
+#--------------------------------------------------
 # Tests for MuonCollider geometries
 #--------------------------------------------------
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/MAIA_v0/MAIA_v0.xml)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/MAIA_v1/MAIA_v1.xml)
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuColl/compact/MuColl_v1/MuColl_v1.xml)
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuSIC/compact/MuSIC_v2/MuSIC_v2.xml)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuSIC/compact/MuSIC_v3/MuSIC_v3.xml)
 
 #--------------------------------------------------
 # check if files named the same contain the same in FCCee
@@ -218,7 +232,10 @@ add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/*/
 # add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/*/IDEA_o?_v0?.xml)
 
 
-set(test_environment "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/lib:$ENV{LD_LIBRARY_PATH}")
+# k4geo_DIR is what compact files use to locate the shipped field maps; point it
+# at the source tree so the tests use this checkout rather than an installed k4geo.
+set(test_environment "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/lib:$ENV{LD_LIBRARY_PATH}"
+                     "k4geo_DIR=${PROJECT_SOURCE_DIR}")
 get_property(test_names DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY TESTS)
 set_tests_properties(${test_names} PROPERTIES ENVIRONMENT "${test_environment}"
                                               FAIL_REGULAR_EXPRESSION " Exception; EXCEPTION;ERROR;Error")

@@ -225,8 +225,7 @@ namespace sim {
         G4double energy = step->GetTrack()->GetTotalEnergy();
 
         // default hit (optical photon count)
-        Geant4DRCalorimeter::Hit* drHit =
-            coll->find<Geant4DRCalorimeter::Hit>(CellIDCompare<Geant4DRCalorimeter::Hit>(cID));
+        Geant4DRCalorimeter::Hit* drHit = coll->findByKey<Geant4DRCalorimeter::Hit>(cID);
 
         if (!drHit) {
           drHit = new Geant4DRCalorimeter::Hit(m_userData.fWavlenStep, m_userData.fTimeStep);
@@ -267,8 +266,7 @@ namespace sim {
 
         // copy-paste of the dd4hep scintillation calorimeter SD
         Geant4HitCollection* coll_scint = collection(m_collectionID + 1);
-        Geant4Calorimeter::Hit* caloHit =
-            coll_scint->find<Geant4Calorimeter::Hit>(CellIDCompare<Geant4Calorimeter::Hit>(cID));
+        Geant4Calorimeter::Hit* caloHit = coll_scint->findByKey<Geant4Calorimeter::Hit>(cID);
         HitContribution contrib = Geant4Calorimeter::Hit::extractContribution(step, true);
 
         if (!caloHit) {
@@ -310,7 +308,7 @@ namespace sim {
                             global.z() * dd4hep::millimeter / CLHEP::millimeter);
 
       auto cID = m_segmentation->cellID(loc, glob, volID); // This returns cID corresponding to SiPM Wafer
-      Hit* hit = coll->find<Hit>(CellIDCompare<Hit>(cID));
+      Hit* hit = coll->findByKey<Hit>(cID);
 
       G4double hitTime = step->GetPostStepPoint()->GetGlobalTime();
       G4double energy = step->GetTrack()->GetTotalEnergy();

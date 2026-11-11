@@ -50,3 +50,7 @@ DECLARE_SEGMENTATION(SCEPCal_MainSegmentation_k4geo,
 #include "detectorSegmentations/SCEPCal_TimingSegmentation_k4geo.h"
 DECLARE_SEGMENTATION(SCEPCal_TimingSegmentation_k4geo,
                      create_segmentation<dd4hep::DDSegmentation::SCEPCal_TimingSegmentation_k4geo>)
+
+#include "detectorSegmentations/FCCSWGridRhoPhiTheta_k4geo.h"
+DECLARE_SEGMENTATION(FCCSWGridRhoPhiTheta_k4geo,
+                     create_segmentation<dd4hep::DDSegmentation::FCCSWGridRhoPhiTheta_k4geo>)
