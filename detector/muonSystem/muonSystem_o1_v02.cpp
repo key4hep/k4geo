@@ -102,13 +102,13 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
   double angle_clearance    = 0.0;
 
   // -------------------------------------------------------------------------
-  //  Parse Barrel layer sequence 
+  //  Barrel parameters
   // -------------------------------------------------------------------------
   auto BarrelXML = xmlElement.child(_Unicode(Barrel));
   double radius      = BarrelXML.attr<double>("rmin");
   double barrelLength= BarrelXML.attr<double>("length");
 
-  //count detector layers so we can compute detectorVolumeThickness
+  // count detector layers so we can compute detectorVolumeThickness
   int numBarrelDetectorLayers = 0;
   for (xml_coll_t layerIt(BarrelXML, _Unicode(layer)); layerIt; ++layerIt) {
       xml_comp_t layer(layerIt);
@@ -396,26 +396,26 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
             yRemainderRotation = std::atan(rectangleEnvX / (rectangleEnvZ - 2.0 * overlapZ));
           dd4hep::RotationY remainderRotationY(yRemainderRotation);
 
-          dd4hep::Position rectangeEnvelopeTrans;
+          dd4hep::Position rectangleEnvelopeTrans;
           if (rectangle == numRectangles) {
-            rectangeEnvelopeTrans = (rectangleEnvZ <= (dimensions.z() + clearance / 2.0) / 10.0)
+            rectangleEnvelopeTrans = (rectangleEnvZ <= (dimensions.z() + clearance / 2.0) / 10.0)
                 ? dd4hep::Position(rectangleRemainderEnvXPos, 0.0, rectangleEnvZPos)
                 : dd4hep::Position(0.0, 0.0, rectangleEnvZPos);
           } else {
-            rectangeEnvelopeTrans = dd4hep::Position(0.0, 0.0, rectangleEnvZPos);
+            rectangleEnvelopeTrans = dd4hep::Position(0.0, 0.0, rectangleEnvZPos);
           }
 
           dd4hep::PlacedVolume rectangleEnvelopePhys;
           if (rectangle == numRectangles) {
             if (side % 2 == 0)
-              rectangleEnvelopePhys = sideVol.placeVolume(rectangleEnvVol, dd4hep::Transform3D(remainderRotationY, rectangeEnvelopeTrans));
+              rectangleEnvelopePhys = sideVol.placeVolume(rectangleEnvVol, dd4hep::Transform3D(remainderRotationY, rectangleEnvelopeTrans));
             else
-              rectangleEnvelopePhys = sideVol2.placeVolume(rectangleEnvVol, dd4hep::Transform3D(remainderRotationY, rectangeEnvelopeTrans));
+              rectangleEnvelopePhys = sideVol2.placeVolume(rectangleEnvVol, dd4hep::Transform3D(remainderRotationY, rectangleEnvelopeTrans));
           } else {
             if (side % 2 == 0)
-              rectangleEnvelopePhys = sideVol.placeVolume(rectangleEnvVol, dd4hep::Transform3D(rotationY, rectangeEnvelopeTrans));
+              rectangleEnvelopePhys = sideVol.placeVolume(rectangleEnvVol, dd4hep::Transform3D(rotationY, rectangleEnvelopeTrans));
             else
-              rectangleEnvelopePhys = sideVol2.placeVolume(rectangleEnvVol, dd4hep::Transform3D(rotationY, rectangeEnvelopeTrans));
+              rectangleEnvelopePhys = sideVol2.placeVolume(rectangleEnvVol, dd4hep::Transform3D(rotationY, rectangleEnvelopeTrans));
           }
           dd4hep::DetElement rectangleEnvelopeDE(sideDE, rectangleEnvelopeName + "DE", rectangle);
           rectangleEnvelopeDE.setPlacement(rectangleEnvelopePhys);

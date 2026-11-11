@@ -25,18 +25,18 @@
        <constant name = "CarbonFiberThick"                      value = "0.0001*mm"/>
        <constant name = "CarbonFiber2Thick"                     value = "0.1*mm"/>
        <constant name = "SiThick"                               value = "1.6*mm"/>
-       <constant name = "mRWELLTotalThickness"                  value = "G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarbonFiberThick+CuThick+CarbonFiber2Thick+CuThick+SiThick"/> <!-- This sequense is the current order of mRWELL (total 10 slices) -->
+       <constant name = "mRWELLTotalThickness"                  value = "G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarbonFiberThick+CuThick+CarbonFiber2Thick+CuThick+SiThick"/> <!-- This sequence is the current order of mRWELL (total 10 slices) -->
 
        <constant name = "mRWELLYLength"                         value = "250*mm"/>
        <constant name = "mRWELLZLength"                         value = "250*mm"/>
 
-       <constant name = "overlapingY"                           value = "5*mm"/> <!-- the common distance between mRWELL chambers in Y direction -->
-       <constant name = "overlapingZ"                           value = "5*mm"/> <!-- the common distance between mRWELL chambers in Z direction -->
+       <constant name = "overlappingY"                          value = "5*mm"/> <!-- overlap of two neighbouring mRWELL chambers in Y: they cover the same 5 mm, so there is no dead area between them -->
+       <constant name = "overlappingZ"                          value = "5*mm"/> <!-- overlap of two neighbouring mRWELL chambers in Z: they cover the same 5 mm, so there is no dead area between them -->
        <constant name = "clearance"                             value = "1*mm"/> <!-- it's a small distance to be used to avoid overlapping between the different volumes ~ 1 mm -->
      <!-- %%%%%%                      Iron yoke thickness (500 mm)          %%%%%% -->
       <constant name = "YokeThickness"                          value = "500*mm"/>
       <!-- %%%%%%                      Readout description                  %%%%%% -->
-      <constant name = "MuonSystemReadoutID"            type="string"  value = "system:5,type:-2,layer:2,chamber:13,slice:1,y:-10,z:-10"/>  <!-- The bit field is divided into 2^5 systems(IDEA sub-detectors), 2^2 types(0 = Barrel Muon System, +1 = positive endcap, and -1 = negative endcap"), 2^2 layers(number of layers in barrel for example) ,2^13 chambers(the number of muRWELL chambers in every layer), 2^1 slice(number of sensitive layers inside every chambers), and 2^10 y&z strips in every sensitive layer-->
+      <constant name = "MuonSystemReadoutID"            type="string"  value = "system:5,type:-2,layer:2,chamber:13,slice:1,y:-10,z:-10"/>  <!-- The bit field is divided into 2^5 systems(IDEA sub-detectors), 2^2 types(0 = Barrel Muon System, +1 = positive endcap, and -1 = negative endcap), 2^2 layers(number of layers in barrel for example) ,2^13 chambers(the number of muRWELL chambers in every layer), 2^1 slice(number of sensitive layers inside every chamber), and 2^10 y&z strips in every sensitive layer-->
   </define>
 
   <readouts>
@@ -51,8 +51,8 @@
     <detector name="Muon-System" type="muonSystem_o1_v01" id="DetID_muonSystem" readout="MuonSystemCollection">
       <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
 
-      <!-- Specify the detector parameters and the overlap /// if you want exclude any component, e.g: endcap, just put endcapDetectorLayerss=0 in the Endcap Entry  // radius is put in the middle, so its not the inner neither the outer -->
-      <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
+      <!-- Specify the detector parameters and the overlap. If you want to exclude a component, e.g. the endcap, set numDetectorLayers=0 in the Endcap entry. The radius is put in the middle, so it is neither the inner nor the outer one -->
+      <generalParameters numSides="numberOfSides" overlapY="overlappingY" overlapZ="overlappingZ" clearance="clearance"/>
       <Barrel numDetectorLayers ="4"  rmin="BarrelFirstLayerRadius" length="BarrelLength" numYokes="3" yoke_Thickness="YokeThickness" yoke_Material="G4_Fe"/>
       <Endcap numDetectorLayers="4"  rmin="EndcapLayersInnerRadius"  z_offset="EndcapFirstLayerZOffset" numYokes="3" yoke_Thickness="YokeThickness" yoke_Material="G4_Fe" />
 
