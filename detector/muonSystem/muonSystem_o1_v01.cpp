@@ -696,6 +696,12 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
                                                  barrelLength);
     std::string barrelRadiatorEnvName = name + "-BarrelRadiatorLayer" + std::to_string(numBarrelRadiatorLayer + 1);
     dd4hep::Volume BarrelRadiatorLayerVolume(barrelRadiatorEnvName, BarrelRadiatorLayer, mat);
+    dd4hep::PlacedVolume radiatorLayerPhys = BarrelVolume.placeVolume(BarrelRadiatorLayerVolume);
+    dd4hep::DetElement BarrelRadiatorLayerDE(
+        BarrelDE, name + "-Barrel_RadiatorLayerDE_" + std::to_string(numBarrelRadiatorLayer + 1),
+        numBarrelRadiatorLayer + 1);
+    BarrelRadiatorLayerDE.setPlacement(radiatorLayerPhys);
+    BarrelRadiatorLayerVolume.setVisAttributes(lcdd.visAttributes("no_vis"));
 
     double barrelRadiatorSideLength =
         2 * (barrelRadiatorLayerRMid - barrelRadiatorThickness / 2.0) * std::tan(halfShapeAngle_radians);
@@ -705,11 +711,6 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
     for (int side = 0; side < numSides; ++side) {
       // sideID = 100 * (barrel radiator layer number, from 1) + (side number, from 1)
       int sideID = (numBarrelRadiatorLayer + 1) * 100 + (side + 1);
-      dd4hep::Trapezoid barrelRadiatorEnvelope(barrelLength / 2.0, barrelLength / 2.0, barrelRadiatorSideLength / 2.0,
-                                               barrelRadiatorSideLength2 / 2.0, barrelRadiatorThickness / 2.0);
-      std::string barrelRadiatorEnvelopeName = name + "-BarrelRadiatorSide" + std::to_string(sideID);
-      dd4hep::Volume barrelRadiatorEnvVol(barrelRadiatorEnvelopeName, barrelRadiatorEnvelope, mat);
-
       double angle_degrees = shapeAngle * side; // Calculate the angle for each side
       double angle_radians = angle_degrees * M_PI / 180.0;
 
@@ -725,12 +726,7 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
       double barrelRadiatorYPos = barrelRadiatorYOffset;
       double barrelRadiatorZPos = 0.0;
 
-      dd4hep::Position barrelRadiatorEnvelopeTrans(barrelRadiatorXPos, barrelRadiatorYPos, barrelRadiatorZPos);
-      dd4hep::PlacedVolume barrelRadiatorEnvelopePhys = BarrelRadiatorLayerVolume.placeVolume(
-          barrelRadiatorEnvVol, dd4hep::Transform3D(barrelRadiatorRotation, barrelRadiatorEnvelopeTrans));
-      dd4hep::DetElement barrelRadiatorEnvelopeDE(detElement, barrelRadiatorEnvelopeName + "DE", sideID);
-      barrelRadiatorEnvelopeDE.setPlacement(barrelRadiatorEnvelopePhys);
-      barrelRadiatorEnvVol.setVisAttributes(lcdd, xmlDet.visStr());
+      dd4hep::Position barrelRadiatorTrans(barrelRadiatorXPos, barrelRadiatorYPos, barrelRadiatorZPos);
 
       // ----------------------------------------- Building the yokes ------------------
 
@@ -739,18 +735,13 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
       std::string barrelRadiatorName = dd4hep::xml::_toString(side, "barrelRadiator%d");
       dd4hep::Volume barrelRadiatorVol(barrelRadiatorName, barrelRadiator, barrelRadiatorMaterial);
 
-      dd4hep::PlacedVolume barrelRadiatorPhys = barrelRadiatorEnvVol.placeVolume(barrelRadiatorVol);
-      dd4hep::DetElement barrelRadiatorDE(barrelRadiatorEnvelopeDE, barrelRadiatorName + "DE", sideID);
+      // the iron is placed directly in the radiator layer
+      dd4hep::PlacedVolume barrelRadiatorPhys = BarrelRadiatorLayerVolume.placeVolume(
+          barrelRadiatorVol, dd4hep::Transform3D(barrelRadiatorRotation, barrelRadiatorTrans));
+      dd4hep::DetElement barrelRadiatorDE(BarrelRadiatorLayerDE, barrelRadiatorName + "DE", sideID);
       barrelRadiatorDE.setPlacement(barrelRadiatorPhys);
       barrelRadiatorVol.setVisAttributes(lcdd.visAttributes("yoke_vis"));
     }
-
-    dd4hep::PlacedVolume radiatorLayerPhys = BarrelVolume.placeVolume(BarrelRadiatorLayerVolume);
-    dd4hep::DetElement BarrelRadiatorLayerDE(
-        BarrelDE, name + "-Barrel_RadiatorLayerDE_" + std::to_string(numBarrelRadiatorLayer + 1),
-        numBarrelRadiatorLayer + 1);
-    BarrelRadiatorLayerDE.setPlacement(radiatorLayerPhys);
-    BarrelRadiatorLayerVolume.setVisAttributes(lcdd.visAttributes("no_vis"));
   }
 
   // -------------------------------------------------------------------------------------------
@@ -1014,13 +1005,13 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
                                                         rectangleRemainderYEnvelope,
                                                         lcdd.material(dimensions.materialStr()));
 
-            double envYPos = (chamberIndex * 2 * dimensions.y()) - (overlapY * chamberIndex) + dimensions.y_offset() -
-                             rectangleEnvY + dimensions.y() +
-                             0.005; // found that the positioning of the chambers inside the rectangle had an overlap
-                                    // with the mother volume ~ 45 um.
+            double envYPos =
+                (chamberIndex * 2 * dimensions.y()) - (overlapY * chamberIndex) + dimensions.y_offset() -
+                rectangleEnvY + dimensions.y() +
+                clearance / 20.0; // small gap to the rectangle edge (an overlap of ~45 um was found without it)
             double rectangleRemainderREnvYPos = (chamberIndex * 2 * dimensions.y()) - (overlapY * chamberIndex) +
                                                 dimensions.y_offset() - rectangleEnvY +
-                                                rectangleRemainderY * dimensions.y() + 0.005;
+                                                rectangleRemainderY * dimensions.y() + clearance / 20.0;
 
             double zRotation;
             double rectangleRemainderZRotation;
