@@ -99,9 +99,9 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
   double rectangleAngle_rad = std::atan(rectangleThickness / dimensions.z());
   double detectorVolumeThickness;
   double endcapDetectorEnvZ; // endcap detetcor layer thickness
-  if (sideLengthEstimate <= (2 * dimensions.y()) &&
-      numBarrelDetectorLayers == 1) { // putting this condtition to minimize the volume thickness in case of there is
-                                      // only one chamber per side(especially for circular shape detector)
+  // shortSides: a side is shorter than one chamber (single barrel layer): thicker layers, 4 endcap z slots
+  bool shortSides = (sideLengthEstimate <= (2 * dimensions.y())) && (numBarrelDetectorLayers == 1);
+  if (shortSides) {
     detectorVolumeThickness =
         rectangleThickness *
         1.33; // multiplying by 1.33 fit the best thickness avoiding overlaps with smaller volumes insides (rectangles).
@@ -169,14 +169,10 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
 
   dd4hep::Position unionPos(0.0, 0.0, unionOffsetZpositive);
   dd4hep::Position unionPos2(0.0, 0.0, unionOffsetZnegative);
-  dd4hep::Rotation3D unionRot(dd4hep::RotationY(0.0 * dd4hep::degree));
-
-  dd4hep::Transform3D unionTransform(unionRot, unionPos);
-  dd4hep::Transform3D unionTransform2(unionRot, unionPos2);
 
   // Combining two shapes by UnionSolid: the first shape is centralized and the second transform around the first..
-  dd4hep::UnionSolid barrelAndPositiveEndcap(BarrelEnv, EndcapEnv, unionTransform);
-  dd4hep::UnionSolid systemEnvelope(barrelAndPositiveEndcap, EndcapEnv, unionTransform2);
+  dd4hep::UnionSolid barrelAndPositiveEndcap(BarrelEnv, EndcapEnv, unionPos);
+  dd4hep::UnionSolid systemEnvelope(barrelAndPositiveEndcap, EndcapEnv, unionPos2);
   dd4hep::Volume detectorVolume(name, systemEnvelope, mat);
 
   dd4hep::Position detectorTrans(0., 0., 0.);
@@ -195,16 +191,10 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
                                               barreltotalLength);
   std::string barrelName = name + "-Barrel" + std::to_string(0);
 
-  dd4hep::Position barrelUnionPos(0.0, 0.0, 0.0);
-  dd4hep::Rotation3D barrelUnionRot(dd4hep::RotationY(0.0 * dd4hep::degree));
-  dd4hep::Transform3D barrelUnionTransform(barrelUnionRot, barrelUnionPos);
-
-  dd4hep::UnionSolid barrelUnion(BarrelEnvWithoutLastLayer, BarrelLastLayerEnv, barrelUnionTransform);
+  dd4hep::UnionSolid barrelUnion(BarrelEnvWithoutLastLayer, BarrelLastLayerEnv);
   dd4hep::Volume BarrelVolume(barrelName, barrelUnion, mat);
 
-  dd4hep::Position barrelTrans(0., 0., 0.);
-  dd4hep::PlacedVolume barrelPhys =
-      detectorVolume.placeVolume(BarrelVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), barrelTrans));
+  dd4hep::PlacedVolume barrelPhys = detectorVolume.placeVolume(BarrelVolume);
   barrelPhys.addPhysVolID("type", 0);
   dd4hep::DetElement BarrelDE(detElement, name + "-BarrelDE", 0);
   BarrelDE.setPlacement(barrelPhys);
@@ -246,9 +236,7 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
         std::fmod((barrelLayerLength - 2 * clearance), (2 * dimensions.z() - overlapZ)) / (2 * dimensions.z()) -
         (2 * clearance / dimensions.z());
 
-    dd4hep::Position detectorLayerTrans(0., 0., 0.);
-    dd4hep::PlacedVolume detectorLayerPhys = BarrelVolume.placeVolume(
-        BarrelDetectorLayerVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), detectorLayerTrans));
+    dd4hep::PlacedVolume detectorLayerPhys = BarrelVolume.placeVolume(BarrelDetectorLayerVolume);
     detectorLayerPhys.addPhysVolID("layer", numBarrelLayer);
     dd4hep::DetElement BarrelDetectorLayerDE(
         BarrelDE, name + "-Barrel_DetectorLayerDE_" + std::to_string(numBarrelLayer + 1), numBarrelLayer + 1);
@@ -260,50 +248,35 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
 
       // sideID = 100 * layer + side (from 1), e.g. 302 = layer 3, side 2; DetElement ID only
       int sideID = (numBarrelLayer + 1) * 100 + (side + 1);
-      dd4hep::Box sideEnvelope(sideEnvX, sideEnvY, sideEnvZ);
-      dd4hep::Box sideEnvelope2(sideEnvX, sideEnvY2, sideEnvZ);
+      // Even sides on the inner half of the layer, odd sides on the outer half (neighbours overlap at corners)
+      double sideRadius;
+      double sideHalfY;
+      if (side % 2 == 0) {
+        sideRadius = barrelLayerRMid - detectorVolumeThickness / 2.0;
+        sideHalfY = sideEnvY;
+      } else {
+        sideRadius = barrelLayerRMid + detectorVolumeThickness / 2.0;
+        sideHalfY = sideEnvY2;
+      }
+      dd4hep::Box sideEnvelope(sideEnvX, sideHalfY, sideEnvZ);
       std::string sideName = dd4hep::xml::_toString(sideID, "side%d");
       dd4hep::Volume sideVol(sideName, sideEnvelope, mat);
-      dd4hep::Volume sideVol2(sideName, sideEnvelope2, mat);
 
       double angle_degrees = shapeAngle * side; // Calculate the angle for each side
       double angle_radians = angle_degrees * M_PI / 180.0;
 
-      double sideXOffset =
-          (barrelLayerRMid - detectorVolumeThickness / 2.0) * std::cos(angle_radians + halfShapeAngle_radians);
-      double sideYOffset =
-          (barrelLayerRMid - detectorVolumeThickness / 2.0) * std::sin(angle_radians + halfShapeAngle_radians);
-
-      double sideXOffset2 =
-          (barrelLayerRMid + detectorVolumeThickness / 2.0) * std::cos(angle_radians + halfShapeAngle_radians);
-      double sideYOffset2 =
-          (barrelLayerRMid + detectorVolumeThickness / 2.0) * std::sin(angle_radians + halfShapeAngle_radians);
+      double sideXOffset = sideRadius * std::cos(angle_radians + halfShapeAngle_radians);
+      double sideYOffset = sideRadius * std::sin(angle_radians + halfShapeAngle_radians);
 
       dd4hep::RotationZ sideRotationZ(angle_radians + halfShapeAngle_radians + angle_clearance);
       dd4hep::Rotation3D sideRotation = dd4hep::Rotation3D(sideRotationZ);
 
-      double sideXPos = sideXOffset;
-      double sideYPos = sideYOffset;
-      double sideZPos = 0.0;
-      double sideXPos2 = sideXOffset2;
-      double sideYPos2 = sideYOffset2;
-
-      dd4hep::Position sideTrans;
-      dd4hep::PlacedVolume sidePhys;
-      dd4hep::DetElement sideDE;
-
-      if (side % 2 == 0) {
-        sideTrans = dd4hep::Position(sideXPos, sideYPos, sideZPos);
-        sidePhys = BarrelDetectorLayerVolume.placeVolume(sideVol, dd4hep::Transform3D(sideRotation, sideTrans));
-      } else {
-        sideTrans = dd4hep::Position(sideXPos2, sideYPos2, sideZPos);
-        sidePhys = BarrelDetectorLayerVolume.placeVolume(sideVol2, dd4hep::Transform3D(sideRotation, sideTrans));
-      }
-
-      sideDE = dd4hep::DetElement(BarrelDetectorLayerDE, sideName + "DE", sideID);
+      dd4hep::Position sideTrans(sideXOffset, sideYOffset, 0.0);
+      dd4hep::PlacedVolume sidePhys =
+          BarrelDetectorLayerVolume.placeVolume(sideVol, dd4hep::Transform3D(sideRotation, sideTrans));
+      dd4hep::DetElement sideDE(BarrelDetectorLayerDE, sideName + "DE", sideID);
       sideDE.setPlacement(sidePhys);
       sideVol.setVisAttributes(lcdd, xmlDet.visStr());
-      sideVol2.setVisAttributes(lcdd, xmlDet.visStr());
 
       // -------------------------------------------------------------------------------------------------------
       //  Dividing every side to small rectangles  //
@@ -317,12 +290,7 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
 
       for (int rectangle = 0; rectangle < (numRectangles + 1); ++rectangle) {
 
-        double rectangleEnvY;
-        if (side % 2 == 0) {
-          rectangleEnvY = sideLength / 2.0; // + clearance;
-        } else {
-          rectangleEnvY = sideLength2 / 2.0; // + clearance;
-        }
+        double rectangleEnvY = sideHalfY;
         double rectangleEnvZ = dimensions.z() + clearance / 2.0;
         double rectangleRemainderEnvZ =
             (remainderZ * dimensions.z()) +
@@ -366,21 +334,16 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
         // _________________________________________________________________________________________________
         if (rectangle == numRectangles) {
 
-          dd4hep::Position rectangeEnvelopeTrans;
+          dd4hep::Position rectangleEnvelopeTrans;
           if (rectangleRemainderEnvZ <= rectangleEnvZ / 10.0) {
-            rectangeEnvelopeTrans =
+            rectangleEnvelopeTrans =
                 dd4hep::Position(rectangleRemainderEnvXPos, rectangleEnvYPos, rectangleRemainderEnvZPos);
           } else {
-            rectangeEnvelopeTrans = dd4hep::Position(rectangleEnvXPos, rectangleEnvYPos, rectangleRemainderEnvZPos);
+            rectangleEnvelopeTrans = dd4hep::Position(rectangleEnvXPos, rectangleEnvYPos, rectangleRemainderEnvZPos);
           }
           dd4hep::PlacedVolume rectangleEnvelopePhys;
-          if (side % 2 == 0) {
-            rectangleEnvelopePhys = sideVol.placeVolume(rectangleRemainderEnvVol,
-                                                        dd4hep::Transform3D(remainderRotationY, rectangeEnvelopeTrans));
-          } else {
-            rectangleEnvelopePhys = sideVol2.placeVolume(
-                rectangleRemainderEnvVol, dd4hep::Transform3D(remainderRotationY, rectangeEnvelopeTrans));
-          }
+          rectangleEnvelopePhys = sideVol.placeVolume(rectangleRemainderEnvVol,
+                                                      dd4hep::Transform3D(remainderRotationY, rectangleEnvelopeTrans));
           dd4hep::DetElement rectangleEnvelopeDE(sideDE, rectangleRemainderEnvelopeName + "DE", rectangle);
           rectangleEnvelopeDE.setPlacement(rectangleEnvelopePhys);
           rectangleEnvVol.setVisAttributes(lcdd, xmlDet.visStr());
@@ -486,8 +449,8 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
                     0.0); // all the slices are centered in the chamber except in x-axis they are accumalted over each
                           // other respectively.. If you want to add an offset to any direction by the user you can add
                           // sliceDet.y_offset() instead of 0.
-                dd4hep::PlacedVolume slicePlacedVolume = rectangleRemainderYEnvVolume.placeVolume(
-                    sliceVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), transSlice));
+                dd4hep::PlacedVolume slicePlacedVolume =
+                    rectangleRemainderYEnvVolume.placeVolume(sliceVolume, transSlice);
 
                 if (slice.hasAttr("vis")) {
                   sliceVolume.setVisAttributes(lcdd, sliceDet.visStr());
@@ -526,8 +489,7 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
                 std::string sliceName = dd4hep::xml::_toString(sliceIdx, "slice%d");
                 dd4hep::Volume sliceVolume(sliceName, sliceShape, lcdd.material(slice.attr<std::string>("material")));
                 dd4hep::Position transSlice(sliceXOffset + sliceDet.x(), 0.0, 0.0);
-                dd4hep::PlacedVolume slicePlacedVolume =
-                    envVolume.placeVolume(sliceVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), transSlice));
+                dd4hep::PlacedVolume slicePlacedVolume = envVolume.placeVolume(sliceVolume, transSlice);
 
                 if (slice.hasAttr("vis")) {
                   sliceVolume.setVisAttributes(lcdd, sliceDet.visStr());
@@ -551,15 +513,10 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
         } else {
           // ......_____________________________________________________________________________________________
 
-          dd4hep::Position rectangeEnvelopeTrans(rectangleEnvXPos, rectangleEnvYPos, rectangleEnvZPos);
+          dd4hep::Position rectangleEnvelopeTrans(rectangleEnvXPos, rectangleEnvYPos, rectangleEnvZPos);
           dd4hep::PlacedVolume rectangleEnvelopePhys;
-          if (side % 2 == 0) {
-            rectangleEnvelopePhys =
-                sideVol.placeVolume(rectangleEnvVol, dd4hep::Transform3D(rotationY, rectangeEnvelopeTrans));
-          } else {
-            rectangleEnvelopePhys =
-                sideVol2.placeVolume(rectangleEnvVol, dd4hep::Transform3D(rotationY, rectangeEnvelopeTrans));
-          }
+          rectangleEnvelopePhys =
+              sideVol.placeVolume(rectangleEnvVol, dd4hep::Transform3D(rotationY, rectangleEnvelopeTrans));
           dd4hep::DetElement rectangleEnvelopeDE(sideDE, rectangleEnvelopeName + "DE", rectangle);
           rectangleEnvelopeDE.setPlacement(rectangleEnvelopePhys);
           rectangleEnvVol.setVisAttributes(lcdd, xmlDet.visStr());
@@ -656,8 +613,8 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
                 std::string sliceName = dd4hep::xml::_toString(sliceIdx, "slice%d");
                 dd4hep::Volume sliceVolume(sliceName, sliceShape, lcdd.material(slice.attr<std::string>("material")));
                 dd4hep::Position transSlice(sliceXOffset + sliceDet.x(), 0.0, 0.0);
-                dd4hep::PlacedVolume slicePlacedVolume = rectangleRemainderYEnvVolume.placeVolume(
-                    sliceVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), transSlice));
+                dd4hep::PlacedVolume slicePlacedVolume =
+                    rectangleRemainderYEnvVolume.placeVolume(sliceVolume, transSlice);
 
                 if (slice.hasAttr("vis")) {
                   sliceVolume.setVisAttributes(lcdd, sliceDet.visStr());
@@ -696,8 +653,7 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
                 std::string sliceName = dd4hep::xml::_toString(sliceIdx, "slice%d");
                 dd4hep::Volume sliceVolume(sliceName, sliceShape, lcdd.material(slice.attr<std::string>("material")));
                 dd4hep::Position transSlice(sliceXOffset + sliceDet.x(), 0.0, 0.0);
-                dd4hep::PlacedVolume slicePlacedVolume =
-                    envVolume.placeVolume(sliceVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), transSlice));
+                dd4hep::PlacedVolume slicePlacedVolume = envVolume.placeVolume(sliceVolume, transSlice);
 
                 if (slice.hasAttr("vis")) {
                   sliceVolume.setVisAttributes(lcdd, sliceDet.visStr());
@@ -783,17 +739,13 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
       std::string barrelRadiatorName = dd4hep::xml::_toString(side, "barrelRadiator%d");
       dd4hep::Volume barrelRadiatorVol(barrelRadiatorName, barrelRadiator, barrelRadiatorMaterial);
 
-      dd4hep::Position barrelRadiatorTrans(0, 0, 0);
-      dd4hep::PlacedVolume barrelRadiatorPhys = barrelRadiatorEnvVol.placeVolume(
-          barrelRadiatorVol, dd4hep::Transform3D(dd4hep::RotationY(0.), barrelRadiatorTrans));
+      dd4hep::PlacedVolume barrelRadiatorPhys = barrelRadiatorEnvVol.placeVolume(barrelRadiatorVol);
       dd4hep::DetElement barrelRadiatorDE(barrelRadiatorEnvelopeDE, barrelRadiatorName + "DE", sideID);
       barrelRadiatorDE.setPlacement(barrelRadiatorPhys);
       barrelRadiatorVol.setVisAttributes(lcdd.visAttributes("yoke_vis"));
     }
 
-    dd4hep::Position radiatorLayerTrans(0., 0., 0.);
-    dd4hep::PlacedVolume radiatorLayerPhys = BarrelVolume.placeVolume(
-        BarrelRadiatorLayerVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), radiatorLayerTrans));
+    dd4hep::PlacedVolume radiatorLayerPhys = BarrelVolume.placeVolume(BarrelRadiatorLayerVolume);
     dd4hep::DetElement BarrelRadiatorLayerDE(
         BarrelDE, name + "-Barrel_RadiatorLayerDE_" + std::to_string(numBarrelRadiatorLayer + 1),
         numBarrelRadiatorLayer + 1);
@@ -818,7 +770,7 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
     EndcapName = name + "-Endcap" + std::to_string(endcapType);
     endcapVolume = dd4hep::Volume(EndcapName, EndcapEnv, mat);
     endcapTrans = dd4hep::Position(0., 0., endcapType * endcapOffset);
-    endcapPhys = detectorVolume.placeVolume(endcapVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), endcapTrans));
+    endcapPhys = detectorVolume.placeVolume(endcapVolume, endcapTrans);
     endcapPhys.addPhysVolID("type", endcapType);
     EndcapDE = dd4hep::DetElement(detElement, name + "EndcapDE_" + std::to_string(endcapType), endcapType);
     EndcapDE.setPlacement(endcapPhys);
@@ -860,8 +812,8 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
                                               : numEndcapLayer + numEndcapDetectorLayers + 1;
 
       dd4hep::Position endcapDetectorEnvelopeTrans(endcapDetectorEnvXPos, endcapDetectorEnvYPos, endcapDetectorEnvZPos);
-      dd4hep::PlacedVolume endcapDetectorEnvelopePhys = endcapVolume.placeVolume(
-          endcapDetectorEnvVol, dd4hep::Transform3D(dd4hep::RotationZ(0.), endcapDetectorEnvelopeTrans));
+      dd4hep::PlacedVolume endcapDetectorEnvelopePhys =
+          endcapVolume.placeVolume(endcapDetectorEnvVol, endcapDetectorEnvelopeTrans);
       dd4hep::DetElement endcapDetectorEnvelopeDE(EndcapDE, endcapDetectorEnvelopeName + "DE", detElementID);
       endcapDetectorEnvelopeDE.setPlacement(endcapDetectorEnvelopePhys);
       endcapDetectorEnvelopePhys.addPhysVolID("layer", numEndcapLayer);
@@ -882,13 +834,10 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
         double boxOffsetZ = endcapDetectorYLength / 2.0;
 
         dd4hep::Position boxPos(0.0, 0.0, boxOffsetZ);
-        dd4hep::Rotation3D boxRot(dd4hep::RotationY(0.0 * dd4hep::degree));
-
-        dd4hep::Transform3D boxTransform(boxRot, boxPos);
 
         // Combining two shapes by UnionSolid: the first shape is centralized and the second transform around the
         // first..
-        dd4hep::UnionSolid endcapDetectorSideEnvelope(endcapDetectorSideTrap, endcapDetectorSideBox, boxTransform);
+        dd4hep::UnionSolid endcapDetectorSideEnvelope(endcapDetectorSideTrap, endcapDetectorSideBox, boxPos);
         std::string endcapDetectorSideEnvName = dd4hep::xml::_toString(sideID, "endcapDetectorSideEnv%d");
         dd4hep::Volume endcapDetectorSideEnvVol(endcapDetectorSideEnvName, endcapDetectorSideEnvelope, mat);
 
@@ -916,7 +865,7 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
         dd4hep::DetElement endcapDetectorSideEnvDE;
 
         // Overlapping neighbour sides are put at different z: 4 slots if a side is shorter than a chamber, else 2
-        if (sideLengthEstimate <= (2 * dimensions.y())) { // short sides: 4 z positions
+        if (shortSides) { // short sides: 4 z positions
           endcapDetectorSideEnvZPos = -endcapDetectorEnvZ / 4.0;
           endcapDetectorSideEnvZPos2 = -endcapDetectorEnvZ * 3.0 / 4.0;
           double endcapDetectorSideEnvZPos3 = endcapDetectorEnvZ / 4.0;
@@ -1010,9 +959,9 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
           double yRotation = std::atan(rectangleEnvX / (rectangleEnvZ - (2 * overlapY)));
           dd4hep::RotationY rotationY(yRotation);
 
-          dd4hep::Position rectangeEnvelopeTrans(rectangleEnvXPos, rectangleEnvYPos, rectangleEnvZPos);
+          dd4hep::Position rectangleEnvelopeTrans(rectangleEnvXPos, rectangleEnvYPos, rectangleEnvZPos);
           dd4hep::PlacedVolume rectangleEnvelopePhys = endcapDetectorSideEnvVol.placeVolume(
-              rectangleEnvVol, dd4hep::Transform3D(rotationY, rectangeEnvelopeTrans));
+              rectangleEnvVol, dd4hep::Transform3D(rotationY, rectangleEnvelopeTrans));
           dd4hep::DetElement rectangleEnvelopeDE(endcapDetectorSideEnvDE, rectangleEnvelopeName + "DE", rectangle);
           rectangleEnvelopeDE.setPlacement(rectangleEnvelopePhys);
           rectangleEnvVol.setVisAttributes(lcdd, xmlDet.visStr());
@@ -1121,8 +1070,8 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
                 std::string sliceName = dd4hep::xml::_toString(sliceIdx, "slice%d");
                 dd4hep::Volume sliceVolume(sliceName, sliceShape, lcdd.material(slice.attr<std::string>("material")));
                 dd4hep::Position transSlice(sliceXOffset + sliceDet.x(), 0.0, 0.0);
-                dd4hep::PlacedVolume slicePlacedVolume = rectangleRemainderYEnvVolume.placeVolume(
-                    sliceVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), transSlice));
+                dd4hep::PlacedVolume slicePlacedVolume =
+                    rectangleRemainderYEnvVolume.placeVolume(sliceVolume, transSlice);
 
                 if (slice.hasAttr("vis")) {
                   sliceVolume.setVisAttributes(lcdd, sliceDet.visStr());
@@ -1166,8 +1115,7 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
                 std::string sliceName = dd4hep::xml::_toString(sliceIdx, "slice%d");
                 dd4hep::Volume sliceVolume(sliceName, sliceShape, lcdd.material(slice.attr<std::string>("material")));
                 dd4hep::Position transSlice(sliceXOffset + sliceDet.x(), 0.0, 0.0);
-                dd4hep::PlacedVolume slicePlacedVolume =
-                    envVolume.placeVolume(sliceVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), transSlice));
+                dd4hep::PlacedVolume slicePlacedVolume = envVolume.placeVolume(sliceVolume, transSlice);
 
                 if (slice.hasAttr("vis")) {
                   sliceVolume.setVisAttributes(lcdd, sliceDet.visStr());
@@ -1221,8 +1169,8 @@ static dd4hep::Ref_t createmuonSystem_o1_v01(dd4hep::Detector& lcdd, dd4hep::xml
       double endcapRadiatorEnvZPos = endcapRadiatorLayerZOffset;
 
       dd4hep::Position endcapRadiatorEnvelopeTrans(endcapRadiatorEnvXPos, endcapRadiatorEnvYPos, endcapRadiatorEnvZPos);
-      dd4hep::PlacedVolume endcapRadiatorEnvelopePhys = endcapVolume.placeVolume(
-          endcapRadiatorEnvVol, dd4hep::Transform3D(dd4hep::RotationZ(0.), endcapRadiatorEnvelopeTrans));
+      dd4hep::PlacedVolume endcapRadiatorEnvelopePhys =
+          endcapVolume.placeVolume(endcapRadiatorEnvVol, endcapRadiatorEnvelopeTrans);
       dd4hep::DetElement endcapRadiatorEnvelopeDE(EndcapDE, endcapRadiatorEnvelopeName + "DE",
                                                   numEndcapRadiatorLayer + 1);
       endcapRadiatorEnvelopeDE.setPlacement(endcapRadiatorEnvelopePhys);
