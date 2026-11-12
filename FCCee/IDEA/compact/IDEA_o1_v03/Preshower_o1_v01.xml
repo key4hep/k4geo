@@ -20,8 +20,8 @@
        <constant name = "psSiThick"                               value = "1.6*mm"/>
        <constant name = "psMRWELLTotalThickness"                  value = "psG10_FR4Thick+psCuThick+psGasLayerThick+psCu2Thick+psKaptonThick+psCarnonFiberThick+psCuThick+psCarbonFiber2Thick+psCuThick+psSiThick"/> <!-- This sequense is the current order of mRWELL (total 10 slices) -->
 
-       <constant name = "psMRWELLYLength"                         value = "250*mm"/>
-       <constant name = "psMRWELLZLength"                         value = "250*mm"/>
+       <constant name = "psMRWELLYLength"                         value = "250*mm"/> <!-- half-length of a chamber in Y (the chamber is 500 mm wide) -->
+       <constant name = "psMRWELLZLength"                         value = "250*mm"/> <!-- half-length of a chamber in Z (the chamber is 500 mm long) -->
 
        <constant name = "psOverlapingY"                           value = "5*mm"/> <!-- the common distance between mRWELL chambers in Y direction -->
        <constant name = "psOverlapingZ"                           value = "5*mm"/> <!-- the common distance between mRWELL chambers in Z direction -->
@@ -32,7 +32,7 @@
 
   <readouts>
     <readout name="PreshowerSystemCollection">
-     <segmentation type="CartesianGridYZ" grid_size_y="1.2*mm" grid_size_z="1.2*mm"/>   <!-- Depending on strip pitch 1.4 mm  -->
+     <segmentation type="CartesianGridYZ" grid_size_y="1.2*mm" grid_size_z="1.2*mm"/>   <!-- strip pitch 1.2 mm. The chamber is read out by two strip layers, one along Y and one along Z, so a hit gives both coordinates; this is simulated as a grid of 1.2 x 1.2 mm cells -->
      <id>${PreShowerReadoutID}</id>
   </readout>
   </readouts>   
