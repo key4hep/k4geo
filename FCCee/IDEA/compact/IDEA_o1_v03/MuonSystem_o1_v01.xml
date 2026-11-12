@@ -20,8 +20,8 @@
        <constant name = "SiThick"                               value = "1.6*mm"/>
        <constant name = "mRWELLTotalThickness"                  value = "G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarbonFiberThick+CuThick+CarbonFiber2Thick+CuThick+SiThick"/> <!-- This sequense is the current order of mRWELL (total 10 slices) -->
 
-       <constant name = "mRWELLYLength"                         value = "250*mm"/>
-       <constant name = "mRWELLZLength"                         value = "250*mm"/>
+       <constant name = "mRWELLYLength"                         value = "250*mm"/> <!-- half-length of a chamber in Y (the chamber is 500 mm wide) -->
+       <constant name = "mRWELLZLength"                         value = "250*mm"/> <!-- half-length of a chamber in Z (the chamber is 500 mm long) -->
 
        <constant name = "overlapingY"                           value = "5*mm"/> <!-- the common distance between mRWELL chambers in Y direction -->
        <constant name = "overlapingZ"                           value = "5*mm"/> <!-- the common distance between mRWELL chambers in Z direction -->
@@ -34,7 +34,7 @@
 
   <readouts>
     <readout name="MuonSystemCollection">
-     <segmentation type="CartesianGridYZ" grid_size_y="1.2*mm" grid_size_z="1.2*mm"/>   <!-- Depending on strip pitch 1.4 mm  -->
+     <segmentation type="CartesianGridYZ" grid_size_y="1.2*mm" grid_size_z="1.2*mm"/>   <!-- strip pitch 1.2 mm. The chamber is read out by two strip layers, one along Y and one along Z, so a hit gives both coordinates; this is simulated as a grid of 1.2 x 1.2 mm cells -->
      <id>${MuonSystemReadoutID}</id>
   </readout>
   </readouts>   

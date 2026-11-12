@@ -97,8 +97,9 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
   double overlapZ   = generalParameters.attr<double>("overlapZ");
   double clearance  = generalParameters.attr<double>("clearance");
 
-  double shapeAngle         = 360.0 / numSides;
-  double shapeAngle_radians = M_PI / numSides;
+  // shapeAngle: angle of one polygon side (degrees); halfShapeAngle_radians: half of it (radians)
+  double shapeAngle             = 360.0 / numSides;
+  double halfShapeAngle_radians = M_PI / numSides;
   double angle_clearance    = 0.0;
 
   // -------------------------------------------------------------------------
@@ -120,7 +121,7 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
   // -------------------------------------------------------------------------
   //  Chamber / detector-layer geometry 
   // -------------------------------------------------------------------------
-  double sideLengthEstimate = 2.0 * radius * std::tan(shapeAngle_radians);
+  double sideLengthEstimate = 2.0 * radius * std::tan(halfShapeAngle_radians);
   double chamberAngle_rad   = std::atan(dimensions.x() / dimensions.y());
   double rectangleThickness = (2.0 * dimensions.y()) * std::sin(chamberAngle_rad)
                             + (2.0 * dimensions.x()) * std::cos(chamberAngle_rad)
@@ -222,16 +223,16 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
 
   // Endcap shape helpers (same as o1)
   double endcapDetectorSideLength =
-      (2.0 * (endcapDetectorLayerInnerRadius + 2.0 * dimensions.y()) * std::tan(shapeAngle_radians)) + 2.0 * clearance;
+      (2.0 * (endcapDetectorLayerInnerRadius + 2.0 * dimensions.y()) * std::tan(halfShapeAngle_radians)) + 2.0 * clearance;
   double endcapDetectorSideTrapLength =
-      (2.0 * endcapDetectorLayerOuterRadius * std::tan(shapeAngle_radians)) + 2.0 * clearance;
+      (2.0 * endcapDetectorLayerOuterRadius * std::tan(halfShapeAngle_radians)) + 2.0 * clearance;
   double endcapDetectorSideTrapYLength =
       endcapDetectorLayerOuterRadius - 2.0 * dimensions.z() - endcapDetectorLayerInnerRadius;
-  double endcapDetectorSideBoxLength  = 2.0 * endcapDetectorLayerOuterRadius * std::tan(shapeAngle_radians);
+  double endcapDetectorSideBoxLength  = 2.0 * endcapDetectorLayerOuterRadius * std::tan(halfShapeAngle_radians);
   double endcapDetectorSideBoxYLength = 2.0 * dimensions.z();
 
-  double endcapRadiatorSideLength  = 2.0 * endcapRadiatorLayerInnerRadius * std::tan(shapeAngle_radians);
-  double endcapRadiatorSideLength2 = 2.0 * endcapRadiatorLayerOuterRadius * std::tan(shapeAngle_radians);
+  double endcapRadiatorSideLength  = 2.0 * endcapRadiatorLayerInnerRadius * std::tan(halfShapeAngle_radians);
+  double endcapRadiatorSideLength2 = 2.0 * endcapRadiatorLayerOuterRadius * std::tan(halfShapeAngle_radians);
 
   double endcapDetectorYLength = endcapDetectorLayerOuterRadius - endcapDetectorLayerInnerRadius;
   double endcapYLength         = endcapRadiatorLayerOuterRadius - endcapRadiatorLayerInnerRadius;
@@ -261,7 +262,7 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
 
   dd4hep::Position      detectorTrans(0., 0., 0.);
   dd4hep::PlacedVolume  detectorPhys = experimentalHall.placeVolume(
-      detectorVolume, dd4hep::Transform3D(dd4hep::RotationZ(shapeAngle_radians), detectorTrans));
+      detectorVolume, dd4hep::Transform3D(dd4hep::RotationZ(halfShapeAngle_radians), detectorTrans));
   detectorPhys.addPhysVolID("system", xmlDet.id());
   detElement.setPlacement(detectorPhys);
   detectorVolume.setVisAttributes(lcdd.visAttributes("no_vis"));
@@ -269,6 +270,7 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
   // -------------------------------------------------------------------------
   //  BARREL volume
   // -------------------------------------------------------------------------
+  // The last detector layer is longer (barreltotalLength): it also covers the endcaps
   dd4hep::PolyhedraRegular BarrelEnvBase(numSides, radius, barrelRMax, barrelLength);
   dd4hep::PolyhedraRegular BarrelLastDetExt(numSides, lastDetLayerRMin, lastDetLayerRMax, barreltotalLength);
 
@@ -298,6 +300,7 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
     // ---- DETECTOR LAYER ------------------------------------------------
     if (spec.type == "detector") {
       int    numBarrelLayer    = barrelDetIdx[seqIdx];
+      // The last detector layer also covers both endcaps (assumes Endcap z_offset = Barrel length / 2)
       bool   isLastDetLayer    = (std::abs(layerRMax - lastDetLayerRMax) < 1e-6);
       double barrelLayerLength = isLastDetLayer ? barreltotalLength : barrelLength;
       double barrelLayerRMid   = (layerRMin + layerRMax) / 2.0;
@@ -306,8 +309,8 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
       std::string barrelDetectorName = name + "-BarrelDetectorLayer" + std::to_string(numBarrelLayer + 1);
       dd4hep::Volume BarrelDetectorLayerVolume(barrelDetectorName, BarrelDetectorLayer, mat);
 
-      double sideLength  = 2.0 * (barrelLayerRMid - detectorVolumeThickness / 2.0) * std::tan(shapeAngle_radians);
-      double sideLength2 = 2.0 * (barrelLayerRMid + detectorVolumeThickness / 2.0) * std::tan(shapeAngle_radians);
+      double sideLength  = 2.0 * (barrelLayerRMid - detectorVolumeThickness / 2.0) * std::tan(halfShapeAngle_radians);
+      double sideLength2 = 2.0 * (barrelLayerRMid + detectorVolumeThickness / 2.0) * std::tan(halfShapeAngle_radians);
       double sideEnvX    = detectorVolumeThickness / 2.0;
       double sideEnvY    = sideLength  / 2.0 + clearance;
       double sideEnvY2   = sideLength2 / 2.0 + clearance;
@@ -327,6 +330,7 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
 
       // ---- Sides --------------------------------------------------------
       for (int side = 0; side < numSides; ++side) {
+        // sideID = 100 * (position in the sequence) + side (from 1), e.g. 302; DetElement ID only
         int sideID = (seqIdx + 1) * 100 + (side + 1);
 
         dd4hep::Box sideEnvelope (sideEnvX, sideEnvY,  sideEnvZ);
@@ -337,12 +341,12 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
 
         double angle_degrees = shapeAngle * side;
         double angle_radians = angle_degrees * M_PI / 180.0;
-        double sideXOffset  = (barrelLayerRMid - detectorVolumeThickness / 2.0) * std::cos(angle_radians + shapeAngle_radians);
-        double sideYOffset  = (barrelLayerRMid - detectorVolumeThickness / 2.0) * std::sin(angle_radians + shapeAngle_radians);
-        double sideXOffset2 = (barrelLayerRMid + detectorVolumeThickness / 2.0) * std::cos(angle_radians + shapeAngle_radians);
-        double sideYOffset2 = (barrelLayerRMid + detectorVolumeThickness / 2.0) * std::sin(angle_radians + shapeAngle_radians);
+        double sideXOffset  = (barrelLayerRMid - detectorVolumeThickness / 2.0) * std::cos(angle_radians + halfShapeAngle_radians);
+        double sideYOffset  = (barrelLayerRMid - detectorVolumeThickness / 2.0) * std::sin(angle_radians + halfShapeAngle_radians);
+        double sideXOffset2 = (barrelLayerRMid + detectorVolumeThickness / 2.0) * std::cos(angle_radians + halfShapeAngle_radians);
+        double sideYOffset2 = (barrelLayerRMid + detectorVolumeThickness / 2.0) * std::sin(angle_radians + halfShapeAngle_radians);
 
-        dd4hep::RotationZ  sideRotationZ(angle_radians + shapeAngle_radians + angle_clearance);
+        dd4hep::RotationZ  sideRotationZ(angle_radians + halfShapeAngle_radians + angle_clearance);
         dd4hep::Rotation3D sideRotation = dd4hep::Rotation3D(sideRotationZ);
 
         dd4hep::Position     sideTrans;
@@ -360,6 +364,7 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
         sideVol2.setVisAttributes(lcdd, xmlDet.visStr());
 
         // ---- Rectangles -------------------------------------------------
+        // Rectangle = one row of chambers along z, tilted (yRotation) so that overlapping rows do not touch
         int numRectangles = (int)(barrelLayerLength / (2.0 * dimensions.z() - overlapZ));
         for (int rectangle = 0; rectangle <= numRectangles; ++rectangle) {
           double rectangleEnvY = (side % 2 == 0) ? sideEnvY : sideEnvY2;
@@ -541,14 +546,15 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
     // ---- RADIATOR LAYER ------------------------------------------------
     } else {
       double layerRMid = (layerRMin + layerRMax) / 2.0;
-      double barrelRadiatorSideLength  = 2.0 * (layerRMid - spec.thickness / 2.0) * std::tan(shapeAngle_radians);
-      double barrelRadiatorSideLength2 = 2.0 * (layerRMid + spec.thickness / 2.0) * std::tan(shapeAngle_radians);
+      double barrelRadiatorSideLength  = 2.0 * (layerRMid - spec.thickness / 2.0) * std::tan(halfShapeAngle_radians);
+      double barrelRadiatorSideLength2 = 2.0 * (layerRMid + spec.thickness / 2.0) * std::tan(halfShapeAngle_radians);
 
       dd4hep::PolyhedraRegular BarrelRadiatorLayer(numSides, layerRMin, layerRMax, barrelLength);
       std::string barrelRadiatorEnvName = name + "-BarrelRadiatorLayer" + std::to_string(seqIdx + 1);
       dd4hep::Volume BarrelRadiatorLayerVolume(barrelRadiatorEnvName, BarrelRadiatorLayer, mat);
 
       for (int side = 0; side < numSides; ++side) {
+        // same numbering as the barrel detector sides: 100 * (position in the sequence) + side number
         int sideID = (seqIdx + 1) * 100 + (side + 1);
         dd4hep::Trapezoid barrelRadiatorEnvelope(
             barrelLength / 2.0, barrelLength / 2.0,
@@ -559,10 +565,10 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
 
         double angle_degrees = shapeAngle * side;
         double angle_radians = angle_degrees * M_PI / 180.0;
-        double bRXOffset = layerRMid * std::cos(angle_radians + shapeAngle_radians);
-        double bRYOffset = layerRMid * std::sin(angle_radians + shapeAngle_radians);
+        double bRXOffset = layerRMid * std::cos(angle_radians + halfShapeAngle_radians);
+        double bRYOffset = layerRMid * std::sin(angle_radians + halfShapeAngle_radians);
 
-        dd4hep::RotationZ  bRRotZ(angle_radians + shapeAngle_radians);
+        dd4hep::RotationZ  bRRotZ(angle_radians + halfShapeAngle_radians);
         dd4hep::RotationY  bRRotY(90.0 * dd4hep::degree);
         dd4hep::Rotation3D bRRot = bRRotZ * bRRotY;
 
@@ -648,6 +654,7 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
 
         // ---- Endcap sides -----------------------------------------------
         for (int side = 0; side < numSides; ++side) {
+          // sideID = 100 * (endcap detector layer number, from 1) + (side number, from 1)
           int sideID = (numEndcapLayer + 1) * 100 + (side + 1);
 
           dd4hep::Trapezoid endcapDetectorSideTrap(
@@ -668,12 +675,13 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
           double angle_radians = angle_degrees * M_PI / 180.0;
           double endcapDetectorTrapCenterRadius =
               endcapDetectorLayerInnerRadius + (endcapDetectorSideTrapYLength / 2.0);
-          double ecXOffset = endcapDetectorTrapCenterRadius * std::cos(angle_radians + shapeAngle_radians);
-          double ecYOffset = endcapDetectorTrapCenterRadius * std::sin(angle_radians + shapeAngle_radians);
+          double ecXOffset = endcapDetectorTrapCenterRadius * std::cos(angle_radians + halfShapeAngle_radians);
+          double ecYOffset = endcapDetectorTrapCenterRadius * std::sin(angle_radians + halfShapeAngle_radians);
 
-          dd4hep::RotationZ  ecRotZ(angle_radians + shapeAngle_radians);
+          dd4hep::RotationZ  ecRotZ(angle_radians + halfShapeAngle_radians);
           dd4hep::Rotation3D ecRot(ecRotZ);
 
+          // Overlapping neighbour sides are put at different z: 4 slots if a side is shorter than a chamber, else 2
           dd4hep::Position endcapDetectorSideEnvTrans;
           if (sideLengthEstimate <= (2.0 * dimensions.y())) {
             double z1 = -endcapDetectorEnvZ / 4.0;
@@ -698,11 +706,12 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
           endcapDetectorSideEnvVol.setVisAttributes(lcdd, xmlDet.visStr());
 
           // ---- Endcap rectangles ----------------------------------------
+          // Rows of chambers along the radius, narrower towards the beam (as in the barrel)
           int numRectangles = (int)(endcapDetectorYLength / (2.0 * dimensions.z() - overlapZ));
           for (int rectangle = 0; rectangle <= numRectangles; ++rectangle) {
             double rectangleEnvY =
                 (endcapDetectorLayerOuterRadius - rectangle * (2.0 * dimensions.y() - overlapY))
-                * std::tan(shapeAngle_radians);
+                * std::tan(halfShapeAngle_radians);
             double rectangleEnvZ;
             if (rectangle == numRectangles)
               rectangleEnvZ = endcapRemainderZ * dimensions.z() + clearance / 4.0;
@@ -861,6 +870,7 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
         endcapRadiatorEnvVol.setVisAttributes(lcdd, xmlDet.visStr());
 
         for (int side = 0; side < numSides; ++side) {
+          // sideID = 100 * (endcap radiator layer number, from 1) + (side number, from 1)
           int sideID = (numEndcapRadiatorLayer + 1) * 100 + (side + 1);
           dd4hep::Trapezoid endcapRadiator(
               spec.thickness / 2.0, spec.thickness / 2.0,
@@ -872,10 +882,10 @@ static dd4hep::Ref_t createmuonSystem_o1_v02(dd4hep::Detector&       lcdd,
           double angle_degrees = shapeAngle * side;
           double angle_radians = angle_degrees * M_PI / 180.0;
           double ecRadMidRadius = endcapRadiatorLayerInnerRadius + endcapYLength / 2.0;
-          double ecRXOffset     = ecRadMidRadius * std::cos(angle_radians + shapeAngle_radians);
-          double ecRYOffset     = ecRadMidRadius * std::sin(angle_radians + shapeAngle_radians);
+          double ecRXOffset     = ecRadMidRadius * std::cos(angle_radians + halfShapeAngle_radians);
+          double ecRYOffset     = ecRadMidRadius * std::sin(angle_radians + halfShapeAngle_radians);
 
-          dd4hep::RotationZ  ecRRotZ(angle_radians + shapeAngle_radians);
+          dd4hep::RotationZ  ecRRotZ(angle_radians + halfShapeAngle_radians);
           dd4hep::Rotation3D ecRRot(ecRRotZ);
 
           dd4hep::PlacedVolume endcapRadiatorPhys = endcapRadiatorEnvVol.placeVolume(

@@ -13,3 +13,5 @@ The old name `muonSystemMuRWELL_o1_v01` is retained as an alias for backward com
 
 ## muonSystem_o1_v02.cpp
 The second version of the muon system driver. Instead of fixed `numDetectorLayers`/`numYokes` counts, `<Barrel>` and `<Endcap>` take an ordered sequence of `<layer type="detector"/>` and `<layer type="radiator" thickness="..." material="..."/>` child elements, allowing arbitrary detector/radiator arrangements (e.g. two detector layers, then a radiator, then a detector, then a radiator). The endcap sequence is mirrored for the negative side so that detector layer 0 is always closest to the IP in both endcaps.
+
+The last (outermost) barrel detector layer is longer than the other barrel layers: its length is the barrel length plus twice the endcap thickness, so it also covers both endcaps. The outer radius of the endcaps is set to the inner radius of this layer, so that the corner between barrel and endcap is closed. This assumes that the endcaps start where the barrel ends (Endcap `z_offset` = Barrel `length`/2).
