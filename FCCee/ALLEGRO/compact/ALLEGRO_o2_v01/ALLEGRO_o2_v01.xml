@@ -22,10 +22,10 @@
   </includes>
 
   <define>
-    <constant name="world_size" value="25*m"/>
-    <constant name="world_x" value="world_size"/>
-    <constant name="world_y" value="world_size"/>
-    <constant name="world_z" value="world_size"/>
+    <!-- World half-lengths: outermost volumes (muon tagger at r = 5.0 m, beam pipe at |z| = 6.0 m) plus a 50 cm margin -->
+    <constant name="world_x" value="5.5*m"/>
+    <constant name="world_y" value="5.5*m"/>
+    <constant name="world_z" value="6.5*m"/>
   </define>
 
   <include ref="./DectDimensions.xml" />
