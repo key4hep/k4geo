@@ -409,7 +409,8 @@
              inner_field="SolenoidField"
              outer_field="-1.0*tesla"
              zmax="Solenoid_Coil_half_length"
-             outer_radius="Solenoid_Coil_radius">
+             inner_radius="Solenoid_Coil_radius"
+             outer_radius="YokeBarrel_outer_radius">
       </field>
 
       <field name="CompensatingSolenoidZplus" type="solenoid"
