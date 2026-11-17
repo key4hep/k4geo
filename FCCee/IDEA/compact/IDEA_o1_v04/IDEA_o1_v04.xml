@@ -78,9 +78,9 @@
     <plugin name="InstallSurfaceManager"/>
   </plugins>
 
-  <parallelworld_volume name="tracking_volume" anchor="/world" material="Air" connected="true"
+  <parallelworld_volume name="tracking_volume" anchor="/world" material="Vacuum" connected="false"
       vis="VisibleBlue">
-      <shape type="Polycone" material="Air">
+      <shape type="Polycone" material="Vacuum">
           <!-- small-angle approximation for tan(theta) -->
           <zplane z="-SiWrD_zmax"   rmin="120*mrad * SiWrD_zmax" rmax="SiWrD_outer_radius" />
           <zplane z="-CentralBeamPipe_zmax"       rmin="0"                            rmax="SiWrD_outer_radius" />
