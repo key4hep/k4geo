@@ -28,6 +28,7 @@ using namespace dd4hep::rec; // for dd4hep::rec::Vector3D
 #define COUNTTUBES // if defined it counts the tubes in each tower
 // #define DUMPTOWEREDGES // if defined it prints tower edges x and y position (cm)
 
+namespace {
 // This methods unifies in 32 bits two IDs of 16 bits max
 // It is used to create a G4 copynumber for volumes with two IDs
 unsigned int CalcCpNo32bits(int id1, int id2) {
@@ -46,6 +47,7 @@ unsigned int CalcCpNo2bits(int id1, int id2) {
   unsigned int CpNo = (id1 << 1) | id2;
   return CpNo;
 }
+} // namespace
 
 // Create the endcap calorimeter
 //

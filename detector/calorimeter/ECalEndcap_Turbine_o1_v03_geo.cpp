@@ -7,21 +7,10 @@
 namespace det {
 
 namespace ECalEndcap_Turbine_o1_v03 {
-  unsigned ECalEndCapElementCounter = 0;
   const unsigned nWheels = 3;
 
+namespace {
   unsigned ECalEndcapNumCalibRhoLayersArr[nWheels], ECalEndcapNumCalibZLayersArr[nWheels];
-
-  double tForArcLength(double s, double bladeangle, double delZ, double r) {
-
-    // some intermediate constants
-    double zpos = delZ / 2.;
-    double zp = zpos / TMath::Tan(bladeangle);
-    double b = zp / (TMath::Sqrt(r * r - zp * zp));
-    double c = (TMath::Tan(s / r) + b) / (1. - b * TMath::Tan(s / r));
-    double d = c * c * r * r / (1 + c * c);
-    return (TMath::Sqrt(d) - zp) * TMath::Sin(bladeangle);
-  }
 
   // return position of the inner edge of a blade
   double getZmin(double r, double bladeangle, double delZ) {
@@ -52,8 +41,8 @@ namespace ECalEndcap_Turbine_o1_v03 {
   }
 
   void buildWheel(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4hep::Volume& aEnvelope,
-                  dd4hep::xml::Handle_t& aXmlElement, dd4hep::DetElement& bathDetElem, float ri, float ro, float delZ,
-                  float offsetZ, unsigned iWheel) {
+                         dd4hep::xml::Handle_t& aXmlElement, dd4hep::DetElement& bathDetElem, float ri, float ro,
+                         float delZ, float offsetZ, unsigned iWheel) {
 
     dd4hep::xml::DetElement calorimeterElem = aXmlElement.child(_Unicode(calorimeter));
     dd4hep::xml::DetElement genericBladeElem = calorimeterElem.child(_Unicode(turbineBlade));
@@ -833,6 +822,7 @@ namespace ECalEndcap_Turbine_o1_v03 {
 
     return;
   }
+} // namespace
 
   static dd4hep::Ref_t createECalEndcapTurbine(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlElement,
                                                dd4hep::SensitiveDetector aSensDet) {

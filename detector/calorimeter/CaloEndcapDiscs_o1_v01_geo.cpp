@@ -10,6 +10,7 @@ const std::string INFO = " Info: ";
 } // anonymous namespace
 
 namespace det {
+namespace {
 void buildOneSide(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4hep::Volume& aEnvelope,
                   dd4hep::DetElement& aEnvelopeDetElem, dd4hep::xml::Handle_t& aXmlElement, int sign) {
 
@@ -267,6 +268,7 @@ void buildOneSide(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, 
   }
   return;
 }
+} // namespace
 
 static dd4hep::Ref_t createCaloDiscs(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlElement,
                                      dd4hep::SensitiveDetector aSensDet) {

@@ -8,25 +8,10 @@
 namespace det {
 
 namespace ECalEndcap_Turbine_o1_v02 {
+namespace {
   unsigned ECalEndCapElementCounter = 0;
 
   unsigned ECalEndcapNumCalibLayers;
-
-  double tForArcLength(double s, double bladeangle, double delZ, double r) {
-
-    // some intermediate constants
-    double zpos = delZ / 2.;
-    double zp = zpos / TMath::Tan(bladeangle);
-    double b = zp / (TMath::Sqrt(r * r - zp * zp));
-    double c = (TMath::Tan(s / r) + b) / (1. - b * TMath::Tan(s / r));
-    double d = c * c * r * r / (1 + c * c);
-    return (TMath::Sqrt(d) - zp) * TMath::Sin(bladeangle);
-
-    // try approximating the arclength as dx.  Less accurate, but that
-    // approximation is used in calculating the LAr gap, so maybe this
-    // will make it more consistent?
-    // return s*TMath::Sin(bladeangle);
-  }
 
   // return position of the inner edge of a blade
   double getZmin(double r, double bladeangle, double delZ) {
@@ -57,8 +42,8 @@ namespace ECalEndcap_Turbine_o1_v02 {
   }
 
   void buildWheel(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4hep::Volume& aEnvelope,
-                  dd4hep::xml::Handle_t& aXmlElement, dd4hep::DetElement& bathDetElem, float ri, float ro, float delZ,
-                  unsigned iWheel) {
+                         dd4hep::xml::Handle_t& aXmlElement, dd4hep::DetElement& bathDetElem, float ri, float ro,
+                         float delZ, unsigned iWheel) {
 
     dd4hep::xml::DetElement calorimeterElem = aXmlElement.child(_Unicode(calorimeter));
     dd4hep::xml::DetElement genericBladeElem = calorimeterElem.child(_Unicode(turbineBlade));
@@ -666,6 +651,7 @@ namespace ECalEndcap_Turbine_o1_v02 {
 
     return;
   }
+} // namespace
 
   static dd4hep::Ref_t createECalEndcapTurbine(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlElement,
                                                dd4hep::SensitiveDetector aSensDet) {

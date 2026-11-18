@@ -36,6 +36,7 @@ using dd4hep::Tube;
 using dd4hep::Volume;
 using dd4hep::rec::ZPlanarData;
 
+namespace {
 ZPlanarData::LayerLayout buildLayerLayout(double radius, int staves, double phi0, double z0, Volume module,
                                           PlacedVolume sensor) {
   ZPlanarData::LayerLayout thisLayer;
@@ -71,6 +72,7 @@ ZPlanarData::LayerLayout buildLayerLayout(double radius, int staves, double phi0
 
   return thisLayer;
 }
+} // namespace
 
 static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens) {
   typedef std::vector<PlacedVolume> Placements;
