@@ -24,5 +24,5 @@ The CMake option `INSTALL_BEAMPIPE_STL_FILES=ON` downloads these STL.
 -- continuation of MDI_o1_v01, fixed issue of a mis-rotation of the beam pipe separation
 Added MDI_standalone.xml to help debug MDI geometry
 
-- MDI_o1_CADBased_v01_o2 and MDI_o1_ShapeBased_v01_o2
--- change with respect to versions without "o2": switched the detailed antisolenoid field map to the simple one (from CLD, e.g. o2_v09)
+- MDI_o1_CADBased_v02 and MDI_o1_ShapeBased_v02
+-- change with respect to versions 01: switched the detailed antisolenoid field map to the simple one (from CLD, e.g. o2_v09)
