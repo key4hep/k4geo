@@ -69,7 +69,7 @@
   <world material="Vacuum"/>
 
   <!-- Include the MDI Collection for shape-based option, version 02 (simple antisolenoid)-->
-  <include ref="../../../MDI/compact/MDI_o1_ShapeBased_v01/MDI_o1_ShapeBased_v01_o2_collection.xml"/>
+  <include ref="../../../MDI/compact/MDI_o1_ShapeBased_v02/MDI_o1_ShapeBased_v02_collection.xml"/>
 
   <!-- lumiCal from CLD_02_v07 -->
   <include ref="../../../CLD/compact/CLD_o2_v07/LumiCal_o3_v02_05.xml"/>
