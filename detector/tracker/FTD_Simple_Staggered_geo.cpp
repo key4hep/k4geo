@@ -75,7 +75,8 @@ void petalSupport(Detector& theDetector, DetElement det, std::map<std::string, d
                   Volume FTDPetalAirLogical);
 VolVec petalSensor(Detector& theDetector, DetElement ftd, SensitiveDetector sens,
                    std::map<std::string, double> valuesDict, Volume FTDPetalAirLogical);
-[[maybe_unused]] Trap SemiPetalSolid(const double& petal_cp_support_dy, const std::string& whereItgoes, const bool isSilicon);
+[[maybe_unused]] Trap SemiPetalSolid(const double& petal_cp_support_dy, const std::string& whereItgoes,
+                                     const bool isSilicon);
 
 // debug print function
 [[maybe_unused]] void printVolume(Volume v) { std::cout << " ++++ create Volume " << v.name() << std::endl; }
@@ -1825,7 +1826,8 @@ std::vector<double> GetPetalDimensions(const double& petal_cp_support_dy, const 
 //                   isSilicon:           True of False, define if is the sensor or the holes
 
 //-------------------------------------------------------------------------------------------------------------------
-[[maybe_unused]] Trap SemiPetalSolid(const double& petal_cp_support_dy, const std::string& whereItgoes, const bool isSilicon) {
+[[maybe_unused]] Trap SemiPetalSolid(const double& petal_cp_support_dy, const std::string& whereItgoes,
+                                     const bool isSilicon) {
   // Get dimensions
   const std::vector<double>& dimensions = GetPetalDimensions(petal_cp_support_dy, whereItgoes, isSilicon);
   double xMin_half = dimensions[0];
