@@ -42,6 +42,8 @@ typedef std::vector<std::pair<Volume, PlacedVolume>> VolVec;
 /// Helper vector for DetElements (e.g. petals in disk)
 typedef std::vector<DetElement> DEVec;
 
+namespace {
+
 /// Storing all the gear parameters
 std::map<int, std::vector<double>> _ftdparameters;
 
@@ -73,10 +75,10 @@ void petalSupport(Detector& theDetector, DetElement det, std::map<std::string, d
                   Volume FTDPetalAirLogical);
 VolVec petalSensor(Detector& theDetector, DetElement ftd, SensitiveDetector sens,
                    std::map<std::string, double> valuesDict, Volume FTDPetalAirLogical);
-Trap SemiPetalSolid(const double& petal_cp_support_dy, const std::string& whereItgoes, const bool isSilicon);
+[[maybe_unused]] Trap SemiPetalSolid(const double& petal_cp_support_dy, const std::string& whereItgoes, const bool isSilicon);
 
 // debug print function
-void printVolume(Volume v) { std::cout << " ++++ create Volume " << v.name() << std::endl; }
+[[maybe_unused]] void printVolume(Volume v) { std::cout << " ++++ create Volume " << v.name() << std::endl; }
 //=========================== PARAMETERS SETTERS FUNCTIONS ====================================/
 //*********************************************************************************************
 // Set Environment variables (dependent of other subdetectors)
@@ -201,6 +203,8 @@ void SetParDisk(XMLHandlerDB db) {
 #endif
 }
 //=END======================= PARAMETERS SETTERS FUNCTIONS ================================END=/
+
+} // namespace
 
 /** Construction of FTD detector, ported from Mokka driver FTD_simple_Staggered.cc
  *
@@ -1245,6 +1249,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
 DECLARE_DETELEMENT(FTD_Simple_Staggered, create_element)
 
+namespace {
+
 //===================================================================================================================================================================================
 
 //================================ PETAL BUILD FUNCTIONS ======================================/
@@ -1819,7 +1825,7 @@ std::vector<double> GetPetalDimensions(const double& petal_cp_support_dy, const 
 //                   isSilicon:           True of False, define if is the sensor or the holes
 
 //-------------------------------------------------------------------------------------------------------------------
-Trap SemiPetalSolid(const double& petal_cp_support_dy, const std::string& whereItgoes, const bool isSilicon) {
+[[maybe_unused]] Trap SemiPetalSolid(const double& petal_cp_support_dy, const std::string& whereItgoes, const bool isSilicon) {
   // Get dimensions
   const std::vector<double>& dimensions = GetPetalDimensions(petal_cp_support_dy, whereItgoes, isSilicon);
   double xMin_half = dimensions[0];
@@ -1951,3 +1957,5 @@ void GearSetup() {
   gearMgr->setFTDParameters(ftdParam);
 }
 #endif
+
+} // namespace

@@ -24,8 +24,10 @@ namespace DCH_v2 {
 using DCH_length_t = dd4hep::rec::WireTracker_info_struct::length_t;
 using DCH_angle_t = dd4hep::rec::WireTracker_info_struct::angle_t;
 
+namespace {
 dd4hep::Solid CompositeTT(double twist_angle, double cell_rin_z0, double cell_rout_z0, double dz, double dphi,
                           const dd4hep::rec::DCH_info& DCH_i);
+} // namespace
 
 /// Function to build DCH
 static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Handle_t handle,
@@ -487,6 +489,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
   return det;
 }
 
+namespace {
 inline double Circumradius(double Apothem, double dphi) { return Apothem / cos(0.5 * dphi / dd4hep::rad); }
 
 /// Solid equivalent to a twisted tube, resulting from the intersection of an hyperboloid and a generic trapezoid
@@ -559,6 +562,7 @@ dd4hep::Solid CompositeTT(double twist_angle, double cell_rin_z0, double cell_ro
   dd4hep::Solid mytt = dd4hep::IntersectionSolid(gtrap_shape, layer_s);
   return mytt;
 }
+} // namespace
 
 }; // namespace DCH_v2
 

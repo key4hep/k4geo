@@ -15,6 +15,7 @@ using dd4hep::Volume;
 using dd4hep::xml::Dimension;
 
 namespace det {
+namespace {
 void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4hep::Volume& aEnvelope,
              dd4hep::DetElement& aHCal, xml_det_t aXmlElement, int sign) {
 
@@ -402,6 +403,7 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
     }
   }
 }
+} // namespace
 
 static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4hep::SensitiveDetector sensDet) {
 
