@@ -12,6 +12,7 @@
 
 #include "detectorCommon/WireTracker_info.h"
 
+namespace {
 /*
  * Define a simple assert function which prints a message when the assert will fail
  * so that the user gets some printout
@@ -22,6 +23,7 @@ void strawAssert(bool condition, std::string message) {
     assert(condition);
   }
 }
+} // namespace
 
 /*
  * Constructor for straw tube tracker detector
