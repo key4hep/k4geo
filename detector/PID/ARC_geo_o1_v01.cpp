@@ -22,6 +22,7 @@ using namespace dd4hep;
 
 // #define DUMP_SENSOR_POSITIONS
 
+namespace {
 /* GetVariableFromXML function look for global variable in XML, if value is not present, returns default value
  * optionally a range for the input value can be provided
  * default value can be outside that range
@@ -40,6 +41,7 @@ double GetVariableFromXML(Detector& desc, std::string varName, double defaultVal
   }
   return value;
 }
+} // namespace
 
 /// Function to build ARC endcaps
 static Ref_t create_ARC_endcaps(Detector& desc, xml::Handle_t handle, SensitiveDetector sens) {
@@ -547,6 +549,7 @@ static Ref_t create_ARC_endcaps(Detector& desc, xml::Handle_t handle, SensitiveD
 }
 DECLARE_DETELEMENT(ARCENDCAP_o1_v01_T, create_ARC_endcaps)
 
+namespace {
 /* Compact unitary barrel cell, following Roger description
  * Because 4 out of 6 lateral sides are not flat,
  * there is a small volume between cells which is filled
@@ -654,6 +657,7 @@ TessellatedSolid create_ARC_barrel_shape(double r_in = 191 * cm /*inner radius*/
   shape->CloseShape(true, false, true);
   return shape;
 }
+} // namespace
 
 /// Function to build ARC barrel
 /**
