@@ -18,6 +18,12 @@
 //  tracking, which currently doesn't support curved sensors (=sensitive
 //  surfaces) yet. Sensor components can now also be defined in an
 //  external xml file to avoid repetion in the detector xml file.
+//  From o1_v03 to o1_v04: Fixed the treatment of insensitive volumes.
+//  They now receive a surface, which is needed for the material evaluation
+//  in DDKalTest and thus conformal tracking. This surface can be skipped
+//  with the 'notPlaceSurface' option, e.g. if the on-stave volumes have
+//  already been included in the 'other_insensitive_thickness_below'/above
+//  of the sensor definition.
 //--------------------------------------------------------------------
 //
 //  Author     : Armin Ilg
@@ -96,6 +102,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     vector<double> phis;
     vector<Volume> volumes;
     vector<bool> isCurved;
+    vector<bool> notPlaceSurface;
   };
 
   // Struct to support end-of-stave structures
@@ -113,6 +120,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     vector<Volume> volumes;
     vector<int> side;
     vector<bool> isCurved;
+    vector<bool> notPlaceSurface;
   };
 
   // Struct for sensors
@@ -205,6 +213,10 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
         bool isCurved = getAttrOrDefault(component, _Unicode(isCurved), bool(false));
         components.isCurved.push_back(isCurved);
+        components.notPlaceSurface.push_back(getAttrOrDefault(
+            component, _Unicode(notPlaceSurface),
+            bool(false))); // Don't put a surface for this volume. Only use if volume material is included in sensor
+                           // 'other_insensitive_thickness_below'/'other_insensitive_thickness_above'
         Volume ele_vol;
 
         if (isCurved) {
@@ -261,6 +273,10 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
         endOfStave.side.push_back(side); // 0 for both sides (default), +1 for +z side, -1 for -z side
         bool isCurved = getAttrOrDefault(component, _Unicode(isCurved), bool(false));
+        endOfStave.notPlaceSurface.push_back(getAttrOrDefault(
+            component, _Unicode(notPlaceSurface),
+            bool(false))); // Don't put a surface for this volume. Only use if volume material is included in sensor
+                           // 'other_insensitive_thickness_below'/'other_insensitive_thickness_above'
         endOfStave.isCurved.push_back(isCurved);
         Volume ele_vol;
 
@@ -332,88 +348,64 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
         double sensitive_thickness = getAttrOrDefault(
             component, _Unicode(thickness), default_sensor_thickness); // Take the overall sensor thickness as default
-        double sensor_insensitive_thickness_below = getAttrOrDefault(
-            component, _Unicode(sensor_insensitive_thickness_below),
-            0.); // Thickness of insensitive material in sensor before the sensitive material (i.e. closer to IP)
-        double sensor_insensitive_thickness_above = getAttrOrDefault(
-            component, _Unicode(sensor_insensitive_thickness_above),
-            0.); // Thickness of insensitive material in sensor after the sensitive material (i.e. farther from IP)
-        vector<double> innerInsensitiveThickness_split = {
-            0.,
-            getAttrOrDefault(component, _Unicode(other_insensitive_thickness_below), 0.) +
-                sensor_insensitive_thickness_below,
-            0.}; // Thickness of insensitive material in front of sensitive volume (within sensor and e.g. from supports
-                 // before). Only the sensitive volume has this property
-        vector<double> outerInsensitiveThickness_split = {
-            0.,
-            getAttrOrDefault(component, _Unicode(other_insensitive_thickness_above), 0.) +
-                sensor_insensitive_thickness_above,
-            0.}; // Thickness of insensitive material behind sensitive volume (within sensor and e.g. from supports
-                 // after). Only the sensitive volume has this property
 
-        vector<double> thicknesses_split = {sensor_insensitive_thickness_below, sensitive_thickness,
-                                            sensor_insensitive_thickness_above};
-        vector<string> sensor_part_names = {component.nameStr() + _toString(iSensor, "_insensitive_below_%d"),
-                                            component.nameStr() + _toString(iSensor, "_%d"),
-                                            component.nameStr() + _toString(iSensor, "_insensitive_above_%d")};
-        vector<bool> isSensitive_split = {false, component.isSensitive(), false};
-        sensor.nSensitivePerModule +=
-            component.isSensitive() ? 1 : 0; // Count how many sensitive components there are per module
+        double insensitive_sensor_below = getAttrOrDefault(component, _Unicode(sensor_insensitive_thickness_below), 0.);
+        double insensitive_sensor_above = getAttrOrDefault(component, _Unicode(sensor_insensitive_thickness_above), 0.);
 
-        vector<double> rs = {component.r(0), component.r(0) + sensor_insensitive_thickness_below,
-                             component.r(0) + sensor_insensitive_thickness_below + sensitive_thickness};
+        // Thickness below/above the sensor (not part of sensor) that is insensitive. E.g. stave support structure
+        double other_below = getAttrOrDefault(component, _Unicode(other_insensitive_thickness_below), 0.);
+        double other_above = getAttrOrDefault(component, _Unicode(other_insensitive_thickness_above), 0.);
+        sensor.nSensitivePerModule += component.isSensitive() ? 1 : 0;
 
-        for (int i = 0; i < int(thicknesses_split.size()); i++) {
-          if (thicknesses_split[i] == 0.)
-            continue; // Skip components with zero thickness
-          sensor.thicknesses.push_back(thicknesses_split[i]);
-          sensor.insensitive_thicknesses_below.push_back(innerInsensitiveThickness_split[i]);
-          sensor.insensitive_thicknesses_above.push_back(outerInsensitiveThickness_split[i]);
-          sensor.sensitives.push_back(isSensitive_split[i]);
+        int nsegment = getAttrOrDefault(component, _Unicode(nsegments),
+                                        int(1)); // To approximate curved sensors by trapezoid segments
+        bool isCurved = getAttrOrDefault(component, _Unicode(isCurved), bool(false));
+        double r_layer = component.r(0); // running radial offset within this component
+
+        // Lambda function to add the sensitive part of the sensor and the insensitive parts below and above it
+        auto addSensorPart = [&](double thickness, bool sensitive, double ins_below, double ins_above,
+                                 const string& name_suffix) {
+          if (thickness == 0.)
+            return; // Skip parts with zero thickness
+          string part_name = component.nameStr() + _toString(iSensor, "_%d") + name_suffix;
+          sensor.thicknesses.push_back(thickness);
+          sensor.insensitive_thicknesses_below.push_back(
+              ins_below); // Volume below sensor that is insensitive, e.g. a sensor substrate
+          sensor.insensitive_thicknesses_above.push_back(
+              ins_above); // Volume above sensor that is insensitive, e.g. a metal layer
+          sensor.sensitives.push_back(sensitive);
           sensor.xmin.push_back(component.xmin());
           sensor.xmax.push_back(component.xmax());
           sensor.ymin.push_back(component.ymin());
           sensor.ymax.push_back(component.ymax());
-          sensor.rs.push_back(rs[i]);
-          int nsegment = getAttrOrDefault(component, _Unicode(nsegments), int(1));
+          sensor.rs.push_back(r_layer);
+          r_layer += thickness;
           sensor.nsegments.push_back(nsegment);
-
-          bool isCurved = getAttrOrDefault(component, _Unicode(isCurved), bool(false));
           sensor.isCurved.push_back(isCurved);
 
-          // Already create volumes for all sensor components as this is independent of number of sensors per layer
           Volume ele_vol;
           if (isCurved) {
-            double rmin = m.stave_r + sensor.r + rs[i];
+            double rmin = m.stave_r + sensor.r + sensor.rs.back();
             double half_width = abs(component.xmax() - component.xmin()) / rmin / 2.;
             if (nsegment > 1) {
-              // Use trapezoids to mimic curved sensors, leaving no cracks and not creating overlaps. To get surfaces
-              // correctly oriented fix DD4hep Surface.cpp
-              // (https://github.com/AIDASoft/DD4hep/blob/d1f9239c7fea65110c8579ca478e29d01afa7801/DDRec/src/Surface.cpp#L1056)
-              // such that not only y direction can be the normal direction of the surface, similarly to how it's done
-              // for planes (isXY...)
+              // The trapezoid has an average width of 'abs(component.xmax() - component.xmin()) / 2. / nsegment', so
+              // the inner width must be a bit smaller and the outer width a bit larger depending on the radius where it
+              // is placed. This is given by the scaling factor '(rmin + thickness) / rmin'
               Trd1 ele_box =
-                  Trd1(abs(component.xmax() - component.xmin()) / 2. / nsegment *
-                           (1 + (1 - (rmin + thicknesses_split[i]) / rmin)),
-                       abs(component.xmax() - component.xmin()) / 2. / nsegment *
-                           (1 - (1 - (rmin + thicknesses_split[i]) / rmin)),
-                       abs(component.ymax() - component.ymin()) / 2.,
-                       thicknesses_split[i] /
-                           2.); // The trapezoid has an average width of 'abs(component.xmax() -
-                                // component.xmin()) / 2. / nsegment', so the inner width must be a bit smaller
-                                // and the outer width a bit larger depending on the radius where it is placed.
-                                // This is given by the scaling factor '(rmin + thicknesses_split[i]) / rmin'
-              ele_vol = Volume(sensor_part_names[i], ele_box, sensor.material);
+                  Trd1(abs(component.xmax() - component.xmin()) / 2. / nsegment * (1 + (1 - (rmin + thickness) / rmin)),
+                       abs(component.xmax() - component.xmin()) / 2. / nsegment * (1 - (1 - (rmin + thickness) / rmin)),
+                       abs(component.ymax() - component.ymin()) / 2., thickness / 2.);
+              ele_vol = Volume(part_name, ele_box, sensor.material);
             } else {
               double phi_offset = getAttrOrDefault(component, _Unicode(phi_offset), double(0.0));
-              Tube ele_box = Tube(rmin, rmin + thicknesses_split[i], abs(component.ymax() - component.ymin()) / 2.,
+              Tube ele_box = Tube(rmin, rmin + thickness, abs(component.ymax() - component.ymin()) / 2.,
                                   -half_width + phi_offset, half_width + phi_offset);
-              ele_vol = Volume(sensor_part_names[i], ele_box, sensor.material);
+              ele_vol = Volume(part_name, ele_box, sensor.material);
             }
           } else {
             Box ele_box = Box(abs(component.xmax() - component.xmin()) / 2.,
-                              abs(component.ymax() - component.ymin()) / 2., thicknesses_split[i] / 2.);
-            ele_vol = Volume(sensor_part_names[i], ele_box, sensor.material);
+                              abs(component.ymax() - component.ymin()) / 2., thickness / 2.);
+            ele_vol = Volume(part_name, ele_box, sensor.material);
           }
 
           if (sensor.sensitives.back())
@@ -421,7 +413,14 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
           ele_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), component.visStr());
           sensor.volumes.push_back(ele_vol);
           iSensor++;
-        }
+        };
+
+        // Finally add all the sensor parts. The material of the insensitive sensor parts below/above the sensitive part
+        // is included in the sensitive sensor part
+        addSensorPart(insensitive_sensor_below, false, 0., 0., "_insensitive_below");
+        addSensorPart(sensitive_thickness, component.isSensitive(), other_below + insensitive_sensor_below,
+                      other_above + insensitive_sensor_above, "");
+        addSensorPart(insensitive_sensor_above, false, 0., 0., "_insensitive_above");
       }
       sensor.width =
           *max_element(sensor.xmax.begin(), sensor.xmax.end()) - *min_element(sensor.xmin.begin(), sensor.xmin.end());
@@ -575,15 +574,25 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             y_pos = r_component_curved * sin(phi) + r_offset_component * cos(phi);
             z_pos = component.z_offset + component.z_offsets[i] + motherVolOffset;
             Position pos(x_pos, y_pos, z_pos);
-            component_assembly.placeVolume(component.volumes[i],
-                                           Transform3D(rot, stave_pos).Inverse() * Transform3D(rot, pos));
+            pv = component_assembly.placeVolume(component.volumes[i],
+                                                Transform3D(rot, stave_pos).Inverse() * Transform3D(rot, pos));
+
+            // Helper surface for this non-sensitive component volume
+            SurfaceType type = SurfaceType::Helper;
+            type.setProperty(SurfaceType::Cylinder, true);
+            if (!component.notPlaceSurface[i])
+              volSurfaceList(pv)->push_back(VolCylinder(component.volumes[i], type, 0., 0., Vector3D(0., 0., 0.)));
           } else {
             x_pos = component.r + component.rs[i] + component.thicknesses[i] / 2.;
             y_pos = component.offset + component.offsets[i];
             z_pos = component.z_offset + component.z_offsets[i] + motherVolOffset;
             Position pos(x_pos, y_pos, z_pos);
-            component_assembly.placeVolume(component.volumes[i],
-                                           Transform3D(RotationZYX(component.phis[i], 0, 0), pos));
+            pv = component_assembly.placeVolume(component.volumes[i],
+                                                Transform3D(RotationZYX(component.phis[i], 0, 0), pos));
+
+            if (!component.notPlaceSurface[i])
+              volSurfaceList(pv)->push_back(VolPlane(component.volumes[i], SurfaceType::Helper, 0., 0.,
+                                                     Vector3D(0., 1., 0.), Vector3D(0., 0., 1.), Vector3D(1., 0., 0.)));
           }
         }
         component_assembly->GetShape()->ComputeBBox();
@@ -613,15 +622,25 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
               z_pos = m.stave_length / 2. + endOfStave.lengths[i] / 2. + endOfStave.dzs[i] + endOfStave.z_offset +
                       endOfStave.z_offsets[i];
               Position pos = Position(x_pos, y_pos, z_pos * endOfStave_side + motherVolOffset);
-              endOfStave_assembly.placeVolume(endOfStave.volumes[i],
-                                              Transform3D(rot, stave_pos).Inverse() * Transform3D(rot, pos));
+              pv = endOfStave_assembly.placeVolume(endOfStave.volumes[i],
+                                                   Transform3D(rot, stave_pos).Inverse() * Transform3D(rot, pos));
+
+              SurfaceType type = SurfaceType::Helper;
+              type.setProperty(SurfaceType::Cylinder, true);
+              if (!endOfStave.notPlaceSurface[i])
+                volSurfaceList(pv)->push_back(VolCylinder(endOfStave.volumes[i], type, 0., 0., Vector3D(0., 0., 0.)));
             } else {
               x_pos = endOfStave.r + endOfStave.rs[i] + endOfStave.thicknesses[i] / 2.;
               y_pos = endOfStave.offset + endOfStave.offsets[i];
               z_pos = m.stave_length / 2. + endOfStave.lengths[i] / 2. + endOfStave.dzs[i] + endOfStave.z_offset +
                       endOfStave.z_offsets[i];
               Position pos(x_pos, y_pos, z_pos * endOfStave_side + motherVolOffset);
-              endOfStave_assembly.placeVolume(endOfStave.volumes[i], pos);
+              pv = endOfStave_assembly.placeVolume(endOfStave.volumes[i], pos);
+
+              if (!endOfStave.notPlaceSurface[i])
+                volSurfaceList(pv)->push_back(VolPlane(endOfStave.volumes[i], SurfaceType::Helper, 0., 0.,
+                                                       Vector3D(0., 1., 0.), Vector3D(0., 0., 1.),
+                                                       Vector3D(1., 0., 0.)));
             }
           }
         }
@@ -692,20 +711,21 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     Translation3D(pos_offset) * Transform3D(rot, stave_pos).Inverse() * Transform3D(rot2, pos) *
                         Translation3D(pos2)); // To do: Simplify transformations, the orientation of Trd1 is strange...
 
-                if (sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
+                SurfaceType type = sensor.sensitives[i] ? SurfaceType::Sensitive : SurfaceType::Helper;
+                type.setProperty(SurfaceType::Cylinder, true);
+                Vector3D ocyl(-(r_component_curved + m.stave_r + sensor.r), 0., 0.);
+                VolCylinder surf(sensor.volumes[i], type,
+                                 sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_below[i],
+                                 sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_above[i], ocyl);
+
+                if (sensor.sensitives[i]) { // sensitive: keep DetElement and register surface on it
                   pv.addPhysVolID("sensor", iSensitive);
                   DetElement sensorDE(moduleDE, _toString(iSensitive, "_sensor%d"), iSensitive);
                   sensorDE.setPlacement(pv);
-
-                  // Use a VolCylinder surface (not supported in reconstruction)
-                  Vector3D ocyl(-(r_component_curved + m.stave_r + sensor.r), 0., 0.);
-                  SurfaceType type = SurfaceType::Sensitive;
-                  type.setProperty(SurfaceType::Cylinder, true);
-                  VolCylinder surf(sensor.volumes[i], type,
-                                   sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_below[i],
-                                   sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_above[i], ocyl);
                   volSurfaceList(sensorDE)->push_back(surf);
                   iSensitive++;
+                } else { // insensitive: surface directly on the PlacedVolume, no DetElement
+                  volSurfaceList(pv)->push_back(surf);
                 }
               } else if (sensor.isCurved[i]) { // Approximated quasi-curved sensors, using sensor.nsegments[i] tapezoids
                 r_offset_component = m.motherVolThickness > 0.0 && m.motherVolWidth > 0.0 ? 0. : layer_offset;
@@ -733,18 +753,20 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                                   -z_pos, y_pos,
                                   x_pos))); // To do: Simplify transformations, the orientation of Trd1 is strange...
 
-                  if (sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
+                  SurfaceType type = sensor.sensitives[i] ? SurfaceType::Sensitive : SurfaceType::Helper;
+                  VolPlane surf(sensor.volumes[i], type,
+                                sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_below[i],
+                                sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_above[i],
+                                Vector3D(1., 0., 0.), Vector3D(0., 1., 0.), Vector3D(0., 0., 1.));
+
+                  if (sensor.sensitives[i]) {
                     pv.addPhysVolID("sensor", iSensitive);
                     DetElement sensorDE(moduleDE, _toString(iSensitive, "_sensor%d"), iSensitive);
                     sensorDE.setPlacement(pv);
-
-                    // Use plane surface on top of trapezoid, supported e.g. in conformal tracking
-                    VolPlane surf(sensor.volumes[i], dd4hep::rec::SurfaceType::Sensitive,
-                                  sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_below[i],
-                                  sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_above[i],
-                                  Vector3D(1., 0., 0.), Vector3D(0., 1., 0.), Vector3D(0., 0., 1.));
                     volSurfaceList(sensorDE)->push_back(surf);
                     iSensitive++;
+                  } else {
+                    volSurfaceList(pv)->push_back(surf);
                   }
                 }
               } else { // not curved (rectangular), use boxes
@@ -758,17 +780,20 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 pv = module_assembly.placeVolume(sensor.volumes[i], Translation3D(pos + pos2) * RotationY(M_PI / 2.) *
                                                                         RotationZ(M_PI / 2.));
 
-                if (sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
+                SurfaceType type = sensor.sensitives[i] ? SurfaceType::Sensitive : SurfaceType::Helper;
+                VolPlane surf(sensor.volumes[i], type,
+                              sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_below[i],
+                              sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_above[i],
+                              Vector3D(1., 0., 0.), Vector3D(0, 1., 0.), Vector3D(0., 0., 1.));
+
+                if (sensor.sensitives[i]) { // sensitive: keep DetElement, register surface on it
                   pv.addPhysVolID("sensor", iSensitive);
                   DetElement sensorDE(moduleDE, _toString(iSensitive, "_sensor%d"), iSensitive);
                   sensorDE.setPlacement(pv);
-
-                  VolPlane surf(sensor.volumes[i], dd4hep::rec::SurfaceType::Sensitive,
-                                sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_below[i],
-                                sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_above[i],
-                                Vector3D(1., 0., 0.), Vector3D(0, 1., 0.), Vector3D(0., 0., 1.));
                   volSurfaceList(sensorDE)->push_back(surf);
                   iSensitive++;
+                } else { // insensitive part: Helper surface directly on the PlacedVolume
+                  volSurfaceList(pv)->push_back(surf);
                 }
               }
             }
@@ -801,4 +826,4 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
   return sdet;
 }
 
-DECLARE_DETELEMENT(VertexBarrel_detailed_o1_v03, create_element)
+DECLARE_DETELEMENT(VertexBarrel_detailed_o1_v04, create_element)
