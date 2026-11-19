@@ -6,7 +6,6 @@ SIM = DD4hepSimulation()
 SIM.compactFile = "../../DD4HEP/compact/TBModel2015.xml"
 SIM.runType = "batch"
 SIM.macroFile = "vis.mac"
-# SIM.inputFiles = "mcparticles.slcio"
 SIM.outputFile = "DD4hep_mu-_8GeV_QGSP_BERT_10k.slcio"
 
 SIM.numberOfEvents = 10000
