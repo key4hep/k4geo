@@ -3,3 +3,6 @@
 
 # clang-format (enforce, see #467)
 a6efcc6bb164daef3b739b184b17716a4d489b0a
+
+# Format detector constructors after namespace changes (see #692)
+6a7619c4e33bcac924b0113133a8bf4a840425b9
