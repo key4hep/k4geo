@@ -44,6 +44,8 @@ The total area of sensors is reduced compared to the o1_v03 version. Also added 
 
 August 2026: The IDEA vertex detector is refactored, such that the individual pieces (Vertex_kapton_on_beampipe_o1_v01.xml, VertexInnerBarrel_o1_v04.xml, VertexInnerBarrel_support_tube_o1_v01.xml, VertexOuterBarrel_o1_v04.xml, VertexDisks_o1_v04.xml) can from now on be easily reused and combined. The ultra-light inner vertex option is now in a separate xml file (VertexInnerBarrelUltraLight_o1_v04.xml) and can be selected in the overall vertex xml file (VertexComplete_o1_v04.xml). Similarly, the FCC-SEED vertex detector can be used. 
 
+November 2026: Same magnetic field as IDEA_o2_v01 (../IDEA_o2_v01/MagneticField_o1_v01.xml).
+
 IDEA_o2_v01
 ------------
 
@@ -61,3 +63,5 @@ April 2026: Switch to vertex detector and silicon wrapper from IDEA_o1_v04.
 July 2026: Added reconstruction metadata to the dual-readout barrel and endcap tubes calorimeters: `LayeredCalorimeterData` extensions provide their r-z extents, while the XML `DetType` flags are applied to their `DetElement`s. This allows downstream reconstruction to retrieve their inner radius / z directly from the geometry.
 
 August 2026: Update of vertex detector, as in IDEA_o1_v04.
+
+November 2026: New magnetic field (MagneticField_o1_v01.xml): uniform field in the coil plus one Bz in the barrel and one Br in each endcap muon system, taken from the IDEA FEM field map and scaled with SolenoidField; the -1.7 T outer field is removed.
