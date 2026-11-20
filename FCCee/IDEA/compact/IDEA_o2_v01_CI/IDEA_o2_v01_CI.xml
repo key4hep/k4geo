@@ -90,6 +90,17 @@
     <plugin name="InstallSurfaceManager"/>
   </plugins>
 
+  <parallelworld_volume name="tracking_volume" anchor="/world" material="Vacuum" connected="false"
+      vis="VisibleBlue">
+      <shape type="Polycone" material="Vacuum">
+          <!-- small-angle approximation for tan(theta) -->
+          <zplane z="-SiWrD_zmax"   rmin="120*mrad * SiWrD_zmax" rmax="SiWrD_outer_radius" />
+          <zplane z="-CentralBeamPipe_zmax"       rmin="0"                            rmax="SiWrD_outer_radius" />
+          <zplane z="+CentralBeamPipe_zmax"       rmin="0"                            rmax="SiWrD_outer_radius" />
+          <zplane z="+SiWrD_zmax"   rmin="120*mrad * SiWrD_zmax" rmax="SiWrD_outer_radius" />
+      </shape>
+  </parallelworld_volume>
+
   <fields>
     <!-- FIXME The magnetic field should be a map derived from FEM tools including all field sources, the return yoke geometry, etc -->
     <!-- Currently the outer field value is kind of arbitrary and it will also impregnate the calorimeter volume while the field there is very small -->
