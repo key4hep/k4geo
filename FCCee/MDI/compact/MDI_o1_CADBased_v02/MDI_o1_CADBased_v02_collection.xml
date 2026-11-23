@@ -1,0 +1,30 @@
+<lccdd>
+
+    <include ref="../MDI_o1_CADBased_v01/BeamInstrumentation_o1_v01.xml"/>
+    <include ref="../MDI_o1_CADBased_v01/Beampipe_CADimport_o1_v03.xml"/>
+
+    <!-- must use one FFQuads_params_xxx.xml BEFORE FFQuads_v01.xml -->
+    <!--<include ref="../MDI_o1_CADBased_v01/FFQuads_params_v530_Z.xml"/>-->
+    <include ref="../MDI_o1_CADBased_v01/FFQuads_params_v572_Z.xml"/>
+    <!--include ref="../MDI_o1_CADBased_v01/FFQuads_params_v572_T.xml"/-->
+    <include ref="../MDI_o1_CADBased_v01/FFQuads_v01.xml"/>
+    <!--include ref="../MDI_o1_CADBased_v01/FFQuads_v01_sens.xml"/-->
+    
+    <!-- difference to v01: simple antisolenoid instead of fields_antisol_map.xml -->
+    <!-- default values for QD0_min_z and CompSil_min_z are in ../MDI_o1_CADBased_v01/MDI_Dimensions_Materials_o1_v01.xml -->
+    <field name="CompensatingSolenoidZplus" type="solenoid"
+           inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
+           outer_field="0*tesla"
+           zmax="QD0_min_z"
+           zmin="CompSol_min_z"
+           outer_radius="20*cm">
+      </field>
+      <field name="CompensatingSolenoidZminus" type="solenoid"
+             inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
+             outer_field="0*tesla"
+             zmin="-QD0_min_z"
+             zmax="-CompSol_min_z"
+             outer_radius="20*cm">
+        </field>
+
+</lccdd>
