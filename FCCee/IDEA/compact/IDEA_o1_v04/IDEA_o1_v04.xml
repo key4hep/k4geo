@@ -77,10 +77,13 @@
     <plugin name="DD4hepVolumeManager"/>
     <plugin name="InstallSurfaceManager"/>
   </plugins>
-
-  <parallelworld_volume name="tracking_volume" anchor="/world" material="Air" connected="true"
+<!-- Defines the tracking region in a parallel world, allowing more complex geometrical
+     boundaries (e.g. excluding the lumi cal) than a simple cylindrical region.
+     This volume is used only to define the tracking region, not as part of the
+     physical geometry simulated. -->
+  <parallelworld_volume name="tracking_volume" anchor="/world" material="Vacuum" connected="false"
       vis="VisibleBlue">
-      <shape type="Polycone" material="Air">
+      <shape type="Polycone" material="Vacuum">
           <!-- small-angle approximation for tan(theta) -->
           <zplane z="-SiWrD_zmax"   rmin="120*mrad * SiWrD_zmax" rmax="SiWrD_outer_radius" />
           <zplane z="-CentralBeamPipe_zmax"       rmin="0"                            rmax="SiWrD_outer_radius" />

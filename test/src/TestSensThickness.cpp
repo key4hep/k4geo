@@ -10,6 +10,8 @@
 
 static dd4hep::DDTest test("SensThickness");
 
+namespace {
+
 template <typename T>
 void checkExtensions(dd4hep::Detector& lcdd, std::vector<std::string> detectorNames,
                      std::vector<double> sensThickness) {
@@ -32,6 +34,8 @@ void checkExtensions(dd4hep::Detector& lcdd, std::vector<std::string> detectorNa
     }
   }
 }
+
+} // namespace
 
 int main(int argc, char** args) {
 

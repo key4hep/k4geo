@@ -24,8 +24,10 @@ namespace DCH_v2 {
 using DCH_length_t = dd4hep::rec::WireTracker_info_struct::length_t;
 using DCH_angle_t = dd4hep::rec::WireTracker_info_struct::angle_t;
 
-dd4hep::Solid CompositeTT(double twist_angle, double cell_rin_z0, double cell_rout_z0, double dz, double dphi,
-                          const dd4hep::rec::DCH_info& DCH_i);
+namespace {
+  dd4hep::Solid CompositeTT(double twist_angle, double cell_rin_z0, double cell_rout_z0, double dz, double dphi,
+                            const dd4hep::rec::DCH_info& DCH_i);
+} // namespace
 
 /// Function to build DCH
 static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Handle_t handle,
@@ -487,78 +489,80 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
   return det;
 }
 
-inline double Circumradius(double Apothem, double dphi) { return Apothem / cos(0.5 * dphi / dd4hep::rad); }
+namespace {
+  inline double Circumradius(double Apothem, double dphi) { return Apothem / cos(0.5 * dphi / dd4hep::rad); }
 
-/// Solid equivalent to a twisted tube, resulting from the intersection of an hyperboloid and a generic trapezoid
-/// the hyperboloid provides the hyperboloidal surfaces, the trapezoid provides the other two types of surfaces
-/// the generic trapezoid is built in such a manner that circumscribe the twisted tube
-dd4hep::Solid CompositeTT(double twist_angle, double cell_rin_z0, double cell_rout_z0, double dz, double dphi,
-                          const dd4hep::rec::DCH_info& DCH_i) {
+  /// Solid equivalent to a twisted tube, resulting from the intersection of an hyperboloid and a generic trapezoid
+  /// the hyperboloid provides the hyperboloidal surfaces, the trapezoid provides the other two types of surfaces
+  /// the generic trapezoid is built in such a manner that circumscribe the twisted tube
+  dd4hep::Solid CompositeTT(double twist_angle, double cell_rin_z0, double cell_rout_z0, double dz, double dphi,
+                            const dd4hep::rec::DCH_info& DCH_i) {
 
-  //----------------- G. trapezoid -------------
-  // make generic trapezoid bigger, later intersected with hyperboloid of proper radii
-  double rmin_zLhalf = DCH_i.Radius_zLhalf(cell_rin_z0);
-  double rout_zLhalf = DCH_i.Radius_zLhalf(cell_rout_z0);
-  double trap_rin = 0.9 * rmin_zLhalf;
-  double trap_rout = Circumradius(1.1 * rout_zLhalf, dphi);
+    //----------------- G. trapezoid -------------
+    // make generic trapezoid bigger, later intersected with hyperboloid of proper radii
+    double rmin_zLhalf = DCH_i.Radius_zLhalf(cell_rin_z0);
+    double rout_zLhalf = DCH_i.Radius_zLhalf(cell_rout_z0);
+    double trap_rin = 0.9 * rmin_zLhalf;
+    double trap_rout = Circumradius(1.1 * rout_zLhalf, dphi);
 
-  double poly_angle = dphi / 2;
-  double twist_angle_half = twist_angle / 2.;
-  // change sign, so the final shape has the same orientation as G4 twisted tube
-  twist_angle_half *= -1; // not sure about this
+    double poly_angle = dphi / 2;
+    double twist_angle_half = twist_angle / 2.;
+    // change sign, so the final shape has the same orientation as G4 twisted tube
+    twist_angle_half *= -1; // not sure about this
 
-  // define points of 8 genenric trapezoid
-  struct point2d {
-    double x = {0.0};
-    double y = {0.0};
-  };
+    // define points of 8 genenric trapezoid
+    struct point2d {
+      double x = {0.0};
+      double y = {0.0};
+    };
 
-  struct face {
-    point2d A;
-    point2d B;
-    point2d C;
-    point2d D;
-  };
+    struct face {
+      point2d A;
+      point2d B;
+      point2d C;
+      point2d D;
+    };
 
-  face fZneg;
-  face fZpos;
+    face fZneg;
+    face fZpos;
 
-  // The generic trapezoid is built in such a manner as to circumscribe the twisted tube
-  // The following points correspond to the corners of the twisted tube
+    // The generic trapezoid is built in such a manner as to circumscribe the twisted tube
+    // The following points correspond to the corners of the twisted tube
 
-  fZpos.A = {trap_rin * cos(poly_angle + twist_angle_half), trap_rin * sin(poly_angle + twist_angle_half)};
-  fZpos.B = {trap_rin * cos(-poly_angle + twist_angle_half), trap_rin * sin(-poly_angle + twist_angle_half)};
+    fZpos.A = {trap_rin * cos(poly_angle + twist_angle_half), trap_rin * sin(poly_angle + twist_angle_half)};
+    fZpos.B = {trap_rin * cos(-poly_angle + twist_angle_half), trap_rin * sin(-poly_angle + twist_angle_half)};
 
-  fZneg.A = {trap_rin * cos(poly_angle - twist_angle_half), trap_rin * sin(poly_angle - twist_angle_half)};
-  fZneg.B = {trap_rin * cos(-poly_angle - twist_angle_half), trap_rin * sin(-poly_angle - twist_angle_half)};
+    fZneg.A = {trap_rin * cos(poly_angle - twist_angle_half), trap_rin * sin(poly_angle - twist_angle_half)};
+    fZneg.B = {trap_rin * cos(-poly_angle - twist_angle_half), trap_rin * sin(-poly_angle - twist_angle_half)};
 
-  fZpos.C = {trap_rout * cos(poly_angle + twist_angle_half), trap_rout * sin(poly_angle + twist_angle_half)};
-  fZpos.D = {trap_rout * cos(-poly_angle + twist_angle_half), trap_rout * sin(-poly_angle + twist_angle_half)};
+    fZpos.C = {trap_rout * cos(poly_angle + twist_angle_half), trap_rout * sin(poly_angle + twist_angle_half)};
+    fZpos.D = {trap_rout * cos(-poly_angle + twist_angle_half), trap_rout * sin(-poly_angle + twist_angle_half)};
 
-  fZneg.C = {trap_rout * cos(poly_angle - twist_angle_half), trap_rout * sin(poly_angle - twist_angle_half)};
-  fZneg.D = {trap_rout * cos(-poly_angle - twist_angle_half), trap_rout * sin(-poly_angle - twist_angle_half)};
+    fZneg.C = {trap_rout * cos(poly_angle - twist_angle_half), trap_rout * sin(poly_angle - twist_angle_half)};
+    fZneg.D = {trap_rout * cos(-poly_angle - twist_angle_half), trap_rout * sin(-poly_angle - twist_angle_half)};
 
-  std::vector<double> vertices_array = {fZpos.B.x, fZpos.B.y, fZpos.A.x, fZpos.A.y, fZpos.C.x, fZpos.C.y,
-                                        fZpos.D.x, fZpos.D.y, fZneg.B.x, fZneg.B.y, fZneg.A.x, fZneg.A.y,
-                                        fZneg.C.x, fZneg.C.y, fZneg.D.x, fZneg.D.y};
+    std::vector<double> vertices_array = {fZpos.B.x, fZpos.B.y, fZpos.A.x, fZpos.A.y, fZpos.C.x, fZpos.C.y,
+                                          fZpos.D.x, fZpos.D.y, fZneg.B.x, fZneg.B.y, fZneg.A.x, fZneg.A.y,
+                                          fZneg.C.x, fZneg.C.y, fZneg.D.x, fZneg.D.y};
 
-  dd4hep::EightPointSolid gtrap_shape(dz, vertices_array.data());
+    dd4hep::EightPointSolid gtrap_shape(dz, vertices_array.data());
 
-  //----------------- Hyperboloid -------------
-  // ROOT hyperboloid require stereoangles stin and stout
-  //-- stereo for rmin
-  double stin = DCH_i.stereoangle_z0(cell_rin_z0);
-  //-- stereo for rout
-  double stout = DCH_i.stereoangle_z0(cell_rout_z0);
+    //----------------- Hyperboloid -------------
+    // ROOT hyperboloid require stereoangles stin and stout
+    //-- stereo for rmin
+    double stin = DCH_i.stereoangle_z0(cell_rin_z0);
+    //-- stereo for rout
+    double stout = DCH_i.stereoangle_z0(cell_rout_z0);
 
-  // make hyperboloid longer, later intersection with gtrap will lead to proper length
-  double dz_safe = 1.1 * dz;
-  dd4hep::Hyperboloid layer_s(cell_rin_z0, stin, cell_rout_z0, stout, dz_safe);
+    // make hyperboloid longer, later intersection with gtrap will lead to proper length
+    double dz_safe = 1.1 * dz;
+    dd4hep::Hyperboloid layer_s(cell_rin_z0, stin, cell_rout_z0, stout, dz_safe);
 
-  // create a twisted tube as intersection of the generic trapezoid and the hyperboloid
-  dd4hep::Solid mytt = dd4hep::IntersectionSolid(gtrap_shape, layer_s);
-  return mytt;
-}
+    // create a twisted tube as intersection of the generic trapezoid and the hyperboloid
+    dd4hep::Solid mytt = dd4hep::IntersectionSolid(gtrap_shape, layer_s);
+    return mytt;
+  }
+} // namespace
 
 }; // namespace DCH_v2
 
