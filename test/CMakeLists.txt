@@ -231,6 +231,23 @@ add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/*/
 # add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/*/ALLEGRO_o?_v0?.xml)
 # add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/*/IDEA_o?_v0?.xml)
 
+#--------------------------------------------------
+# world extrusion checks
+set(world_check_files ${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o2_v01/ALLEGRO_o2_v01.xml)
+if(DCH_INFO_H_EXIST)
+  list(APPEND world_check_files ${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v03/ALLEGRO_o1_v03.xml
+                                ${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v04/ALLEGRO_o1_v04.xml
+                                ${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml
+                                ${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o1_v04/IDEA_o1_v04.xml
+                                ${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o2_v01/IDEA_o2_v01.xml
+                                ${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o2_v01_CI/IDEA_o2_v01_CI.xml)
+endif()
+foreach(compact_file ${world_check_files})
+  cmake_path(GET compact_file STEM det_name)
+  add_test(NAME t_world_check_${det_name}
+    COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/../utils/world_extrusion_check.py -c ${compact_file})
+endforeach()
+
 
 # k4geo_DIR is what compact files use to locate the shipped field maps; point it
 # at the source tree so the tests use this checkout rather than an installed k4geo.
