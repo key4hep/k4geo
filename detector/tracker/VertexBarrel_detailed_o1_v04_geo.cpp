@@ -71,6 +71,7 @@ using dd4hep::rec::Vector3D;
 using dd4hep::rec::VolCylinder;
 using dd4hep::rec::VolPlane;
 using dd4hep::rec::volSurfaceList;
+
 static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector sens) {
 
   xml_det_t x_det = e;
@@ -574,25 +575,27 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             y_pos = r_component_curved * sin(phi) + r_offset_component * cos(phi);
             z_pos = component.z_offset + component.z_offsets[i] + motherVolOffset;
             Position pos(x_pos, y_pos, z_pos);
-            pv = component_assembly.placeVolume(component.volumes[i],
-                                                Transform3D(rot, stave_pos).Inverse() * Transform3D(rot, pos));
+            component_assembly.placeVolume(component.volumes[i],
+                                           Transform3D(rot, stave_pos).Inverse() * Transform3D(rot, pos));
 
             // Helper surface for this non-sensitive component volume
             SurfaceType type = SurfaceType::Helper;
             type.setProperty(SurfaceType::Cylinder, true);
             if (!component.notPlaceSurface[i])
-              volSurfaceList(pv)->push_back(VolCylinder(component.volumes[i], type, 0., 0., Vector3D(0., 0., 0.)));
+              volSurfaceList(sdet)->push_back(VolCylinder(component.volumes[i], type, component.thicknesses[i] / 2.,
+                                                          component.thicknesses[i] / 2., Vector3D(0., 0., 0.)));
           } else {
             x_pos = component.r + component.rs[i] + component.thicknesses[i] / 2.;
             y_pos = component.offset + component.offsets[i];
             z_pos = component.z_offset + component.z_offsets[i] + motherVolOffset;
             Position pos(x_pos, y_pos, z_pos);
-            pv = component_assembly.placeVolume(component.volumes[i],
-                                                Transform3D(RotationZYX(component.phis[i], 0, 0), pos));
+            component_assembly.placeVolume(component.volumes[i],
+                                           Transform3D(RotationZYX(component.phis[i], 0, 0), pos));
 
             if (!component.notPlaceSurface[i])
-              volSurfaceList(pv)->push_back(VolPlane(component.volumes[i], SurfaceType::Helper, 0., 0.,
-                                                     Vector3D(0., 1., 0.), Vector3D(0., 0., 1.), Vector3D(1., 0., 0.)));
+              volSurfaceList(sdet)->push_back(VolPlane(
+                  component.volumes[i], SurfaceType::Helper, component.thicknesses[i] / 2.,
+                  component.thicknesses[i] / 2., Vector3D(0., 1., 0.), Vector3D(0., 0., 1.), Vector3D(1., 0., 0.)));
           }
         }
         component_assembly->GetShape()->ComputeBBox();
@@ -622,25 +625,26 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
               z_pos = m.stave_length / 2. + endOfStave.lengths[i] / 2. + endOfStave.dzs[i] + endOfStave.z_offset +
                       endOfStave.z_offsets[i];
               Position pos = Position(x_pos, y_pos, z_pos * endOfStave_side + motherVolOffset);
-              pv = endOfStave_assembly.placeVolume(endOfStave.volumes[i],
-                                                   Transform3D(rot, stave_pos).Inverse() * Transform3D(rot, pos));
+              endOfStave_assembly.placeVolume(endOfStave.volumes[i],
+                                              Transform3D(rot, stave_pos).Inverse() * Transform3D(rot, pos));
 
               SurfaceType type = SurfaceType::Helper;
               type.setProperty(SurfaceType::Cylinder, true);
               if (!endOfStave.notPlaceSurface[i])
-                volSurfaceList(pv)->push_back(VolCylinder(endOfStave.volumes[i], type, 0., 0., Vector3D(0., 0., 0.)));
+                volSurfaceList(sdet)->push_back(VolCylinder(endOfStave.volumes[i], type, endOfStave.thicknesses[i] / 2.,
+                                                            endOfStave.thicknesses[i] / 2., Vector3D(0., 0., 0.)));
             } else {
               x_pos = endOfStave.r + endOfStave.rs[i] + endOfStave.thicknesses[i] / 2.;
               y_pos = endOfStave.offset + endOfStave.offsets[i];
               z_pos = m.stave_length / 2. + endOfStave.lengths[i] / 2. + endOfStave.dzs[i] + endOfStave.z_offset +
                       endOfStave.z_offsets[i];
               Position pos(x_pos, y_pos, z_pos * endOfStave_side + motherVolOffset);
-              pv = endOfStave_assembly.placeVolume(endOfStave.volumes[i], pos);
+              endOfStave_assembly.placeVolume(endOfStave.volumes[i], pos);
 
               if (!endOfStave.notPlaceSurface[i])
-                volSurfaceList(pv)->push_back(VolPlane(endOfStave.volumes[i], SurfaceType::Helper, 0., 0.,
-                                                       Vector3D(0., 1., 0.), Vector3D(0., 0., 1.),
-                                                       Vector3D(1., 0., 0.)));
+                volSurfaceList(sdet)->push_back(VolPlane(
+                    endOfStave.volumes[i], SurfaceType::Helper, endOfStave.thicknesses[i] / 2.,
+                    endOfStave.thicknesses[i] / 2., Vector3D(0., 1., 0.), Vector3D(0., 0., 1.), Vector3D(1., 0., 0.)));
             }
           }
         }
@@ -724,8 +728,12 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                   sensorDE.setPlacement(pv);
                   volSurfaceList(sensorDE)->push_back(surf);
                   iSensitive++;
-                } else { // insensitive: surface directly on the PlacedVolume, no DetElement
-                  volSurfaceList(pv)->push_back(surf);
+                } else if (std::string(sensor.volumes[i].name()).find("above") == std::string::npos &&
+                           std::string(sensor.volumes[i].name()).find("below") ==
+                               std::string::npos) { // Don't add surfaces for 'below' or 'above' sensor elements, as
+                                                    // they are already accounted for using
+                                                    // other_insensitive_thickness_above/below
+                  volSurfaceList(sdet)->push_back(surf);
                 }
               } else if (sensor.isCurved[i]) { // Approximated quasi-curved sensors, using sensor.nsegments[i] tapezoids
                 r_offset_component = m.motherVolThickness > 0.0 && m.motherVolWidth > 0.0 ? 0. : layer_offset;
@@ -765,8 +773,12 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     sensorDE.setPlacement(pv);
                     volSurfaceList(sensorDE)->push_back(surf);
                     iSensitive++;
-                  } else {
-                    volSurfaceList(pv)->push_back(surf);
+                  } else if (std::string(sensor.volumes[i].name()).find("above") == std::string::npos &&
+                             std::string(sensor.volumes[i].name()).find("below") ==
+                                 std::string::npos) { // Don't add surfaces for 'below' or 'above' sensor elements, as
+                                                      // they are already accounted for using
+                                                      // other_insensitive_thickness_above/below
+                    volSurfaceList(sdet)->push_back(surf);
                   }
                 }
               } else { // not curved (rectangular), use boxes
@@ -792,8 +804,12 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                   sensorDE.setPlacement(pv);
                   volSurfaceList(sensorDE)->push_back(surf);
                   iSensitive++;
-                } else { // insensitive part: Helper surface directly on the PlacedVolume
-                  volSurfaceList(pv)->push_back(surf);
+                } else if (std::string(sensor.volumes[i].name()).find("above") == std::string::npos &&
+                           std::string(sensor.volumes[i].name()).find("below") ==
+                               std::string::npos) { // Don't add surfaces for 'below' or 'above' sensor elements, as
+                                                    // they are already accounted for using
+                                                    // other_insensitive_thickness_above/below
+                  volSurfaceList(sdet)->push_back(surf);
                 }
               }
             }

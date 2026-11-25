@@ -2,7 +2,7 @@
     <comment> Carbon fibre support tube holding the complete inner vertex. Implemented by Armin Ilg (UZH). </comment>
 
     <detectors>
-        <detector name="VertexInnerBarrel_tube" type="VertexBarrel_detailed_o1_v03" vis="VTXIBTubeVis" id="-3" readout="VertexInnerSupportTubeDummyCollection" region="VertexBarrelRegion">
+        <detector name="VertexInnerBarrel_tube" type="VertexBarrel_detailed_o1_v04" vis="VTXIBTubeVis" id="-3" readout="VertexInnerSupportTubeDummyCollection" region="VertexBarrelRegion">
             <envelope vis="VTXIBTubeVis">
                 <shape type="Assembly"/>
             </envelope>
