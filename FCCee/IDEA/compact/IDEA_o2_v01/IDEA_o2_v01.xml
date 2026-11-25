@@ -93,17 +93,7 @@
       </shape>
   </parallelworld_volume>
 
-  <fields>
-    <!-- FIXME The magnetic field should be a map derived from FEM tools including all field sources, the return yoke geometry, etc -->
-    <!-- Currently the outer field value is kind of arbitrary and it will also impregnate the calorimeter volume while the field there is very small -->
-    <field name="GlobalSolenoid" type="solenoid"
-           inner_field="SolenoidField"
-           outer_field="-1.7*tesla"
-           zmax="1.2 * Solenoid_Coil_half_length"
-           inner_radius="Solenoid_Coil_radius"
-           outer_radius="YokeBarrel_outer_radius">
-    </field>
-
-  </fields>
+  <!-- Magnetic field (coil + muon-system return field), after the muon system: it uses YokeThickness -->
+  <include ref="MagneticField_o1_v01.xml"/>
 
 </lccdd>
