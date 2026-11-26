@@ -206,7 +206,8 @@ namespace sim {
         }
 
         // World position of the local beam axis: the piece must be coaxial with z.
-        const TGeoHMatrix& m = de.nominal().worldTransformation();
+        const Alignment nominal = de.nominal(); // named, so the matrix reference below outlives no temporary
+        const TGeoHMatrix& m = nominal.worldTransformation();
         const double* rot = m.GetRotationMatrix();
         const double* tr = m.GetTranslation();
         if (std::hypot(rot[2], rot[5]) > 1e-9 || std::hypot(tr[0], tr[1]) > 1e-6 * dd4hep::mm)
