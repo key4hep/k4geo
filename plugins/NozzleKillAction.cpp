@@ -128,8 +128,8 @@ namespace sim {
         for (const Segment& s : sides[side])
           m_zEnd[side] = std::max(m_zEnd[side], s.z2);
         if (m_zEnd[side] <= m_killZ)
-          except("NozzleKill: KillZ = %.1f cm is beyond the %s end of the nozzle (|z| = %.1f cm).",
-                 m_killZ / CLHEP::cm, side == 0 ? "+z" : "-z", m_zEnd[side] / CLHEP::cm);
+          except("NozzleKill: KillZ = %.1f cm is beyond the %s end of the nozzle (|z| = %.1f cm).", m_killZ / CLHEP::cm,
+                 side == 0 ? "+z" : "-z", m_zEnd[side] / CLHEP::cm);
       }
 
       double angle = m_openingAngle;
@@ -211,8 +211,7 @@ namespace sim {
           continue;
         const TGeoPcon* pcon = dynamic_cast<const TGeoPcon*>(vol.solid().ptr());
         if (!pcon) {
-          warning("NozzleKill: %s is in %s but is not a polycone; ignored.",
-                  de.name(), m_nozzleRegion.c_str());
+          warning("NozzleKill: %s is in %s but is not a polycone; ignored.", de.name(), m_nozzleRegion.c_str());
           continue;
         }
 
@@ -221,8 +220,7 @@ namespace sim {
         const double* rot = m.GetRotationMatrix();
         const double* tr = m.GetTranslation();
         if (std::hypot(rot[2], rot[5]) > 1e-9 || std::hypot(tr[0], tr[1]) > 1e-6 * dd4hep::mm)
-          except("NozzleKill: %s is not coaxial with the beam axis; NozzleKillAction needs it to be.",
-                 de.name());
+          except("NozzleKill: %s is not coaxial with the beam axis; NozzleKillAction needs it to be.", de.name());
 
         ++nVolumes;
         for (int i = 0; i + 1 < pcon->GetNz(); ++i) {

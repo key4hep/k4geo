@@ -2,8 +2,8 @@
 
 NozzleKillAction (plugins/NozzleKillAction.cpp) stops every track inside two cones
 with their tips on the beam axis at z = +-KillZ, opening away from the interaction
-point with half-angle OpeningAngle, and ending at the end of the nozzle.  
-Values are Geant4 internal units; use g4units to express them.  
+point with half-angle OpeningAngle, and ending at the end of the nozzle.
+Values are Geant4 internal units; use g4units to express them.
 
 At the beginning of the run the plugin reads the nozzle extent and outer radius
 from the volumes of the Geant4 region NozzleRegion.  The cones stop where the
