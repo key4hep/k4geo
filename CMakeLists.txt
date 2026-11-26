@@ -101,6 +101,7 @@ file(GLOB G4sources
   ./plugins/SCEPCal_TimingSDAction.cpp
   ./plugins/GrainitaCaloSDAction.h
   ./plugins/GrainitaCaloSDAction.cpp
+  ./plugins/NozzleKillAction.cpp
 )
 
 if(DD4HEP_USE_PYROOT)

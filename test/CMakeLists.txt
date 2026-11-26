@@ -193,6 +193,13 @@ add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALFA/compact/ALFA_o1_v00
 #--------------------------------------------------
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/MAIA_v0/MAIA_v0.xml)
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/MAIA_v1/MAIA_v1.xml)
+# Exercise the NozzleKillAction stepping plugin: check that the steering values are
+# the ones applied at begin of run (not the built-in defaults).
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/MAIA_v0/MAIA_v0.xml
+  NAME test_MAIA_v0_NozzleKill
+  EXTRA_ARGS --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_MuColl_NozzleKill.py
+             --outputFile=testMAIA_v0_NozzleKill.edm4hep.root
+  PROPERTIES PASS_REGULAR_EXPRESSION "NozzleKill: active - killing tracks in cones from \\|z\\| = 200.0 cm with opening angle 4.00 deg")
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuColl/compact/MuColl_v1/MuColl_v1.xml)
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuSIC/compact/MuSIC_v2/MuSIC_v2.xml)
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuSIC/compact/MuSIC_v3/MuSIC_v3.xml)
