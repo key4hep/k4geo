@@ -94,7 +94,7 @@
     </define>
 
     <detectors>
-        <detector name="VertexOuterBarrel" type="VertexBarrel_detailed_o1_v03" vis="VXDVis" id="DetID_VXD_OuterBarrel" readout="VertexBarrelCollection"  region="VertexBarrelRegion">
+        <detector name="VertexOuterBarrel" type="VertexBarrel_detailed_o1_v04" vis="VXDVis" id="DetID_VXD_OuterBarrel" readout="VertexBarrelCollection"  region="VertexBarrelRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>

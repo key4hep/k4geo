@@ -177,7 +177,7 @@
     </define>
 
     <detectors>
-        <detector id="DetID_VXD_Disks" name="VertexDisks" vis="VXDVis" type="VertexEndcap_detailed_o1_v03" readout="VertexEndcapCollection" reflect="true" region="VertexEndcapRegion">
+        <detector id="DetID_VXD_Disks" name="VertexDisks" vis="VXDVis" type="VertexEndcap_detailed_o1_v04" readout="VertexEndcapCollection" reflect="true" region="VertexEndcapRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -316,7 +316,7 @@
         </detector>
 
         <comment> Disk support proxy volumes  </comment>
-        <detector name="VertexDisks_support" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="-1" readout="VertexDummyCollection"  region="VertexEndcapRegion">
+        <detector name="VertexDisks_support" type="VertexBarrel_detailed_o1_v04" vis="VXDVis" id="-1" readout="VertexDummyCollection"  region="VertexEndcapRegion">
             <type_flags type="DetType_SUPPORT"/>
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
@@ -372,16 +372,5 @@
         <readout name="VertexDummyCollection">    <comment> For disk supports, should not have any hits but better safe than sorry </comment>
             <id>${GlobalTrackerReadoutID}</id>
         </readout>  
-    </readouts>    
-
-    <comment> Plugin to define the sensitive surfaces of the disks </comment>
-    <plugins>
-        <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
-            <argument value="VertexDisks"/> 
-            <argument value="dimension=2"/>
-            <argument value="u_y=1."/> <comment> The better measurement direction should be in u (by convention), which we want to be in phi for the track momentum measurement. In local sensor coordinates, this is in the y direction (along the vertex disk stave) </comment>
-            <argument value="v_x=1."/> <comment> The worse measurement direction should be in v (by convention), which we want to be in r. In local sensor coordinates, this is in the x direction (across the vertex disk stave) </comment>
-            <argument value="n_z=-1."/>
-        </plugin>
-    </plugins>
+    </readouts>
 </lccdd>

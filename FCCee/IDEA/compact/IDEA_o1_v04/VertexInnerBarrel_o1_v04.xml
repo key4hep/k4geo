@@ -72,7 +72,7 @@
     </define>
 
     <detectors>
-        <detector name="VertexInnerBarrel" type="VertexBarrel_detailed_o1_v03" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VertexBarrelRegion">
+        <detector name="VertexInnerBarrel" type="VertexBarrel_detailed_o1_v04" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VertexBarrelRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -83,7 +83,7 @@
             <stave name="VTXIBStave1" length="2.*VTXIB_halfLength1">
                 <sensor name="ARCADIA" r="0.0*mm" thickness="VTXIB_sensor_thickness" material="Silicon">
                     <component name="periphery" sensitive="False" vis="VTXPeripheryVis" xmin="-VTXIB_sensor_rphi/2.0" xmax="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0"/>
-                    <component name="sensor"    sensitive="True"  vis="VTXSensitiveVis" xmin="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" xmax="VTXIB_sensor_rphi/2.0" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0" sensor_insensitive_thickness_below="VTXIB_insensitive_thickness_below" thickness="VTXIB_sensitive_thickness" sensor_insensitive_thickness_above="VTXIB_insensitive_thickness_above" other_insensitive_thickness_below="VTXIB_insensitive_thickness_below" other_insensitive_thickness_above="VTXIB_glue_thickness+VTXIB_support_thickness"/>
+                    <component name="sensor"    sensitive="True"  vis="VTXSensitiveVis" xmin="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" xmax="VTXIB_sensor_rphi/2.0" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0" sensor_insensitive_thickness_below="VTXIB_insensitive_thickness_below" thickness="VTXIB_sensitive_thickness" sensor_insensitive_thickness_above="VTXIB_insensitive_thickness_above"/>
                 </sensor>
 
                 <components name="support" r="VTXIB_sensor_thickness" length="VTXIB_halfLength1">
@@ -118,7 +118,7 @@
             <stave name="VTXIBStave2" length="2.*VTXIB_halfLength2">
                 <sensor name="ARCADIA" r="0.0*mm" thickness="VTXIB_sensor_thickness" material="Silicon">
                     <component name="periphery" sensitive="False" vis="VTXPeripheryVis" xmin="-VTXIB_sensor_rphi/2.0" xmax="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0"/>
-                    <component name="sensor"    sensitive="True"  vis="VTXSensitiveVis" xmin="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" xmax="VTXIB_sensor_rphi/2.0" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0" sensor_insensitive_thickness_below="VTXIB_insensitive_thickness_below" thickness="VTXIB_sensitive_thickness" sensor_insensitive_thickness_above="VTXIB_insensitive_thickness_above" other_insensitive_thickness_below="VTXIB_insensitive_thickness_below" other_insensitive_thickness_above="VTXIB_glue_thickness+VTXIB_support_thickness"/>
+                    <component name="sensor"    sensitive="True"  vis="VTXSensitiveVis" xmin="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" xmax="VTXIB_sensor_rphi/2.0" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0" sensor_insensitive_thickness_below="VTXIB_insensitive_thickness_below" thickness="VTXIB_sensitive_thickness" sensor_insensitive_thickness_above="VTXIB_insensitive_thickness_above"/>
                 </sensor>
 
                 <components name="support" r="VTXIB_sensor_thickness" length="VTXIB_halfLength2">
@@ -153,7 +153,7 @@
             <stave name="VTXIBStave3" length="2.*VTXIB_halfLength3">
                 <sensor name="ARCADIA" r="0.0*mm" thickness="VTXIB_sensor_thickness" material="Silicon">
                     <component name="periphery" sensitive="False" vis="VTXPeripheryVis" xmin="-VTXIB_sensor_rphi/2.0" xmax="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0"/>
-                    <component name="sensor"    sensitive="True"  vis="VTXSensitiveVis" xmin="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" xmax="VTXIB_sensor_rphi/2.0" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0" sensor_insensitive_thickness_below="VTXIB_insensitive_thickness_below" thickness="VTXIB_sensitive_thickness" sensor_insensitive_thickness_above="VTXIB_insensitive_thickness_above" other_insensitive_thickness_below="VTXIB_insensitive_thickness_below" other_insensitive_thickness_above="VTXIB_glue_thickness+VTXIB_support_thickness"/>
+                    <component name="sensor"    sensitive="True"  vis="VTXSensitiveVis" xmin="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" xmax="VTXIB_sensor_rphi/2.0" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0" sensor_insensitive_thickness_below="VTXIB_insensitive_thickness_below" thickness="VTXIB_sensitive_thickness" sensor_insensitive_thickness_above="VTXIB_insensitive_thickness_above"/>
                 </sensor>
 
                 <components name="support" r="VTXIB_sensor_thickness" length="VTXIB_halfLength3">
