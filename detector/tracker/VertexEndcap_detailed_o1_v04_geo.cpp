@@ -18,12 +18,19 @@
 //  in the xml compact file to define the sensitive surfaces.
 //  Updates from o1_v02 to o1_v03: ignoring components with zero thickness,
 //  changes to volume naming, possibility to include sensor definition with
-// external file, possibliity to have partially insensitive sensors (in
-// thickness).
+//  external file, possibliity to have partially insensitive sensors (in
+//  thickness).
+//  Updates from o1_v03 to o1_v04: Fixed the treatment of insensitive volumes.
+//  They now receive a surface, which is needed for the material evaluation
+//  in DDKalTest and thus conformal tracking. This surface can be skipped
+//  with the 'notPlaceSurface' option, e.g. if the on-stave volumes have
+//  already been included in the 'other_insensitive_thickness_below'/above
+//  of the sensor definition.
 //====================================================================
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
+#include "DDRec/Surface.h"
 #include "XML/Utilities.h"
 #include "XMLHandlerDB.h"
 
@@ -51,6 +58,10 @@ using dd4hep::Translation3D;
 using dd4hep::Tube;
 using dd4hep::Volume;
 using dd4hep::WARNING;
+using dd4hep::rec::SurfaceType;
+using dd4hep::rec::Vector3D;
+using dd4hep::rec::VolPlane;
+using dd4hep::rec::volSurfaceList;
 
 static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens) {
   xml_det_t x_det = e;
@@ -81,6 +92,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     vector<double> z_offsets;
     vector<Material> materials;
     vector<string> viss;
+    vector<bool> notPlaceSurface;
   };
 
   // Struct to support end-of-stave structures
@@ -97,6 +109,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     vector<double> xs; // Indicating whether end of stave struct should be place on pos x side (if x>0) or on neg x side
                        // (if x<0). Didn't work with using nsides
     vector<Volume> volumes;
+    vector<bool> notPlaceSurface;
   };
 
   // --- Module information struct ---
@@ -154,6 +167,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         components.z_offsets.push_back(component.z_offset(0));
         components.materials.push_back(theDetector.material(component.materialStr()));
         components.viss.push_back(component.visStr());
+        components.notPlaceSurface.push_back(getAttrOrDefault(
+            component, _Unicode(notPlaceSurface),
+            bool(false))); // Don't put a surface for this volume. Only use if volume material is included in sensor
+                           // 'other_insensitive_thickness_below'/'other_insensitive_thickness_above'
       }
       m.components_vec.push_back(components);
     }
@@ -181,6 +198,11 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         endOfStave.xs.push_back(component.x());
         total_lengths.push_back(component.length() + component.z_offset(0) + endOfStave.z_offset +
                                 component.thickness());
+
+        endOfStave.notPlaceSurface.push_back(getAttrOrDefault(
+            component, _Unicode(notPlaceSurface),
+            bool(false))); // Don't put a surface for this volume. Only use if volume material is included in sensor
+                           // 'other_insensitive_thickness_below'/'other_insensitive_thickness_above'
 
         Box ele_box = Box(component.width() / 2., component.length() / 2., component.thickness() / 2.);
         Volume ele_vol = Volume(endOfStave.name + _toString(iEndOfStave, "_%d"), ele_box,
@@ -235,65 +257,49 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       double sensitive_thickness = getAttrOrDefault(component, _Unicode(thickness),
                                                     m.sensor_thickness); // Take the overall sensor thickness as default
 
-      double sensor_insensitive_thickness_below = getAttrOrDefault(
-          component, _Unicode(sensor_insensitive_thickness_below),
-          0.); // Thickness of insensitive material in sensor before the sensitive material (i.e. closer to IP)
-      double sensor_insensitive_thickness_above = getAttrOrDefault(
-          component, _Unicode(sensor_insensitive_thickness_above),
-          0.); // Thickness of insensitive material in sensor after the sensitive material (i.e. farther from IP)
+      double insensitive_sensor_below = getAttrOrDefault(component, _Unicode(sensor_insensitive_thickness_below), 0.);
+      double insensitive_sensor_above = getAttrOrDefault(component, _Unicode(sensor_insensitive_thickness_above), 0.);
 
-      vector<double> thicknesses_split = {sensor_insensitive_thickness_below, sensitive_thickness,
-                                          sensor_insensitive_thickness_above};
-      vector<double> innerInsensitiveThickness_split = {
-          0.,
-          getAttrOrDefault(component, _Unicode(other_insensitive_thickness_below), 0.) +
-              sensor_insensitive_thickness_below,
-          0.}; // Thickness of insensitive material in front of sensitive volume (within sensor and e.g. from supports
-               // before). Only the sensitive volume has this property
-      vector<double> outerInsensitiveThickness_split = {
-          0.,
-          getAttrOrDefault(component, _Unicode(other_insensitive_thickness_above), 0.) +
-              sensor_insensitive_thickness_above,
-          0.}; // Thickness of insensitive material behind sensitive volume (within sensor and e.g. from supports
-               // after). Only the sensitive volume has this property
+      // Thickness below/above the sensor (not part of sensor) that is insensitive. E.g. stave support structure
+      double other_below = getAttrOrDefault(component, _Unicode(other_insensitive_thickness_below), 0.);
+      double other_above = getAttrOrDefault(component, _Unicode(other_insensitive_thickness_above), 0.);
+      m.nSensitivePerModule += component.isSensitive() ? 1 : 0;
 
-      vector<string> sensor_part_names = {component.nameStr("sensor") + _toString(iSensor, "_insensitive_below_%d"),
-                                          component.nameStr("sensor") + _toString(iSensor, "_%d"),
-                                          component.nameStr("sensor") + _toString(iSensor, "_insensitive_above_%d")};
-      vector<bool> isSensitive_split = {false, component.isSensitive(), false};
-      m.nSensitivePerModule +=
-          component.isSensitive() ? 1 : 0; // Count how many sensitive components there are per module
+      double z_layer = m.sensor_z_offset + component.z_offset(0); // running z offset within this component
 
-      vector<double> z_offsets = {
-          m.sensor_z_offset + component.z_offset(0), m.sensor_z_offset + component.z_offset(0) + thicknesses_split[0],
-          m.sensor_z_offset + component.z_offset(0) + thicknesses_split[0] + thicknesses_split[1]};
-
-      for (int i = 0; i < int(thicknesses_split.size());
-           i++) { // Loop over sensitive and insensitive parts of sensor, but skip parts with zero thickness
-        if (thicknesses_split[i] == 0.)
-          continue; // Skip components with zero thickness
-
-        m.sensor_thicknesses.push_back(thicknesses_split[i]);
-        m.insensitive_thicknesses_below.push_back(innerInsensitiveThickness_split[i]);
-        m.insensitive_thicknesses_above.push_back(outerInsensitiveThickness_split[i]);
-        m.sensor_sensitives.push_back(isSensitive_split[i]);
+      // Lambda function to add the sensitive part of the sensor and the insensitive parts below and above it
+      auto addSensorPart = [&](double thickness, bool sensitive, double ins_below, double ins_above,
+                               const string& name_suffix) {
+        if (thickness == 0.)
+          return; // Skip parts with zero thickness
+        m.sensor_thicknesses.push_back(thickness);
+        m.insensitive_thicknesses_below.push_back(ins_below); // Only non-zero for the sensitive part
+        m.insensitive_thicknesses_above.push_back(ins_above); // Only non-zero for the sensitive part
+        m.sensor_sensitives.push_back(sensitive);
         m.sensor_xmin.push_back(component.xmin());
         m.sensor_xmax.push_back(component.xmax());
         m.sensor_ymin.push_back(component.ymin());
         m.sensor_ymax.push_back(component.ymax());
-        m.sensor_names.push_back(sensor_part_names[i]);
-        m.sensor_z_offsets.push_back(z_offsets[i]);
+        m.sensor_names.push_back(component.nameStr("sensor") + _toString(iSensor, "_%d") + name_suffix);
+        m.sensor_z_offsets.push_back(z_layer);
+        z_layer += thickness;
 
         Box ele_box = Box(abs(component.xmax() - component.xmin()) / 2., abs(component.ymax() - component.ymin()) / 2.,
-                          m.sensor_thicknesses.back() / 2.);
-        Volume ele_vol = Volume(m.sensor_names.back() + _toString(iSensor, "_%d"), ele_box, m.sensor_material);
+                          thickness / 2.);
+        Volume ele_vol = Volume(m.sensor_names.back(), ele_box, m.sensor_material);
         ele_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), component.visStr());
-
-        if (m.sensor_sensitives.back())
+        if (sensitive)
           ele_vol.setSensitiveDetector(sens);
         m.sensor_volumes.push_back(ele_vol);
         iSensor++;
-      }
+      };
+
+      // Finally add all the sensor parts. The material of the insensitive sensor parts below/above the sensitive part
+      // is included in the sensitive sensor part
+      addSensorPart(insensitive_sensor_below, false, 0., 0., "_insensitive_below");
+      addSensorPart(sensitive_thickness, component.isSensitive(), other_below + insensitive_sensor_below,
+                    other_above + insensitive_sensor_above, "");
+      addSensorPart(insensitive_sensor_above, false, 0., 0., "_insensitive_above");
     }
     m.sensor_width = *max_element(m.sensor_xmax.begin(), m.sensor_xmax.end()) -
                      *min_element(m.sensor_xmin.begin(), m.sensor_xmin.end());
@@ -476,6 +482,11 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                 ele_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), component.viss[i]);
 
                 pv = component_assembly.placeVolume(ele_vol, pos);
+
+                if (!component.notPlaceSurface[i])
+                  volSurfaceList(sdet)->push_back(VolPlane(ele_vol, SurfaceType::Helper, component.thicknesses[i] / 2.,
+                                                           component.thicknesses[i] / 2., Vector3D(1., 0., 0.),
+                                                           Vector3D(0., 1., 0.), Vector3D(0., 0., 1.)));
               }
               component_assembly->GetShape()->ComputeBBox();
             }
@@ -504,6 +515,12 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
                 pv = endOfStave_assembly.placeVolume(endOfStave.volumes[i], pos);
                 iEndOfStave++;
+
+                if (!endOfStave.notPlaceSurface[i])
+                  volSurfaceList(sdet)->push_back(VolPlane(endOfStave.volumes[i], SurfaceType::Helper,
+                                                           endOfStave.thicknesses[i] / 2.,
+                                                           endOfStave.thicknesses[i] / 2., Vector3D(1., 0., 0.),
+                                                           Vector3D(0., 1., 0.), Vector3D(0., 0., 1.)));
               }
               endOfStave_assembly->GetShape()->ComputeBBox();
             }
@@ -546,19 +563,26 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                 z_pos = 0;
                 Position pos_i(x_pos, y_pos, z_pos);
 
-                // Place active sensor parts
-                if (m.sensor_sensitives[i]) {
-                  string sensor_name = module_name + _toString(iSensitive, "_sensor%d");
-                  pv = module_assembly.placeVolume(m.sensor_volumes[i], pos + pos_i);
+                pv = module_assembly.placeVolume(m.sensor_volumes[i], pos + pos_i);
 
+                SurfaceType type = m.sensor_sensitives[i] ? SurfaceType::Sensitive : SurfaceType::Helper;
+                VolPlane surf(m.sensor_volumes[i], type,
+                              m.sensor_thicknesses[i] / 2. + m.insensitive_thicknesses_below[i],
+                              m.sensor_thicknesses[i] / 2. + m.insensitive_thicknesses_above[i], Vector3D(1., 0., 0.),
+                              Vector3D(0., 1., 0.), Vector3D(0., 0., 1.));
+
+                if (m.sensor_sensitives[i]) { // sensitive: keep DetElement and register surface on it
+                  string sensor_name = module_name + _toString(iSensitive, "_sensor%d");
                   pv.addPhysVolID("sensor", iSensitive);
                   DetElement sensorDE(moduleDE, sensor_name, iSensitive);
                   sensorDE.setPlacement(pv);
+                  volSurfaceList(sensorDE)->push_back(surf);
                   iSensitive++;
-                }
-                // Place passive sensor parts
-                else {
-                  pv = module_assembly.placeVolume(m.sensor_volumes[i], pos + pos_i);
+                } else if (std::string(m.sensor_volumes[i].name()).find("above") == std::string::npos &&
+                           std::string(m.sensor_volumes[i].name()).find("below") == std::string::npos) {
+                  // Don't add surfaces for 'below' or 'above' sensor elements, as they are already accounted for
+                  // using other_insensitive_thickness_above/below
+                  volSurfaceList(sdet)->push_back(surf);
                 }
               }
               iModule_tot++;
@@ -593,4 +617,4 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   return sdet;
 }
 
-DECLARE_DETELEMENT(VertexEndcap_detailed_o1_v03, create_detector)
+DECLARE_DETELEMENT(VertexEndcap_detailed_o1_v04, create_detector)
