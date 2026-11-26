@@ -71,8 +71,9 @@
 #include "TGeoPcon.h"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
-#include <cstdio>
+#include <cstdlib>
 #include <limits>
 #include <string>
 #include <vector>
@@ -102,14 +103,9 @@ namespace sim {
 
     /// Destructor: report what the action did
     virtual ~NozzleKillAction() {
-      if (m_nCalls) {
-        char buf[256];
-        std::snprintf(buf, sizeof(buf),
-                      "NozzleKill: %llu steps, killed gamma=%llu e+-=%llu "
-                      "mu+-=%llu neutron=%llu other=%llu",
-                      m_nCalls, m_nGamma, m_nElectron, m_nMuon, m_nNeutron, m_nOther);
-        info("%s", buf);
-      }
+      if (m_nCalls)
+        info("NozzleKill: %llu steps, killed gamma=%llu e+-=%llu mu+-=%llu neutron=%llu other=%llu", m_nCalls, m_nGamma,
+             m_nElectron, m_nMuon, m_nNeutron, m_nOther);
       InstanceCount::decrement(this);
     }
 
@@ -121,16 +117,11 @@ namespace sim {
       if (m_openingAngle < 0.0 || m_openingAngle >= 90.0 * CLHEP::deg)
         except("NozzleKill: OpeningAngle must be in [0, 90) deg, got %.3f deg.", m_openingAngle / CLHEP::deg);
 
-      std::vector<Segment> sides[2];
-      collectNozzleSegments(sides);
-      for (int side = 0; side < 2; ++side) {
-        m_zEnd[side] = 0.0;
-        for (const Segment& s : sides[side])
-          m_zEnd[side] = std::max(m_zEnd[side], s.z2);
+      const Sides sides = collectNozzleSegments();
+      for (int side : {0, 1})
         if (m_zEnd[side] <= m_killZ)
           except("NozzleKill: KillZ = %.1f cm is beyond the %s end of the nozzle (|z| = %.1f cm).", m_killZ / CLHEP::cm,
-                 side == 0 ? "+z" : "-z", m_zEnd[side] / CLHEP::cm);
-      }
+                 kSideName[side], m_zEnd[side] / CLHEP::cm);
 
       double angle = m_openingAngle;
       if (m_nozzleMargin >= 0.0) {
@@ -154,16 +145,12 @@ namespace sim {
     /// Stepping callback
     void operator()(const G4Step* step, G4SteppingManager* /* mgr */) override {
       ++m_nCalls;
-
-      const G4StepPoint* post = step->GetPostStepPoint();
-      if (!post)
-        return;
-      const G4ThreeVector& pos = post->GetPosition();
+      const G4ThreeVector& pos = step->GetPostStepPoint()->GetPosition();
 
       // Cheap test first: most steps are nowhere near the nozzle.
       const double absZ = std::fabs(pos.z());
       const double dz = absZ - m_killZ;
-      if (dz <= 0.0 || absZ >= m_zEnd[pos.z() > 0.0 ? 0 : 1])
+      if (dz <= 0.0 || absZ >= m_zEnd[sideOf(pos.z())])
         return;
 
       // Inside a cone: kill whatever it is.
@@ -172,22 +159,9 @@ namespace sim {
         return;
 
       G4Track* track = step->GetTrack();
-      if (!track)
-        return;
       track->SetTrackStatus(fStopAndKill);
-
-      const G4ParticleDefinition* def = track->GetParticleDefinition();
-      const G4int pdg = def ? def->GetPDGEncoding() : 0;
-      if (pdg == 22)
-        ++m_nGamma;
-      else if (pdg == 11 || pdg == -11)
-        ++m_nElectron;
-      else if (pdg == 13 || pdg == -13)
-        ++m_nMuon;
-      else if (pdg == 2112)
-        ++m_nNeutron;
-      else
-        ++m_nOther;
+      const int pdg = std::abs(track->GetParticleDefinition()->GetPDGEncoding());
+      ++(pdg == 22 ? m_nGamma : pdg == 11 ? m_nElectron : pdg == 13 ? m_nMuon : pdg == 2112 ? m_nNeutron : m_nOther);
     }
 
   private:
@@ -195,11 +169,27 @@ namespace sim {
     struct Segment {
       double z1, z2, r1, r2;
     };
+    /// Outer-surface segments of the nozzle volumes on each side (0: z > 0, 1: z < 0)
+    using Sides = std::array<std::vector<Segment>, 2>;
 
-    /// Outer-surface segments of the nozzle volumes, split by side (0: z > 0, 1: z < 0)
-    void collectNozzleSegments(std::vector<Segment> (&sides)[2]) const {
+    static constexpr const char* kSideName[2] = {"+z", "-z"};
+    static int sideOf(double z) { return z > 0.0 ? 0 : 1; }
+
+    /// Outer radius of the nozzle at |z| on one side: the largest rmax of the pieces covering z, -1 in a gap
+    static double outerRadius(const std::vector<Segment>& segs, double z) {
+      double rOut = -1.0;
+      for (const Segment& s : segs)
+        if (z >= s.z1 && z <= s.z2)
+          rOut = std::max(rOut, s.r1 + (s.r2 - s.r1) * (z - s.z1) / (s.z2 - s.z1));
+      return rOut;
+    }
+
+    /// Collect the outer-surface segments of the nozzle volumes and set the nozzle end on each side
+    Sides collectNozzleSegments() {
       const double toG4 = CLHEP::cm / dd4hep::cm; // TGeo length -> Geant4 length
       Detector& description = context()->detectorDescription();
+      Sides sides;
+      m_zEnd = {0.0, 0.0};
       int nVolumes = 0;
       for (const auto& entry : description.detectors()) {
         DetElement de(entry.second);
@@ -224,33 +214,34 @@ namespace sim {
 
         ++nVolumes;
         for (int i = 0; i + 1 < pcon->GetNz(); ++i) {
-          const double za = (tr[2] + rot[8] * pcon->GetZ(i)) * toG4;
-          const double zb = (tr[2] + rot[8] * pcon->GetZ(i + 1)) * toG4;
+          double za = (tr[2] + rot[8] * pcon->GetZ(i)) * toG4, ra = pcon->GetRmax(i) * toG4;
+          double zb = (tr[2] + rot[8] * pcon->GetZ(i + 1)) * toG4, rb = pcon->GetRmax(i + 1) * toG4;
           if (za * zb < 0.0)
             continue; // crosses the interaction point, not a forward nozzle piece
-          const int side = (za + zb > 0.0) ? 0 : 1;
-          double z1 = std::fabs(za), z2 = std::fabs(zb);
-          double r1 = pcon->GetRmax(i) * toG4, r2 = pcon->GetRmax(i + 1) * toG4;
-          if (z1 > z2) {
-            std::swap(z1, z2);
-            std::swap(r1, r2);
+          if (std::fabs(za) > std::fabs(zb)) {
+            std::swap(za, zb);
+            std::swap(ra, rb);
           }
-          if (z2 > z1)
-            sides[side].push_back({z1, z2, r1, r2});
+          if (std::fabs(zb) <= std::fabs(za))
+            continue; // zero length
+          const int side = sideOf(za + zb);
+          sides[side].push_back({std::fabs(za), std::fabs(zb), ra, rb});
+          m_zEnd[side] = std::max(m_zEnd[side], std::fabs(zb));
         }
       }
       if (!nVolumes)
         except("NozzleKill: no polycone volumes found in region %s. Set NozzleRegion to the region "
                "holding the nozzle volumes.",
                m_nozzleRegion.c_str());
+      return sides;
     }
 
     /// Widest opening angle keeping both cones NozzleMargin inside the nozzle outer radius
-    double maxOpeningAngle(const std::vector<Segment> (&sides)[2]) const {
+    double maxOpeningAngle(const Sides& sides) const {
       const double step = 1.0 * CLHEP::mm;
       double maxTan = std::numeric_limits<double>::max();
       double limitZ = 0.0;
-      for (int side = 0; side < 2; ++side) {
+      for (int side : {0, 1}) {
         const std::vector<Segment>& segs = sides[side];
         const double zEnd = m_zEnd[side];
 
@@ -258,22 +249,13 @@ namespace sim {
         std::vector<double> zs;
         for (double z = m_killZ + step; z < zEnd; z += step)
           zs.push_back(z);
-        for (const Segment& s : segs) {
-          if (s.z1 > m_killZ)
-            zs.push_back(s.z1);
-          if (s.z2 > m_killZ)
-            zs.push_back(s.z2);
-        }
+        for (const Segment& s : segs)
+          for (double z : {s.z1, s.z2})
+            if (z > m_killZ)
+              zs.push_back(z);
 
         for (double z : zs) {
-          // Outer radius of the nozzle at z: the largest rmax of the pieces covering z.
-          double rOut = -1.0;
-          for (const Segment& s : segs) {
-            if (z < s.z1 || z > s.z2)
-              continue;
-            const double r = s.r1 + (s.r2 - s.r1) * (z - s.z1) / (s.z2 - s.z1);
-            rOut = std::max(rOut, r);
-          }
+          const double rOut = outerRadius(segs, z);
           if (rOut < 0.0)
             continue; // gap between nozzle pieces
           const double room = rOut - m_nozzleMargin;
@@ -287,7 +269,7 @@ namespace sim {
           const double t = room / (z - m_killZ);
           if (t < maxTan) {
             maxTan = t;
-            limitZ = (side == 0) ? z : -z;
+            limitZ = side == 0 ? z : -z;
           }
         }
       }
@@ -309,7 +291,7 @@ namespace sim {
     /// Derived at begin of run; with zEnd = 0 the action kills nothing until then
     double m_tanAngle = 0.0;
     /// End of the nozzle in |z| on each side (0: z > 0, 1: z < 0)
-    double m_zEnd[2] = {0.0, 0.0};
+    std::array<double, 2> m_zEnd = {0.0, 0.0};
 
     unsigned long long m_nCalls = 0;
     unsigned long long m_nGamma = 0;
